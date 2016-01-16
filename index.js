@@ -1,18 +1,13 @@
-var http = require("http");
-var url = require('url');
+var express = require('express');
+var app = express();
 
-http.createServer(
-function(request, response)
+app.set('port', (process.env.PORT || 5000));
+app.get('/', function(request, response)
 {
-  var url_parts = url.parse(request.url, true);
-  console.log(url_parts.query);
-  if (url_parts.query['t'] == '3')
-  {
-    console.log('yes!')
-  }
-response.writeHead(200, {'Content-Type' : 'text/plain'});
-response.end('helffflo');
-}
-).listen(8081);
+  response.send('Hello world');
+});
 
-console.log('server running');
+app.listen(app.get('port'), function()
+{
+  console.log('Running web!');
+});
