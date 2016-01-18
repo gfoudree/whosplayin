@@ -1,7 +1,6 @@
 var express = require('express');
 var helmet = require('helmet');
 
-
 var users = require('./users');
 var db = require('./db');
 
@@ -22,6 +21,9 @@ app.get('/', function(request, response) //Main index
 });
 
 app.get('/user', users.userHandler); //Users
+app.get('/user/authenticate', users.userAuthenticator);
+app.get('/user/getNonce', users.getNonce);
+
 
 app.listen(app.get('port'), function() //Main loop
 {

@@ -15,8 +15,8 @@ exports.sqlQuery = function(query, done)
   connection.connect();
   connection.query(query, function(err, rows, field)
   {
-    done(rows);
+    done(rows[0]['PASSWORD']);
   }
-);
+  );
   connection.end();
 }
