@@ -15,7 +15,14 @@ exports.sqlQuery = function(query, done)
   connection.connect();
   connection.query(query, function(err, rows, field)
   {
-    done(rows[0]['PASSWORD']);
+    if (err)
+    {
+      console.log(err);
+      done('Error retrieving SQL data');
+    }
+    else {
+      done(rows);
+    }
   }
   );
   connection.end();
