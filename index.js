@@ -21,7 +21,6 @@ app.get('/', function(request, response) //Main index
 app.get('/user', users.userHandler); //Users
 app.get('/user/authenticate', users.userAuthenticator);
 
-
 app.get('/games', games.getGames);
 
 app.listen(app.get('port'), function() //Main loop
