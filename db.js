@@ -1,10 +1,39 @@
-var pg = require('pg');
 var mysql = require('mysql');
 var redis = require('redis');
 
+redisConn = null;
+mysqlConn = null;
+
 exports.sqlQuery = function(query, done)
 {
-  var connection = mysql.createConnection(
+  if (mysqlConn != null)
+  {
+    mysqlConn.getConnection(function(error, connection)
+    {
+      connection.query(query, function(err, rows, field)
+      {
+        if (err)
+        {
+          console.log(err);
+          done('Error retrieving SQL data');
+        }
+        else {
+          done(rows);
+        }
+      }
+      );
+      connection.release();
+    });
+  }
+  else
+  {
+    console.log('Unable to connect to mysql');
+  }
+}
+
+exports.mysqlConnect = function()
+{
+  mysqlConn = mysql.createPool(
     {
       host:'sql5.freemysqlhosting.net',
       user:'sql5103427',
@@ -12,62 +41,49 @@ exports.sqlQuery = function(query, done)
       password:'qTJw2dqrvs'
     }
   );
-
-  connection.connect();
-  connection.query(query, function(err, rows, field)
-  {
-    if (err)
-    {
-      console.log(err);
-      done('Error retrieving SQL data');
-    }
-    else {
-      done(rows);
-    }
-  }
-  );
-  connection.end();
 }
 
+exports.redisConnect = function()
+{
+  redisConn = redis.createClient('redis://fag:cfdd043d458397e295641a103ca70342@50.30.35.9:3008/');
+  redisConn.on('connect', function(err) {
+    console.log('Error starting redis: ' + err);
+  });
+}
 
 exports.setValueRedis = function(key, data)
 {
-  var conn = redis.createClient('redis://fag:cfdd043d458397e295641a103ca70342@50.30.35.9:3008/');
-  conn.on('connect', function()
+  if (redisConn != null)
   {
-    console.log(key + ' -> ' + data);
-    conn.set(key, data, function (error, reply)
-    {
-    if (error)
-    {
-      console.log(error);
-    }
-    else {
-      console.log(reply);
-    }
-    }
-  );
+      redisConn.set(key, data, function (error, reply)
+      {
+        console.log('REDIS: ' + key + ' -> ' + data);
+        if (error)
+        {
+          console.log(error);
+        }
+        else {
+          console.log(reply);
+        }
+      }
+      );
   }
-)
 }
 
 exports.getValueRedis = function(key, done)
 {
-  var conn = redis.createClient('redis://fag:cfdd043d458397e295641a103ca70342@50.30.35.9:3008/');
-  conn.on('connect', function()
+  if (redisConn != null)
   {
-    conn.get(key, function (error, reply)
+    redisConn.get(key, function (error, reply)
     {
-    if (error)
-    {
-      console.log(error);
+      if (error)
+      {
+        console.log(error);
+      }
+      else {
+        done(reply);
+      }
     }
-    else {
-      console.log(reply);
-      done(reply);
-    }
-    }
-  );
+    );
   }
-)
 }

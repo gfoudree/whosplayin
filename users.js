@@ -8,25 +8,33 @@ function RNG(username)
   return randomString;
 }
 
-
 exports.userHandler = function(request, response)
 {
   var id = request.query.id;
   var sessionID = request.query.sessionID;
 
-  if (id > 0)
+  if (!id || sessionID.length === 0 || !sessionID || id < 1)
   {
-    db.sqlQuery('SELECT id,username FROM user WHERE ID=\'' + id + '\'', function(rows)
+    response.write('Invalid query');
+  }
+  else
+  {
+    db.sqlQuery('SELECT username FROM users WHERE ID=\'' + id + '\'', function(rows) //Get username
     {
-      console.log('user:' + rows[0].username);
-      db.getValueRedis('user:' + rows[0].username, function(reply)
+      db.getValueRedis('user:' + rows[0]['username'], function(reply) //Get session ID from redis
       {
-        if (reply == sessionID)
+        if (reply == sessionID && reply != null) //Check if the passed sessionID == stored sessionID
         {
-          response.send(rows);
+          console.log('Correct');
+          db.sqlQuery('SELECT username,id,name,age,gender,location,raiting,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(rows)
+          {
+            response.send(rows);
+          });
         }
-        else {
-          response.send('Invalid session ID!');
+        else
+        {
+          console.log('Incorrect');
+          response.send('Invalid Query');
         }
       });
     });
@@ -43,20 +51,25 @@ exports.userAuthenticator = function(request, response)
   {
     response.send('Invalid data');
   }
-  db.sqlQuery('SELECT PASSWORD FROM user WHERE username = \'' + username + '\'', function(storedPassword)
+  db.sqlQuery('SELECT PASSWORD FROM users WHERE username = \'' + username + '\'', function(storedPassword)
   {
     hash.update(password);
     var hashedPw = hash.digest('hex');
     var loginStatus = {correct : 'false', sessionID : ''};
-    if (hashedPw == storedPassword[0]['PASSWORD'])
+    if (hashedPw.toLowerCase() == storedPassword[0]['PASSWORD'].toLowerCase())
     {
       loginStatus.correct = 'true'; //Password is correct
       loginStatus.sessionID = RNG(username);
       response.json(loginStatus);
     }
     else {
-      loginStatus.correct = 'false'; //Passowrd is incorrect
+      loginStatus.correct = 'false'; //Password is incorrect
       response.json(loginStatus);
     }
   });
+}
+
+exports.friendsList = function(request, response)
+{
+
 }
