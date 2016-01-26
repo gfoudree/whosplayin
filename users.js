@@ -8,40 +8,50 @@ function RNG(username)
   return randomString;
 }
 
-exports.userHandler = function(request, response)
+//Returns invalid if the user is not authenticated, and returns valid if authenticated
+exports.validateUser = function (sessionId, username, sqlStmt, done)
 {
-  var id = request.query.id;
-  var sessionID = request.query.sessionID;
-
-  if (!id || sessionID.length === 0 || !sessionID || id < 1)
+  if (sessionId.length === 0 || !sessionId || !username || username.length === 0)
   {
-    response.write('Invalid query');
+    done('Invalid query');
   }
   else
   {
-    db.sqlQuery('SELECT username FROM users WHERE ID=\'' + id + '\'', function(rows) //Get username
-    {
-      db.getValueRedis('user:' + rows[0]['username'], function(reply) //Get session ID from redis
+      db.getValueRedis('user:' + username, function(reply) //Get session ID from redis
       {
-        if (reply == sessionID && reply != null) //Check if the passed sessionID == stored sessionID
+        if (reply == sessionId && reply != null) //Check if the passed sessionId == stored sessionId
         {
-          console.log('Correct');
-          db.sqlQuery('SELECT username,id,name,age,gender,location,raiting,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(rows)
+          if (sqlStmt.length > 0 && sqlStmt)
           {
-            response.send(rows);
-          });
+            db.sqlQuery(sqlStmt, function(rows)
+            {
+              done(rows);
+            });
+          }
+          else {
+            done('Valid');
+          }
         }
         else
         {
-          console.log('Incorrect');
-          response.send('Invalid Query');
+          done('Invalid');
         }
       });
-    });
   }
 }
 
-exports.userAuthenticator = function(request, response)
+exports.getInfo = function(request, response)
+{
+  var id = request.query.id;
+  var sessionId = request.query.sessionId;
+  var username = request.query.username;
+  validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,raiting,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
+  {
+    response.send(data);
+  });
+}
+
+exports.authenticator = function(request, response)
 {
   var password = request.query.password;
   var username = request.query.user;
@@ -55,11 +65,11 @@ exports.userAuthenticator = function(request, response)
   {
     hash.update(password);
     var hashedPw = hash.digest('hex');
-    var loginStatus = {correct : 'false', sessionID : ''};
+    var loginStatus = {correct : 'false', sessionId : ''};
     if (hashedPw.toLowerCase() == storedPassword[0]['PASSWORD'].toLowerCase())
     {
       loginStatus.correct = 'true'; //Password is correct
-      loginStatus.sessionID = RNG(username);
+      loginStatus.sessionId = RNG(username);
       response.json(loginStatus);
     }
     else {
@@ -69,7 +79,14 @@ exports.userAuthenticator = function(request, response)
   });
 }
 
-exports.friendsList = function(request, response)
+exports.getFriendsList = function(request, response)
 {
+  var id = request.query.id;
+  var sessionId = request.query.sessionId;
+  var username = request.query.username;
 
+  validateUser(sessionId, username, 'SELECT', function(data)
+  {
+
+  });
 }

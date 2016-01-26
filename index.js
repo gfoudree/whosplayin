@@ -23,13 +23,15 @@ app.get('/', function(request, response) //Main index
 });
 
 /* ---------------------- USERS --------------------------- */
-app.get('/user', users.userHandler); //Users
-app.get('/user/authenticate', users.userAuthenticator);
-app.get('/user/friendsList', users.friendsList);
+app.get('/user/info', users.getInfo); //Users
+app.get('/user/authenticate', users.authenticator);
+app.get('/user/friendsList', users.getFriendsList);
 
 /* ---------------------- GAMES --------------------------- */
-app.get('/games', games.getGames);
+app.get('/games/info', games.getGames);
 app.get('/games/new', games.newGame);
+app.get('/games/addplayer', games.addPlayer);
+app.get('/games/getPlayers', games.getPlayers);
 
 /* ---------------------- MESSAGES --------------------------- */
 

@@ -28,6 +28,7 @@ exports.sqlQuery = function(query, done)
   else
   {
     console.log('Unable to connect to mysql');
+    done('Error');
   }
 }
 
@@ -46,14 +47,15 @@ exports.mysqlConnect = function()
 exports.redisConnect = function()
 {
   redisConn = redis.createClient('redis://fag:cfdd043d458397e295641a103ca70342@50.30.35.9:3008/');
-  redisConn.on('connect', function(err) {
+  redisConn.on('connect', function(err)
+  {
     console.log('Error starting redis: ' + err);
   });
 }
 
 exports.setValueRedis = function(key, data)
 {
-  if (redisConn != null)
+  if (redisConn)
   {
       redisConn.set(key, data, function (error, reply)
       {
@@ -68,11 +70,14 @@ exports.setValueRedis = function(key, data)
       }
       );
   }
+  else {
+    done('Error');
+  }
 }
 
 exports.getValueRedis = function(key, done)
 {
-  if (redisConn != null)
+  if (redisConn)
   {
     redisConn.get(key, function (error, reply)
     {
@@ -85,5 +90,53 @@ exports.getValueRedis = function(key, done)
       }
     }
     );
+  }
+  else {
+    done('Error');
+  }
+}
+
+exports.listAddRedis = function(key, data, done)
+{
+  if (redisConn)
+  {
+    redisConn.sadd(key, data, function (error, reply)
+    {
+      console.log('REDIS: ' + key + ' -> ' + data);
+      if (error)
+      {
+        console.log(error);
+        done(error);
+      }
+      else {
+        console.log(reply);
+        done(reply);
+      }
+    });
+  }
+  else {
+    done('Error');
+  }
+}
+
+exports.listGetRedis = function(key, done)
+{
+  if (redisConn)
+  {
+    redisConn.smembers(key, function (error, reply)
+    {
+      if (error)
+      {
+        console.log(error);
+        done(error);
+      }
+      else {
+        done(reply);
+      }
+    }
+    );
+  }
+  else {
+    done('Error');
   }
 }
