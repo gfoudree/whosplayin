@@ -29,7 +29,7 @@ app.get('/user/friendsList', users.getFriendsList);
 
 /* ---------------------- GAMES --------------------------- */
 app.get('/games/info', games.getGames);
-app.get('/games/new', games.newGame);
+app.get('/games/newGame', games.newGame);
 app.get('/games/addplayer', games.addPlayer);
 app.get('/games/getPlayers', games.getPlayers);
 

@@ -10,9 +10,28 @@ exports.getGames = function(request, response)
   db.setValueRedis('test', 'testData');
 }
 
+//Todo add game ownerId to tables
 exports.newGame = function(request, response)
 {
+  var title = request.query.title;
+  var maxPlayers = request.query.maxPlayers;
+  var startTime = request.query.startTime;
+  var endTime = request.query.endTime;
+  var gameType = request.query.gameType;
+  var sessionId = request.query.sessionId;
+  var username = request.query.username;
 
+  if (0)
+  {
+    response.send('Invalid Trw');
+  }
+  else {
+    users.validateUser(sessionId, username, 'INSERT INTO games (title,numPlayers,maxPlayers,startTime,endTime,gameType) VALUES (\'' + title + '\',\'0\',\'' + maxPlayers + '\',\'' + startTime + '\', \
+      \'' + endTime + '\',\'' + gameType + '\')', function(reply)
+    {
+      response.send('Success');
+    });
+  }
 }
 
 exports.addPlayer = function(request, response)
@@ -22,7 +41,7 @@ exports.addPlayer = function(request, response)
   var sessionId = request.query.sessionId;
   var username = request.query.username;
 
-  if (!gameId || gameId < 1 || !playerId || playerId < 1 || !sessionId || !username || username.length === 0)
+  if (!gameId || gameId < 1 || !playerId || playerId < 1 || !sessionId || sessionId.length === 0 || !username || username.length === 0)
   {
     response.send('Invalid');
   }

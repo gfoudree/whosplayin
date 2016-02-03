@@ -9,7 +9,7 @@ function RNG(username)
 }
 
 //Returns invalid if the user is not authenticated, and returns valid if authenticated
-function validateUser(sessionId, username, sqlStmt, done)
+exports.validateUser = function(sessionId, username, sqlStmt, done)
 {
   if (sessionId.length === 0 || !sessionId || !username || username.length === 0)
   {
@@ -45,7 +45,7 @@ exports.getInfo = function(request, response)
   var id = request.query.id;
   var sessionId = request.query.sessionId;
   var username = request.query.username;
-  validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,raiting,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
+  users.validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,raiting,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
   {
     response.send(data);
   });
@@ -85,7 +85,7 @@ exports.getFriendsList = function(request, response)
   var sessionId = request.query.sessionId;
   var username = request.query.username;
 
-  validateUser(sessionId, username, 'CALL `sql5103427`.`stp_sel_userFriends`(' + id + ');', function(data)
+  users.validateUser(sessionId, username, 'CALL `sql5103427`.`stp_sel_userFriends`(' + id + ');', function(data)
   {
     response.send(data);
   });
