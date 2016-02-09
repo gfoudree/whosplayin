@@ -1,4 +1,6 @@
 local.properties
 app/
-build/
-Project/
+build/*
+app/*
+.gradle/*
+.idea/*
