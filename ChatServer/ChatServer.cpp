@@ -42,7 +42,7 @@ void ChatServer::init() {
         socklen_t cliLen;
 
         cliLen = sizeof(clientInfo);
-        memset(&clientInfo, 0, sizeof(socklen_t));
+        memset(&clientInfo, 0, sizeof(sockaddr_in));
 
         hClientSock = accept(hSock, (sockaddr*)&clientInfo, &cliLen);
 
