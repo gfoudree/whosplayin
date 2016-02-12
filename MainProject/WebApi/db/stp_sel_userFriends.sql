@@ -1,4 +1,4 @@
-CREATE DEFINER=`sql5103427`@`%` PROCEDURE `stp_sel_userFriends`(IN idParam INT)
+CREATE DEFINER=`db309grp12`@`%` PROCEDURE `stp_sel_userFriends`(IN idParam INT)
 BEGIN
 	SELECT
  Names.username,
@@ -15,9 +15,9 @@ BEGIN
  Names.gamesPlayed,
  Names.gamesCreated
     
-	FROM sql5103427.friendsList as Friends
-	JOIN sql5103427.users as Users
-	INNER JOIN sql5103427.users as Names
+	FROM db309grp12.friendsList as Friends
+	JOIN db309grp12.users as Users
+	INNER JOIN db309grp12.users as Names
 	ON Friends.userId = Users.id
 	and Names.id = Friends.friendId
 	WHERE Friends.userId = idParam;

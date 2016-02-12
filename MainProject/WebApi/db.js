@@ -36,10 +36,10 @@ exports.mysqlConnect = function()
 {
   mysqlConn = mysql.createPool(
     {
-      host:'sql5.freemysqlhosting.net',
-      user:'sql5103427',
-      database:'sql5103427',
-      password:'qTJw2dqrvs'
+      host:'mysql.cs.iastate.edu',
+      user:'dbu309grp12',
+      database:'db309grp12',
+      password:'LPwMxakSPKr',
     }
   );
 }

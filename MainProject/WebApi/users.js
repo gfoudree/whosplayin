@@ -45,6 +45,7 @@ exports.getInfo = function(request, response)
   var id = request.query.id;
   var sessionId = request.query.sessionId;
   var username = request.query.username;
+
   users.validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,raiting,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
   {
     response.send(data);
@@ -85,8 +86,34 @@ exports.getFriendsList = function(request, response)
   var sessionId = request.query.sessionId;
   var username = request.query.username;
 
-  users.validateUser(sessionId, username, 'CALL `sql5103427`.`stp_sel_userFriends`(' + id + ');', function(data)
+  users.validateUser(sessionId, username, 'CALL `db309grp12`.`stp_sel_userFriends`(' + id + ');', function(data)
   {
     response.send(data);
   });
+}
+
+exports.create = function(request, response)
+{
+  var username = request.query.username;
+  var email = request.query.email;
+  var name = request.query.name;
+  var age = request.query.age;
+  var gender = request.query.gender;
+  var password = request.query.password;
+  var location = request.query.location;
+  var phoneNumber = request.query.phoneNumber;
+
+  if (!username || !email || !name || !age || !gender || !password || !location || !phoneNumber || username.length === 0 || email.length === 0 || name.length === 0 ||
+    gender.length === 0 || password.length === 0 || location.length === 0 || phoneNumber.length === 0 || age < 1)
+    {
+      response.send("Invalid!");
+    }
+    else{
+      var query = "INSERT INTO users (username, email, name, age, gender, password, location, dateCreated, phoneNumber) VALUES (\'" + username + "\',\'" + email + "\',\'" + name + "\',\'" + age+ "\',\'" +gender+ "\',\'" +password+ "\',\'" +location + "\',NOW(),\'" +  phoneNumber + "\')";
+      db.sqlQuery(query, function()
+    {
+      response.send("OK");
+    });
+    }
+
 }

@@ -26,6 +26,7 @@ app.get('/', function(request, response) //Main index
 app.get('/user/info', users.getInfo); //Users
 app.get('/user/authenticate', users.authenticator);
 app.get('/user/friendsList', users.getFriendsList);
+app.get('/user/create', users.create);
 
 /* ---------------------- GAMES --------------------------- */
 app.get('/games/info', games.getGames);
