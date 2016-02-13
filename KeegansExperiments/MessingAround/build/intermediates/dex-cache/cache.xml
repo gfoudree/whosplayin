@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/kjdwyer/AndroidStudioProjects/MessingAround/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="379471b2bd17d9737c050345c08e8c7d16589784">
+        <dex dex="/Users/kjdwyer/AndroidStudioProjects/MessingAround/app/build/intermediates/pre-dexed/debug/com.android.support-design-23.1.1_74f6342a9f3835a12f599c1bc496fdddcc4a7305.jar" />
+    </item>
+    <item
+        jar="/Users/kjdwyer/AndroidStudioProjects/MessingAround/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
+        <dex dex="/Users/kjdwyer/AndroidStudioProjects/MessingAround/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.1.1_5ed6ff8253a3f6862473fa6b1ec4b2377f2c1d5c.jar" />
+    </item>
+    <item
+        jar="/Users/kjdwyer/android-sdks/extras/android/m2repository/com/android/support/support-annotations/23.1.1/support-annotations-23.1.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
+        <dex dex="/Users/kjdwyer/AndroidStudioProjects/MessingAround/app/build/intermediates/pre-dexed/debug/support-annotations-23.1.1_059eeda56fd46ab308db929d70788a5a7881e8d4.jar" />
+    </item>
+    <item
+        jar="/Users/kjdwyer/AndroidStudioProjects/MessingAround/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/libs/internal_impl-23.1.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
+        <dex dex="/Users/kjdwyer/AndroidStudioProjects/MessingAround/app/build/intermediates/pre-dexed/debug/internal_impl-23.1.1_e59d5d5e12f9e3ea28d3ac8498e5db153bb19c21.jar" />
+    </item>
+    <item
+        jar="/Users/kjdwyer/AndroidStudioProjects/MessingAround/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="/Users/kjdwyer/AndroidStudioProjects/MessingAround/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.1.1_3a1d895fe66f4e70a9c913206765987cf40b6c2e.jar" />
+    </item>
+    <item
+        jar="/Users/kjdwyer/AndroidStudioProjects/MessingAround/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="/Users/kjdwyer/AndroidStudioProjects/MessingAround/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-23.1.1_a5793c04f627d535924f604da9ebc38234570ddd.jar" />
+    </item>
+
+</items>
