@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.rickstestapp.TestUserPage"
+    tools:showIn="@layout/activity_test_user_page">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="#51abcf"
+        android:minHeight="210dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:fillViewport="false" >
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profilePicImage"
+            android:minHeight="100dp"
+            android:minWidth="100dp"
+            android:layout_marginTop="33dp"
+            android:layout_marginLeft="20dp"
+            android:background="#a4a4a4" >
+
+        </ImageView>
+    </ScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="SuperBaller76"
+        android:id="@+id/userNameText"
+        android:layout_marginTop="5dp"
+        android:layout_alignTop="@+id/scrollView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Age:"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/userNameText"
+        android:layout_alignLeft="@+id/userNameText"
+        android:layout_marginTop="10dp"
+        android:layout_alignStart="@+id/userNameText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Zip:"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Gender:"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/textView3"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignStart="@+id/textView3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Last Active:"
+        android:id="@+id/textView5"
+        android:layout_below="@+id/textView4"
+        android:layout_alignLeft="@+id/textView4"
+        android:layout_alignStart="@+id/textView4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="17"
+        android:id="@+id/ageText"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_toRightOf="@+id/textView2"
+        android:layout_marginLeft="6dp"
+        android:layout_toEndOf="@+id/textView2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="50266"
+        android:id="@+id/zipText"
+        android:layout_above="@+id/textView4"
+        android:layout_toRightOf="@+id/textView3"
+        android:layout_marginLeft="6dp"
+        android:layout_toEndOf="@+id/textView3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Male"
+        android:id="@+id/genderText"
+        android:layout_below="@+id/zipText"
+        android:layout_toRightOf="@+id/ageText"
+        android:layout_marginLeft="6dp"
+        android:layout_toEndOf="@+id/ageText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="01/20/2016"
+        android:id="@+id/lastActiveDate"
+        android:layout_below="@+id/textView5"
+        android:layout_toRightOf="@+id/textView3"
+        android:layout_toEndOf="@+id/textView3" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton"
+        android:minWidth="50dp"
+        android:minHeight="50dp"
+        android:layout_alignTop="@+id/ageText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="23dp"
+        android:layout_marginEnd="23dp"
+        android:background="@null"
+        />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton2"
+        android:minWidth="50dp"
+        android:minHeight="50dp"
+        android:background="@null"
+        android:layout_alignTop="@+id/genderText"
+        android:layout_alignLeft="@+id/imageButton"
+        android:layout_alignStart="@+id/imageButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="0"
+        android:id="@+id/thumbsUpText"
+        android:layout_alignTop="@+id/zipText"
+        android:layout_toRightOf="@+id/userNameText"
+        android:layout_above="@+id/imageButton2"
+        android:layout_toLeftOf="@+id/imageButton"
+        android:layout_toStartOf="@+id/imageButton"
+        android:textColor="#3ef819" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="0"
+        android:id="@+id/thumbsDownText"
+        android:layout_below="@+id/imageButton"
+        android:layout_alignLeft="@+id/thumbsUpText"
+        android:layout_alignStart="@+id/thumbsUpText"
+        android:textColor="#fa0101" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Friend"
+        android:id="@+id/addFriendButton"
+        android:background="#fddf84"
+        android:layout_below="@+id/lastActiveDate"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="20dp"
+        android:layout_toLeftOf="@+id/textView5"
+        android:layout_toStartOf="@+id/textView5" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message Me"
+        android:id="@+id/messageButton"
+        android:background="#2a668e"
+        android:layout_below="@+id/lastActiveDate"
+        android:layout_alignLeft="@+id/ageText"
+        android:layout_alignStart="@+id/ageText"
+        android:layout_toLeftOf="@+id/thumbsDownText"
+        android:layout_toStartOf="@+id/thumbsDownText" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView2"
+        android:background="#10495f"
+        android:minHeight="301dp"
+        android:fillViewport="false"
+        android:layout_below="@+id/scrollView"
+        android:layout_alignLeft="@+id/scrollView"
+        android:layout_alignStart="@+id/scrollView"
+        android:layout_alignRight="@+id/scrollView"
+        android:layout_alignEnd="@+id/scrollView">
+
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/achievmentsView"
+        android:background="#bdbdbd"
+        android:minHeight="230dp"
+        android:fillViewport="false"
+        android:minWidth="300dp"
+        android:layout_alignBottom="@+id/scrollView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="23dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Achievements"
+        android:id="@+id/textView12"
+        android:layout_above="@+id/achievmentsView"
+        android:layout_alignLeft="@+id/textView5"
+        android:layout_alignStart="@+id/textView5"
+        android:textColor="#fd7a00" />
+
+</RelativeLayout>
