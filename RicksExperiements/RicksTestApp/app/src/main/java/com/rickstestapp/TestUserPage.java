@@ -37,7 +37,7 @@ public class TestUserPage extends AppCompatActivity {
 
 
     public Boolean secure = false;
-    public Boolean friend = false;
+    public Boolean friend = true;
     public String name = "Madman123";
     public String age = "23";
     public String zipcode = "12564";
@@ -57,6 +57,8 @@ public class TestUserPage extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        //all of the object views
         thumbsDownText = (TextView) findViewById(R.id.thumbsDownText);
         thumbsUpText = (TextView) findViewById(R.id.thumbsUpText);
         username = (TextView) findViewById(R.id.userNameText);
@@ -68,7 +70,7 @@ public class TestUserPage extends AppCompatActivity {
         addFriend = (Button) findViewById(R.id.addFriendButton);
         achievmentsView = (ScrollView) findViewById(R.id.achievmentsView);
 
-
+        //all of the text views
         username.setText(name);
         ageText.setText(age);
         zipText.setText(zipcode);
