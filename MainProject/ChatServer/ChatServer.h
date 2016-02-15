@@ -6,11 +6,21 @@
 #define CHATSERVER_CHATSERVER_H
 
 #include <iostream>
-#include <sys/types.h>   // Types used in sys/socket.h and netinet/in.h
-#include <netinet/in.h>  // Internet domain address structures and functions
-#include <sys/socket.h>  // Structures and functions used for socket API
-#include <netdb.h>       // Used for domain/DNS hostname lookup
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <openssl/bio.h>
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+#include <openssl/x509v3.h>
+#include <openssl/bn.h>
+#include <openssl/asn1.h>
+#include <openssl/x509.h>
+#include <openssl/x509_vfy.h>
+#include <openssl/pem.h>
 #include "User.h"
+#include "ChatHandler.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -24,14 +34,18 @@ using namespace std;
 class ChatServer {
 
 private:
+    SSL_CTX *ctx;
+    const SSL_METHOD *method;
+    EC_KEY *ecdh;
     sockaddr_in sockInfo;
-    int hSock = 0;
+    int serverSock = 0;
     boost::thread_group threads;
     std::vector<User> activeUsers;
+    std::vector<ChatHandler*> chatHandlers;
 
 public:
     void init();
-    ChatServer(int port);
+    ChatServer(int port, const char *cacert, const char *cert, const char *key);
     ~ChatServer();
 };
 

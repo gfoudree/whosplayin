@@ -14,10 +14,28 @@
 void ChatHandler::chatHandler(std::vector<User> *users) {
     char buf[512];
     int recvBytes = 0;
+    X509 *cliCert;
+    const char *welcomeMsg = "Hello, welcome to the Who'splayin chat interface!\n";
+
+    cliCert = SSL_get_peer_certificate(ssl);
+
+    //Suppose you can do some CA checking here, make sure it was by our CA
+    if (cliCert == NULL)
+        printf("Client did not supply certificate\n");
+    else {
+        char *subj, *issuer;
+        subj = X509_NAME_oneline(X509_get_subject_name(cliCert), 0, 0);
+        issuer = X509_NAME_oneline(X509_get_issuer_name(cliCert), 0, 0);
+        printf("Subject: %s\nIssuer: %s\n", subj, issuer);
+        free(subj);
+        free(issuer);
+    }
+
+    SSL_write(ssl, welcomeMsg, strlen(welcomeMsg));
 
     do {
         memset(buf, 0, sizeof(buf));
-        recvBytes = recv(socket, buf, sizeof(buf) - 1, 0);
+        recvBytes = SSL_read(ssl, buf, sizeof(buf) - 1);
         std::string data(buf);
 
         std::cout << data.c_str();
@@ -26,7 +44,7 @@ void ChatHandler::chatHandler(std::vector<User> *users) {
         {
             std::string name = data.substr(5, data.find('\n', 0));
             std::cout << "Hello " << name.c_str() << std::endl;
-            send(socket, "Hello", 5, 0);
+            SSL_write(ssl, "Hello", 5);
 
             User newUser;
             newUser.name = name;
@@ -37,24 +55,35 @@ void ChatHandler::chatHandler(std::vector<User> *users) {
         {
             std::string name = data.substr(5, data.find('\n', 0));
             std::cout << "Goodbye " << name.c_str() << std::endl;
-            send(socket, "Goodbye", 7, 0);
-            close(socket);
+            SSL_write(ssl, "Goodbye", 7);
+            break;
         }
-        else if(data.compare("LS_USERS"))
+        else if(data.compare("LS_USERS") == 0)
         {
             std::string response;
-            bool first = true;
             for (std::vector<User>::iterator it = users->begin(); it != users->end(); ++it)
             {
-                if (first) {
-                    response.append(", ");
-                    first = false;
-                }
                 response.append(it->name);
             }
-            send(socket, response.c_str(), response.length(), 0);
+            SSL_write(ssl, response.c_str(), response.length());
         }
     }
     while(recvBytes > 0);
+    std::cout << "Client disconnected." << std::endl;
+    X509_free(cliCert);
+    SSL_shutdown(ssl);
     close(socket);
+    SSL_free(ssl);
+}
+
+ChatHandler::ChatHandler(int sock, sockaddr_in info, SSL *pSsl) {
+    socket = sock;
+    cliInfo = info;
+    ssl = pSsl;
+}
+
+ChatHandler::~ChatHandler() {
+    SSL_shutdown(ssl);
+    close(socket);
+    SSL_free(ssl);
 }

@@ -37,11 +37,11 @@ int main()
 	server.sin_port = htons(9090);
 
 	ctx = SSL_CTX_new(method);
-	
-	//SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
-	//SSL_CTX_load_verify_locations(ctx, "cacert.pem", NULL);
-	//SSL_CTX_load_and_set_client_CA_file(ctx, "cacert.pem");
-	
+
+	SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
+	SSL_CTX_load_verify_locations(ctx, "cacert.pem", NULL);
+	SSL_CTX_set_verify_depth(ctx, 1);
+
 	SSL_CTX_set_cipher_list(ctx, "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256");
 
 	EC_KEY *ecdh = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
@@ -110,7 +110,7 @@ int main()
 	ERR_free_strings();
 	EVP_cleanup();
 	close(cli);
-	EC_free(ecdh);
+	EC_KEY_free(ecdh);
 }
 
 
