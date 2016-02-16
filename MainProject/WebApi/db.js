@@ -46,7 +46,7 @@ var mysqlConnect = function()
 
 var redisConnect = function()
 {
-  redisConn = redis.createClient('redis://fag:cfdd043d458397e295641a103ca70342@50.30.35.9:3008/');
+  redisConn = redis.createClient('redis://proj-309-12.cs.iastate.edu:6379/');
   redisConn.on('connect', function(err)
   {
     console.log('Error starting redis: ' + err);

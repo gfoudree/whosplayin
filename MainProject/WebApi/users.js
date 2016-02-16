@@ -46,7 +46,7 @@ var getInfo = function(request, response)
   var sessionId = request.query.sessionId;
   var username = request.query.username;
 
-  validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,raiting,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
+  validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,rating,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
   {
     response.send(data); //Send user info in JSON
   });

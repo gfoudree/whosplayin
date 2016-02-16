@@ -8,6 +8,9 @@ var db = require('./db');
 var games = require('./games');
 
 var app = express();
+var https = require('https');
+var fs = require('fs');
+
 app.use(sqlinjection);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(helmet()); //Sets security headers for HTTP
@@ -17,6 +20,11 @@ app.set('port', (process.env.PORT || 5000));
 db.redisConnect();
 db.mysqlConnect();
 
+var pKey = fs.readFileSync('key.pem');
+var cert = fs.readFileSync('cert.pem');
+var cred = {key: pKey, cert: cert};
+
+var httpsServer = https.createServer(cred, app);
 app.get('/', function(request, response) //Main index
 {
   response.send('<a href=http://localhost:5000/user/authenticate?user=tom&password=password>Login</a>');
@@ -36,7 +44,7 @@ app.get('/games/getPlayers', games.getPlayers);
 
 /* ---------------------- MESSAGES --------------------------- */
 
-app.listen(app.get('port'), function() //Main loop
+httpsServer.listen(app.get('port'), function() //Main loop
 {
   console.log('Running web!');
 });
