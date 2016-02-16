@@ -1,7 +1,7 @@
 var db = require('./db');
 var users = require('./users');
 
-exports.getGames = function(request, response)
+var getGames = function(request, response)
 {
   db.getValueRedis('test', function(value)
   {
@@ -10,8 +10,7 @@ exports.getGames = function(request, response)
   db.setValueRedis('test', 'testData');
 }
 
-//Todo add game ownerId to tables
-exports.newGame = function(request, response)
+var newGame = function(request, response)
 {
   var title = request.query.title;
   var maxPlayers = request.query.maxPlayers;
@@ -20,21 +19,30 @@ exports.newGame = function(request, response)
   var gameType = request.query.gameType;
   var sessionId = request.query.sessionId;
   var username = request.query.username;
+  var captainId = request.query.captainId;
 
-  if (0)
+  if (!title || !maxPlayers || !startTime || !endTime || !gameType || !sessionId || !username || !captainId)
   {
-    response.send('Invalid Trw');
+    response.send('Invalid');
   }
   else {
-    users.validateUser(sessionId, username, 'INSERT INTO games (title,numPlayers,maxPlayers,startTime,endTime,gameType) VALUES (\'' + title + '\',\'0\',\'' + maxPlayers + '\',\'' + startTime + '\', \
-      \'' + endTime + '\',\'' + gameType + '\')', function(reply)
+    var query = 'INSERT INTO games (title,numPlayers,maxPlayers,startTime,endTime,gameType,captainId) VALUES (\'' + title + '\',\'0\',\'' + maxPlayers + '\',\'' + startTime + '\', \
+      \'' + endTime + '\',\'' + gameType + '\',\'' + captainId +'\')';
+
+      console.log(query);
+    users.validateUser(sessionId, username, query, function(reply)
     {
-      response.send('Success');
+      if (reply == 'Error retrieving SQL data')
+        response.send('Invalid');
+      else {
+        //Maybe set a redis key with TTL that expires that contains the list of current games
+        response.send('Success');
+      }
     });
   }
 }
 
-exports.addPlayer = function(request, response)
+var addPlayer = function(request, response)
 {
   var gameId = request.query.gameId;
   var playerId = request.query.playerId;
@@ -68,7 +76,7 @@ exports.addPlayer = function(request, response)
   }
 }
 
-exports.getPlayers = function(request, response)
+var getPlayers = function(request, response)
 {
   var gameId = request.query.gameId;
   var sessionId = request.query.sessionId;
@@ -93,4 +101,11 @@ exports.getPlayers = function(request, response)
       }
     });
   }
+}
+
+module.exports = {
+  newGame: newGame,
+  getPlayers: getPlayers,
+  addPlayer: addPlayer,
+  getGames: getGames
 }

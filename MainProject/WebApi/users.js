@@ -9,7 +9,7 @@ function RNG(username)
 }
 
 //Returns invalid if the user is not authenticated, and returns valid if authenticated
-exports.validateUser = function(sessionId, username, sqlStmt, done)
+var validateUser = function(sessionId, username, sqlStmt, done)
 {
   if (sessionId.length === 0 || !sessionId || !username || username.length === 0)
   {
@@ -40,19 +40,19 @@ exports.validateUser = function(sessionId, username, sqlStmt, done)
   }
 }
 
-exports.getInfo = function(request, response)
+var getInfo = function(request, response)
 {
   var id = request.query.id;
   var sessionId = request.query.sessionId;
   var username = request.query.username;
 
-  users.validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,raiting,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
+  validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,raiting,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
   {
     response.send(data);
   });
 }
 
-exports.authenticator = function(request, response)
+var authenticator = function(request, response)
 {
   var password = request.query.password;
   var username = request.query.user;
@@ -80,7 +80,7 @@ exports.authenticator = function(request, response)
   });
 }
 
-exports.getFriendsList = function(request, response)
+var getFriendsList = function(request, response)
 {
   var id = request.query.id;
   var sessionId = request.query.sessionId;
@@ -92,7 +92,7 @@ exports.getFriendsList = function(request, response)
   });
 }
 
-exports.create = function(request, response)
+var create = function(request, response)
 {
   var username = request.query.username;
   var email = request.query.email;
@@ -111,9 +111,16 @@ exports.create = function(request, response)
     else{
       var query = "INSERT INTO users (username, email, name, age, gender, password, location, dateCreated, phoneNumber) VALUES (\'" + username + "\',\'" + email + "\',\'" + name + "\',\'" + age+ "\',\'" +gender+ "\',\'" +password+ "\',\'" +location + "\',NOW(),\'" +  phoneNumber + "\')";
       db.sqlQuery(query, function()
-    {
-      response.send("OK");
-    });
+      {
+        response.send("OK");
+      });
     }
-
+}
+module.exports = {
+  create: create,
+  getFriendsList: getFriendsList,
+  authenticator: authenticator,
+  getInfo: getInfo,
+  validateUser: validateUser,
+  RNG: RNG
 }

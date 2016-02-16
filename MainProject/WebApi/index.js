@@ -19,7 +19,7 @@ db.mysqlConnect();
 
 app.get('/', function(request, response) //Main index
 {
-  response.send('Hello world');
+  response.send('<a href=http://localhost:5000/user/authenticate?user=tom&password=password>Login</a>');
 });
 
 /* ---------------------- USERS --------------------------- */

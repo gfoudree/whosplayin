@@ -4,7 +4,7 @@ var redis = require('redis');
 redisConn = null;
 mysqlConn = null;
 
-exports.sqlQuery = function(query, done)
+var sqlQuery = function(query, done)
 {
   if (mysqlConn != null)
   {
@@ -32,7 +32,7 @@ exports.sqlQuery = function(query, done)
   }
 }
 
-exports.mysqlConnect = function()
+var mysqlConnect = function()
 {
   mysqlConn = mysql.createPool(
     {
@@ -44,7 +44,7 @@ exports.mysqlConnect = function()
   );
 }
 
-exports.redisConnect = function()
+var redisConnect = function()
 {
   redisConn = redis.createClient('redis://fag:cfdd043d458397e295641a103ca70342@50.30.35.9:3008/');
   redisConn.on('connect', function(err)
@@ -53,7 +53,7 @@ exports.redisConnect = function()
   });
 }
 
-exports.setValueRedis = function(key, data)
+var setValueRedis = function(key, data)
 {
   if (redisConn)
   {
@@ -75,7 +75,7 @@ exports.setValueRedis = function(key, data)
   }
 }
 
-exports.getValueRedis = function(key, done)
+var getValueRedis = function(key, done)
 {
   if (redisConn)
   {
@@ -96,7 +96,7 @@ exports.getValueRedis = function(key, done)
   }
 }
 
-exports.listAddRedis = function(key, data, done)
+var listAddRedis = function(key, data, done)
 {
   if (redisConn)
   {
@@ -119,7 +119,7 @@ exports.listAddRedis = function(key, data, done)
   }
 }
 
-exports.listGetRedis = function(key, done)
+var listGetRedis = function(key, done)
 {
   if (redisConn)
   {
@@ -139,4 +139,14 @@ exports.listGetRedis = function(key, done)
   else {
     done('Error');
   }
+}
+
+module.exports = {
+  listGetRedis: listGetRedis,
+  sqlQuery: sqlQuery,
+  listAddRedis: listAddRedis,
+  getValueRedis: getValueRedis,
+  setValueRedis: setValueRedis,
+  redisConnect: redisConnect,
+  mysqlConnect: mysqlConnect
 }
