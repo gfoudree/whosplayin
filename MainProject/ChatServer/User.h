@@ -9,7 +9,7 @@
 
 class User {
 public:
-    std::string name;
+    std::string name; //Name of the user
 };
 
 

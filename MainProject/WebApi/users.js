@@ -48,7 +48,7 @@ var getInfo = function(request, response)
 
   validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,raiting,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
   {
-    response.send(data);
+    response.send(data); //Send user info in JSON
   });
 }
 
@@ -62,7 +62,7 @@ var authenticator = function(request, response)
   {
     response.send('Invalid data');
   }
-  db.sqlQuery('SELECT PASSWORD FROM users WHERE username = \'' + username + '\'', function(storedPassword)
+  db.sqlQuery('SELECT PASSWORD FROM users WHERE username = \'' + username + '\'', function(storedPassword) //Check if user exists
   {
     hash.update(password);
     var hashedPw = hash.digest('hex');
@@ -86,13 +86,13 @@ var getFriendsList = function(request, response)
   var sessionId = request.query.sessionId;
   var username = request.query.username;
 
-  users.validateUser(sessionId, username, 'CALL `db309grp12`.`stp_sel_userFriends`(' + id + ');', function(data)
+  users.validateUser(sessionId, username, 'CALL `db309grp12`.`stp_sel_userFriends`(' + id + ');', function(data) //Call stored proceedure to get friends list
   {
     response.send(data);
   });
 }
 
-var create = function(request, response)
+var create = function(request, response) //Create a user
 {
   var username = request.query.username;
   var email = request.query.email;

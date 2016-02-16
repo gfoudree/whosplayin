@@ -1,6 +1,7 @@
 var db = require('./db');
 var users = require('./users');
 
+//TODO: make this work with REDIS to store current games instead of using mysql
 var getGames = function(request, response)
 {
   db.getValueRedis('test', function(value)
@@ -30,12 +31,12 @@ var newGame = function(request, response)
       \'' + endTime + '\',\'' + gameType + '\',\'' + captainId +'\')';
 
       console.log(query);
-    users.validateUser(sessionId, username, query, function(reply)
+    users.validateUser(sessionId, username, query, function(reply) //Validate user before we do anything
     {
       if (reply == 'Error retrieving SQL data')
         response.send('Invalid');
       else {
-        //Maybe set a redis key with TTL that expires that contains the list of current games
+        //Maybe set a redis key with TTL that expires that contains the list of current games We need to get gameID somehow
         response.send('Success');
       }
     });
@@ -58,7 +59,7 @@ var addPlayer = function(request, response)
     {
       if (result === 'Valid')
       {
-        db.listAddRedis('game:' + gameId, playerId, function(reply)
+        db.listAddRedis('game:' + gameId, playerId, function(reply) //Adding player to game:gameId key in redis.
         {
           if (reply == 0)
           {
@@ -91,7 +92,7 @@ var getPlayers = function(request, response)
     {
       if (result === 'Valid')
       {
-        db.listGetRedis('game:' + gameId, function(reply)
+        db.listGetRedis('game:' + gameId, function(reply) //Get players in redis key
         {
           response.send(reply);
         });

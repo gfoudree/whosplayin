@@ -6,13 +6,13 @@
 #include "ChatHandler.h"
 
 ChatServer::~ChatServer() {
-    threads.join_all();
-    std::for_each(chatHandlers.begin(), chatHandlers.end(), [](ChatHandler *ch)
+    threads.join_all(); //Join all threads
+    std::for_each(chatHandlers.begin(), chatHandlers.end(), [](ChatHandler *ch) //Free all allocated memory
     {
         delete ch;
     });
 
-    SSL_CTX_free(ctx);
+    SSL_CTX_free(ctx); //Cleanup openSSL
     ERR_free_strings();
     EVP_cleanup();
     EC_KEY_free(ecdh);
@@ -20,12 +20,12 @@ ChatServer::~ChatServer() {
 }
 
 ChatServer::ChatServer(int port, const char *cacert, const char *cert, const char *key) {
-    OpenSSL_add_all_algorithms();
+    OpenSSL_add_all_algorithms(); //Init Openssl
     SSL_load_error_strings();
     ERR_load_BIO_strings();
     SSL_library_init();
 
-    method = TLSv1_2_server_method();
+    method = TLSv1_2_server_method(); //We want TLS 1.2
     ctx = SSL_CTX_new(method);
 
     if (ctx == NULL)
@@ -35,7 +35,7 @@ ChatServer::ChatServer(int port, const char *cacert, const char *cert, const cha
     }
 
     SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, NULL);
-    if (SSL_CTX_load_verify_locations(ctx, cacert, NULL) != 1) {
+    if (SSL_CTX_load_verify_locations(ctx, cacert, NULL) != 1) { //Verification CA Cert
         ERR_print_errors_fp(stderr);
         throw "Error loading CA certificate";
     }
@@ -44,7 +44,7 @@ ChatServer::ChatServer(int port, const char *cacert, const char *cert, const cha
 
     SSL_CTX_set_cipher_list(ctx, "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256");
 
-    ecdh = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
+    ecdh = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1); //Setup ephemerical key DH
     if (!ecdh) {
         ERR_print_errors_fp(stderr);
         throw "Error creating new EC curve";
@@ -54,15 +54,15 @@ ChatServer::ChatServer(int port, const char *cacert, const char *cert, const cha
         throw "Error setting ECDH params";
     }
 
-    if (SSL_CTX_use_certificate_file(ctx, cert, SSL_FILETYPE_PEM) <= 0) {
+    if (SSL_CTX_use_certificate_file(ctx, cert, SSL_FILETYPE_PEM) <= 0) { //Use certificate
         ERR_print_errors_fp(stderr);
         throw "Error using certificate file!";
     }
-    if (SSL_CTX_use_PrivateKey_file(ctx, key, SSL_FILETYPE_PEM) <= 0) {
+    if (SSL_CTX_use_PrivateKey_file(ctx, key, SSL_FILETYPE_PEM) <= 0) { //Use private key
         ERR_print_errors_fp(stderr);
         throw "Error using private key file!";
     }
-    if (!SSL_CTX_check_private_key(ctx)) {
+    if (!SSL_CTX_check_private_key(ctx)) { //Do the private and public keys match?
         ERR_print_errors_fp(stderr);
         throw "Server private key error!";
     }
@@ -75,18 +75,18 @@ ChatServer::ChatServer(int port, const char *cacert, const char *cert, const cha
 }
 
 void ChatServer::init() {
-    serverSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    serverSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); //Setup socket
     if (serverSock < 0) {
         close(serverSock);
         throw "Error creating socket";
     }
 
-    if (bind(serverSock, (struct sockaddr *)&sockInfo, sizeof(struct sockaddr_in)) < 0) {
+    if (bind(serverSock, (struct sockaddr *)&sockInfo, sizeof(struct sockaddr_in)) < 0) { //Bind
         close(serverSock);
         throw "Error binding";
     }
 
-    if (listen(serverSock, 10) < 0) {
+    if (listen(serverSock, 10) < 0) { //Listen, max 10 clients in queue
         close(serverSock);
         throw "Error listening";
     }
@@ -101,7 +101,7 @@ void ChatServer::init() {
         cliLen = sizeof(clientInfo);
         memset(&clientInfo, 0, sizeof(sockaddr_in));
 
-        hClientSock = accept(serverSock, (struct sockaddr*)&clientInfo, &cliLen);
+        hClientSock = accept(serverSock, (struct sockaddr*)&clientInfo, &cliLen); //Accept clients
 
         if (hClientSock < 0)
         {
@@ -127,11 +127,11 @@ void ChatServer::init() {
             throw std::to_string(SSL_get_error(ssl, r)).c_str();
         }
 
-        cout << "Got connection from: " << inet_ntoa(clientInfo.sin_addr) << " Using cipher " << SSL_get_cipher(ssl) << endl;
-        ChatHandler *chatHandler = new ChatHandler(hClientSock, clientInfo, ssl);
+        cout << "Got connection from: " << inet_ntoa(clientInfo.sin_addr) << " Using cipher " << SSL_get_cipher(ssl) << endl; //Print out connection info
+        ChatHandler *chatHandler = new ChatHandler(hClientSock, clientInfo, ssl); //Create new chat handler
 
-        boost::thread hThread(boost::bind(&ChatHandler::chatHandler, chatHandler, &activeUsers));
-        threads.add_thread(&hThread);
+        boost::thread hThread(boost::bind(&ChatHandler::chatHandler, chatHandler, &activeUsers)); //Launch it in a new thread asynchrnously
+        threads.add_thread(&hThread); //Add thread and chathandler to vector so we can free the memory later
         chatHandlers.push_back(chatHandler);
     }
 }
