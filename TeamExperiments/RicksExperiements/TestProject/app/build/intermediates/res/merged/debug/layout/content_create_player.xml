@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ick">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Test Player Creation"
+            android:id="@+id/textView"
+            android:layout_marginTop="57dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Username"
+            android:ems="10"
+            android:id="@+id/editText"
+            android:layout_marginTop="40dp"
+            android:layout_below="@+id/textView"
+            android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/userIconButton"
+            android:minHeight="50dp"
+            android:minWidth="50dp"
+            android:background="#1e521d"
+            android:onClick="iconSelectPressed"
+            android:layout_below="@+id/editText"
+            android:layout_alignRight="@+id/genderText"
+            android:layout_alignEnd="@+id/genderText"
+            android:layout_marginTop="23dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="User Icon"
+            android:id="@+id/textView2"
+            android:layout_below="@+id/userIconButton"
+            android:layout_alignRight="@+id/genderText" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/zipCodeText"
+            android:text="Zip Code"
+            android:layout_marginTop="29dp"
+            android:layout_below="@+id/textView2"
+            android:layout_alignLeft="@+id/genderText"
+            android:layout_alignStart="@+id/genderText" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/genderText"
+            android:text="Gender"
+            android:layout_below="@+id/zipCodeText"
+            android:layout_alignLeft="@+id/activeDate"
+            android:layout_alignStart="@+id/activeDate" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/activeDate"
+            android:text="Last Active"
+            android:layout_below="@+id/genderText"
+            android:layout_alignLeft="@+id/editText"
+            android:layout_alignStart="@+id/editText" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:id="@+id/button"
+            android:layout_below="@+id/activeDate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
