@@ -11,7 +11,7 @@ function RNG(username)
 //Returns invalid if the user is not authenticated, and returns valid if authenticated
 var validateUser = function(sessionId, username, sqlStmt, done)
 {
-  if (sessionId.length === 0 || !sessionId || !username || username.length === 0)
+  if (!sessionId || !username || sessionId.length === 0 ||  username.length === 0)
   {
     done('Invalid query');
   }
@@ -58,7 +58,7 @@ var authenticator = function(request, response)
   var username = request.query.user;
   var hash = crypto.createHash('sha256');
 
-  if (password.length < 1 || username.length < 1)
+  if (!password || !username || password.length < 1 || username.length < 1)
   {
     response.send('Invalid data');
   }
