@@ -1,5 +1,5 @@
 Authenticate a user:
-http://localhost:5000/user/authenticate?user=tom&password=password
+http://localhost:5000/user/authenticate?username=tom&password=password
 -Returns a sessionID that needs to be sent to ALL other API queries if successful or invalid if not
 -All the fields need to be specified
 

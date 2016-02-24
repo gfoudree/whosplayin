@@ -13,14 +13,14 @@ var getGames = function(request, response)
 
 var newGame = function(request, response)
 {
-  var title = request.query.title;
-  var maxPlayers = request.query.maxPlayers;
-  var startTime = request.query.startTime;
-  var endTime = request.query.endTime;
-  var gameType = request.query.gameType;
-  var sessionId = request.query.sessionId;
-  var username = request.query.username;
-  var captainId = request.query.captainId;
+  var title = request.body.title;
+  var maxPlayers = request.body.maxPlayers;
+  var startTime = request.body.startTime;
+  var endTime = request.body.endTime;
+  var gameType = request.body.gameType;
+  var sessionId = request.body.sessionId;
+  var username = request.body.username;
+  var captainId = request.body.captainId;
 
   if (!title || !maxPlayers || !startTime || !endTime || !gameType || !sessionId || !username || !captainId)
   {
@@ -45,10 +45,10 @@ var newGame = function(request, response)
 
 var addPlayer = function(request, response)
 {
-  var gameId = request.query.gameId;
-  var playerId = request.query.playerId;
-  var sessionId = request.query.sessionId;
-  var username = request.query.username;
+  var gameId = request.body.gameId;
+  var playerId = request.body.playerId;
+  var sessionId = request.body.sessionId;
+  var username = request.body.username;
 
   if (!gameId || gameId < 1 || !playerId || playerId < 1 || !sessionId || sessionId.length === 0 || !username || username.length === 0)
   {
@@ -79,9 +79,9 @@ var addPlayer = function(request, response)
 
 var getPlayers = function(request, response)
 {
-  var gameId = request.query.gameId;
-  var sessionId = request.query.sessionId;
-  var username = request.query.username;
+  var gameId = request.body.gameId;
+  var sessionId = request.body.sessionId;
+  var username = request.body.username;
 
   if (!gameId || gameId < 1 || !sessionId || !username || username.length === 0)
   {

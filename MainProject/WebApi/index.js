@@ -1,7 +1,6 @@
 var express = require('express');
-var helmet = require('helmet');
-var sqlinjection = require('sql-injection');
 var bodyParser = require('body-parser');
+var helmet = require('helmet');
 
 var users = require('./users');
 var db = require('./db');
@@ -11,11 +10,10 @@ var app = express();
 //var https = require('https');
 //var fs = require('fs');
 
-app.use(sqlinjection);
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(helmet()); //Sets security headers for HTTP
 app.disable('x-powered-by');
-app.set('port', 5000);
 
 db.redisConnect();
 db.mysqlConnect();
@@ -25,26 +23,28 @@ db.mysqlConnect();
 //var cred = {key: pKey, cert: cert};
 
 //var httpsServer = https.createServer(cred, app);
+
 app.get('/', function(request, response) //Main index
 {
   response.send('<a href=http://localhost:5000/user/authenticate?user=tom&password=password>Login</a>');
 });
 
+
+
 /* ---------------------- USERS --------------------------- */
-app.get('/user/info', users.getInfo); //Users
-app.get('/user/authenticate', users.authenticator);
-app.get('/user/friendsList', users.getFriendsList);
-app.get('/user/create', users.create);
+app.post('/user/info', users.getInfo); //Users
+app.post('/user/authenticate', users.authenticate);
+app.post('/user/friendsList', users.getFriendsList);
+app.post('/user/create', users.create);
+app.post('/user/status', users.status);
+app.post('/user/getId', users.getId);
 
 /* ---------------------- GAMES --------------------------- */
-app.get('/games/info', games.getGames);
-app.get('/games/newGame', games.newGame);
-app.get('/games/addplayer', games.addPlayer);
-app.get('/games/getPlayers', games.getPlayers);
+app.post('/games/info', games.getGames);
+app.post('/games/newGame', games.newGame);
+app.post('/games/addplayer', games.addPlayer);
+app.post('/games/getPlayers', games.getPlayers);
 
 /* ---------------------- MESSAGES --------------------------- */
 
-app.listen(app.get('port'), function() //Main loop
-{
-  console.log('Running web!');
-});
+app.listen(5000);
