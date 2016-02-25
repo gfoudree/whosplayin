@@ -11,7 +11,7 @@ function RNG(username)
 //Returns invalid if the user is not authenticated, and returns valid if authenticated
 var validateUser = function(sessionId, username, sqlStmt, done)
 {
-  if (sessionId.length === 0 || !sessionId || !username || username.length === 0)
+  if (!sessionId || !username || sessionId.length === 0 ||  username.length === 0)
   {
     done('Invalid query');
   }
@@ -42,9 +42,9 @@ var validateUser = function(sessionId, username, sqlStmt, done)
 
 var getInfo = function(request, response)
 {
-  var id = request.query.id;
-  var sessionId = request.query.sessionId;
-  var username = request.query.username;
+  var id = request.body.id;
+  var sessionId = request.body.sessionId;
+  var username = request.body.username;
 
   validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,rating,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
   {
@@ -52,22 +52,27 @@ var getInfo = function(request, response)
   });
 }
 
-var authenticator = function(request, response)
+var authenticate = function(request, response)
 {
-  var password = request.query.password;
-  var username = request.query.user;
+  var password = request.body.password;
+  var username = request.body.username;
   var hash = crypto.createHash('sha256');
 
-  if (password.length < 1 || username.length < 1)
+  console.log(password);
+  if (!password || !username || password.length < 1 || username.length < 1)
   {
     response.send('Invalid data');
   }
   db.sqlQuery('SELECT PASSWORD FROM users WHERE username = \'' + username + '\'', function(storedPassword) //Check if user exists
   {
+    if (!storedPassword || storedPassword.length === 0)
+      return false;
     hash.update(password);
     var hashedPw = hash.digest('hex');
     var loginStatus = {correct : 'false', sessionId : ''};
-    if (hashedPw.toLowerCase() == storedPassword[0]['PASSWORD'].toLowerCase())
+    var dbPassword = storedPassword[0]['PASSWORD'].toLowerCase();
+
+    if (hashedPw.toLowerCase() == dbPassword)
     {
       loginStatus.correct = 'true'; //Password is correct
       loginStatus.sessionId = RNG(username);
@@ -82,11 +87,11 @@ var authenticator = function(request, response)
 
 var getFriendsList = function(request, response)
 {
-  var id = request.query.id;
-  var sessionId = request.query.sessionId;
-  var username = request.query.username;
+  var id = request.body.id;
+  var sessionId = request.body.sessionId;
+  var username = request.body.username;
 
-  users.validateUser(sessionId, username, 'CALL `db309grp12`.`stp_sel_userFriends`(' + id + ');', function(data) //Call stored proceedure to get friends list
+  validateUser(sessionId, username, 'CALL `db309grp12`.`stp_sel_userFriends`(' + id + ');', function(data) //Call stored proceedure to get friends list
   {
     response.send(data);
   });
@@ -94,14 +99,14 @@ var getFriendsList = function(request, response)
 
 var create = function(request, response) //Create a user
 {
-  var username = request.query.username;
-  var email = request.query.email;
-  var name = request.query.name;
-  var age = request.query.age;
-  var gender = request.query.gender;
-  var password = request.query.password;
-  var location = request.query.location;
-  var phoneNumber = request.query.phoneNumber;
+  var username = request.body.username;
+  var email = request.body.email;
+  var name = request.body.name;
+  var age = request.body.age;
+  var gender = request.body.gender;
+  var password = request.body.password;
+  var location = request.body.location;
+  var phoneNumber = request.body.phoneNumber;
 
   if (!username || !email || !name || !age || !gender || !password || !location || !phoneNumber || username.length === 0 || email.length === 0 || name.length === 0 ||
     gender.length === 0 || password.length === 0 || location.length === 0 || phoneNumber.length === 0 || age < 1)
@@ -116,11 +121,49 @@ var create = function(request, response) //Create a user
       });
     }
 }
+
+var status = function(request, response)
+{
+  var username = request.body.username;
+  var sessionId = request.body.sessionId;
+
+  if (!sessionId || !username || sessionId.length === 0 || username.length === 0)
+  {
+    response.send("False");
+  }
+  else {
+    db.getValueRedis("user:" + username, function (value)
+    {
+      if (value == sessionId)
+      {
+        response.send("True");
+      }
+      else {
+        response.send("False");
+      }
+    });
+  }
+}
+
+var getId = function(request, response)
+{
+  var sessionId = request.body.sessionId;
+  var username = request.body.username;
+  var user = request.body.user;
+  console.log("Test");
+  validateUser(sessionId, username, 'SELECT id FROM users WHERE username=\'' + user + '\'', function (done)
+  {
+    response.send(done);
+  });
+}
+
 module.exports = {
   create: create,
   getFriendsList: getFriendsList,
-  authenticator: authenticator,
+  authenticate: authenticate,
   getInfo: getInfo,
   validateUser: validateUser,
-  RNG: RNG
+  RNG: RNG,
+  status: status,
+  getId: getId
 }

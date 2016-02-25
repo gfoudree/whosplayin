@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="group12.whosplayin.ProfileFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:layout_width="153dp"
+        android:layout_height="153dp"
+        android:id="@+id/imageView2"
+        android:layout_gravity="left|top"
+        android:background="@mipmap/ic_profile_default" />
+</FrameLayout>
