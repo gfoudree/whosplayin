@@ -15,7 +15,6 @@
     </string>
     <string name="title_activity_friend_profile">FriendProfileActivity</string>
 <<<<<<< HEAD
-<<<<<<< HEAD
     <string name="title_activity_main">MainActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -25,8 +24,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-=======
->>>>>>> parent of 5c8f4b8... Login activity now works and directs you to the main page once you are logged in
 =======
 >>>>>>> parent of 5c8f4b8... Login activity now works and directs you to the main page once you are logged in
 </resources>

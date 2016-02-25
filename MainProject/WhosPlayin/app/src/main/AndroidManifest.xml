@@ -12,13 +12,10 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 <<<<<<< HEAD
-<<<<<<< HEAD
     <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-=======
->>>>>>> parent of 5c8f4b8... Login activity now works and directs you to the main page once you are logged in
 =======
 >>>>>>> parent of 5c8f4b8... Login activity now works and directs you to the main page once you are logged in
     <application
@@ -37,7 +34,6 @@
             </intent-filter>
         </activity>
 <<<<<<< HEAD
-<<<<<<< HEAD
         
         <activity
             android:name=".MainActivity"
@@ -49,8 +45,6 @@
                 android:value="group12.whosplayin.LoginActivity" />
         </activity>
 =======
-=======
->>>>>>> parent of 5c8f4b8... Login activity now works and directs you to the main page once you are logged in
         <activity
             android:name=".FriendProfileActivity"
             android:label="@string/title_activity_friend_profile"

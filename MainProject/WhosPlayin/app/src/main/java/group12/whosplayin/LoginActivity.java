@@ -310,7 +310,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
 <<<<<<< HEAD
-<<<<<<< HEAD
             boolean auth = false;
             User user = new User();
             try {
@@ -322,12 +321,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Snackbar.make(mLoginFormView, e.getMessage(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 auth = false;
-=======
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
->>>>>>> parent of 5c8f4b8... Login activity now works and directs you to the main page once you are logged in
 =======
             try {
                 // Simulate network access.
