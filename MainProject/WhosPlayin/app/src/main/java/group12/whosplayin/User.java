@@ -51,7 +51,7 @@ public class User {
             {
                 JSONObject obj = new JSONObject(json);
                 this.sessionId = obj.getString("sessionId");
-                return obj.getBoolean("correct");
+                return true;
             }
             catch (Exception e)
             {
