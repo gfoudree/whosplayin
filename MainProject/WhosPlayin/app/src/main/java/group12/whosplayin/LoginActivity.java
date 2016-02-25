@@ -310,17 +310,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            boolean auth = false;
             User user = new User();
             try {
-                auth =  user.authenticate(mEmail, mPassword);
-                return auth;
+                return user.authenticate(mEmail, mPassword);
             }
             catch (Exception e)
             {
-                Snackbar.make(mLoginFormView, e.getMessage(), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                auth = false;
                 return false;
             }
         }

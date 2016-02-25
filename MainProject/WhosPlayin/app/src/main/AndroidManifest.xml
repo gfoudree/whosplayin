@@ -2,20 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="group12.whosplayin">
 
-    <uses-sdk
-        android:minSdkVersion="23"
-        android:targetSdkVersion="23" />
-
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+    <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="23" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -31,16 +24,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+        <activity
+            android:name=".FriendProfileActivity"
+            android:label="@string/title_activity_friend_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:parentActivityName=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="group12.whosplayin.LoginActivity" />
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
