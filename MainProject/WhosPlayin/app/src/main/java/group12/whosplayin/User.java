@@ -1,6 +1,10 @@
 package group12.whosplayin;
 
 
+import android.util.Log;
+
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 /**
@@ -30,7 +34,7 @@ public class User {
     public int gamesPlayed = 0;
     private int gamesCreated = 0;
 
-    public void authenticate() throws Exception
+    public boolean authenticate() throws Exception
     {
         HashMap<String, String> queries = new HashMap<String, String>();
         queries.put("username", "tom");
@@ -38,7 +42,6 @@ public class User {
 
         String url = WebAPI.queryBuilder(queries, null, null);
         String json = WebAPI.getJson("user/authenticate", url);
-<<<<<<< HEAD
         Log.d("Info", json);
         if (json.compareTo("Invalid") != 0) //Is it valid?
         {
@@ -55,8 +58,7 @@ public class User {
         }
         else
             return false;
-=======
->>>>>>> parent of 5c8f4b8... Login activity now works and directs you to the main page once you are logged in
+
     }
 
     public void getUserInfo() throws Exception
