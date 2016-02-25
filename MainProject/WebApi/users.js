@@ -65,10 +65,14 @@ var authenticate = function(request, response)
   }
   db.sqlQuery('SELECT PASSWORD FROM users WHERE username = \'' + username + '\'', function(storedPassword) //Check if user exists
   {
+    if (!storedPassword || storedPassword.length === 0)
+      return false;
     hash.update(password);
     var hashedPw = hash.digest('hex');
     var loginStatus = {correct : 'false', sessionId : ''};
-    if (hashedPw.toLowerCase() == storedPassword[0]['PASSWORD'].toLowerCase())
+    var dbPassword = storedPassword[0]['PASSWORD'].toLowerCase();
+
+    if (hashedPw.toLowerCase() == dbPassword)
     {
       loginStatus.correct = 'true'; //Password is correct
       loginStatus.sessionId = RNG(username);
