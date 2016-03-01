@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home_fragment"
+            android:title="@string/nav_home_title" />
+        <item
+            android:id="@+id/nav_profile_fragment"
+            android:title="@string/nav_profile_title" />
+        <item
+            android:id="@+id/nav_friends_fragment"
+            android:title="@string/nav_friends_title" />
+        <item
+            android:id="@+id/nav_events_fragment"
+            android:title="@string/nav_events_title" />
+        <item
+            android:id="@+id/nav_messages_fragment"
+            android:title="@string/nav_messages_title" />
+        <item
+            android:id="@+id/nav_achievements_fragment"
+            android:title="@string/nav_achievements_title" />
+        <item
+            android:id="@+id/nav_discover_fragment"
+            android:title="@string/nav_discover_title" />
+    </group>
+</menu>
