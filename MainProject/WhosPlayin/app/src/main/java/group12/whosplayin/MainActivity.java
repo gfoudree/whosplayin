@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void selectDrawerItem(MenuItem menuItem){
-        Fragment fragment = null;
+        android.app.Fragment fragment = null;
 
         Class fragmentClass = null;
 
@@ -87,12 +87,20 @@ public class MainActivity extends AppCompatActivity {
 
         //Error Checking to see if user entered the wrong input
         try {
-            fragment = (Fragment) fragmentClass.newInstance();
+            fragment = (android.app.Fragment) fragmentClass.newInstance();
         }catch (Exception e){
             e.printStackTrace();
         }
 
-//        FragmentManager fragmentManager = getSupportFragmentManager();
+        //Insert the selected Fragment by replacing the previous Fragment
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent,fragment).commit();
+
+
+        //Highlights the item that has been selected and closes the drawer
+        menuItem.setChecked(true);
+        setTitle(menuItem.getTitle());
+        mDrawer.closeDrawers();
 
     }
 
