@@ -5,6 +5,9 @@
             android:id="@+id/nav_home_fragment"
             android:title="@string/nav_home_title" />
         <item
+            android:id="@+id/nav_home2_fragment"
+            android:title="@string/nav_home2_title"/>
+        <item
             android:id="@+id/nav_profile_fragment"
             android:title="@string/nav_profile_title" />
         <item
@@ -22,5 +25,8 @@
         <item
             android:id="@+id/nav_discover_fragment"
             android:title="@string/nav_discover_title" />
+        <!--<item-->
+            <!--android:id="@+id/nav_home2_fragment"-->
+            <!--android:title="@string/nav_home2_title"/>-->
     </group>
 </menu>

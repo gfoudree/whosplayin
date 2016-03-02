@@ -14,7 +14,7 @@ import android.view.View;
 import android.support.v4.app.Fragment;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -83,6 +83,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_discover_fragment:
                 fragmentClass = Discover_Fragment.class;
                 break;
+            case R.id.nav_home_fragment:
+                fragmentClass = Home_Fragment.class;
+                break;
+            case R.id.nav_home2_fragment:
+                fragmentClass = Home_Fragment.class;
         }
 
         //Error Checking to see if user entered the wrong input
@@ -103,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         mDrawer.closeDrawers();
 
     }
+
+
 
     @Override
     //This method opens or closes the drawer when the action bar home/up action happens
