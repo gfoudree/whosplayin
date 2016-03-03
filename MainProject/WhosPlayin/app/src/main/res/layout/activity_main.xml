@@ -63,6 +63,7 @@
         </LinearLayout>
 
 
+        <!--This widget builds the navbar drawer-->
         <android.support.design.widget.NavigationView
             android:id="@+id/nvView"
             android:layout_width="wrap_content"

@@ -1,12 +1,14 @@
 package group12.whosplayin;
 
 import android.app.FragmentManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity{
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +42,18 @@ public class MainActivity extends AppCompatActivity{
 
         //Now I find the drawer view that is defined by the drawer_layout.xml file
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = setupDrawerToggle();
 
         //Find the drawer view
         NavigationView nvDrawer = (NavigationView) findViewById(R.id.nvView);
         //Then setup drawer view and enable it to navigate between all the fragments
         setupDrawerContent(nvDrawer);
+
+        mDrawer.setDrawerListener(drawerToggle);
+    }
+
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        return new ActionBarDrawerToggle(this,mDrawer,toolbar,R.string.drawer_open,R.string.drawer_close);
     }
 
     private void setupDrawerContent(NavigationView navigationView){
@@ -114,10 +124,8 @@ public class MainActivity extends AppCompatActivity{
     @Override
     //This method opens or closes the drawer when the action bar home/up action happens
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
-                return true;
+        if (drawerToggle.onOptionsItemSelected(item)){
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -126,5 +134,12 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 }

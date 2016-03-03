@@ -13,6 +13,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!--Strings related to the navbar drawer-->
     <string name="title_activity_friend_profile">FriendProfileActivity</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="misc_menu_settings">Settings</string>
@@ -25,6 +27,9 @@
     <string name="nav_achievements_title">My Achievements</string>
     <string name="nav_discover_title">Discover</string>
     <string name="nav_home2_title">Home</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
 
     <!--Strings for the Misc. Menu-->
 
