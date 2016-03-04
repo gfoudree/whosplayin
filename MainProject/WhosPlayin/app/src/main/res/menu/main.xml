@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/misc_menu_logout"
+        android:title="Log Out"
+        android:orderInCategory="100"
+        android:showAsAction="never"/>
+
+    <item android:id="@+id/misc_menu_settings"
+        android:title="@string/misc_menu_settings"
+        android:orderInCategory="101"
+        android:showAsAction="never"/>
+
+    <item android:id="@+id/misc_menu_help"
+        android:title="@string/misc_menu_help"
+        android:orderInCategory="102"
+        android:showAsAction="never"/>
+
+    <item android:id="@+id/misc_menu_contact"
+        android:title="Contact"
+        android:orderInCategory="103"
+        android:showAsAction="never"/>
+
+
+</menu>
