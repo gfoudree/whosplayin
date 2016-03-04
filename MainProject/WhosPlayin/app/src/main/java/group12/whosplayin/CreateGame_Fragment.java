@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,15 +16,23 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.LogRecord;
 
 /**
  * Created by kjdwyer on 2/29/16.
@@ -32,7 +41,7 @@ public class CreateGame_Fragment extends Fragment
 {
     View currentView;
     private EditText mEventTitle;
-    private EditText mLocation;
+    private AutoCompleteTextView mLocation;
     private Spinner mGameType;
     private EditText mMaxPlayers;
     private static EditText mDate;
@@ -51,7 +60,7 @@ public class CreateGame_Fragment extends Fragment
 
         // Make the Fields
         mEventTitle = (EditText) currentView.findViewById(R.id.eventTitle_text);
-        mLocation = (EditText) currentView.findViewById(R.id.location_text);
+        mLocation = (AutoCompleteTextView) currentView.findViewById(R.id.location_text);
         mGameType = (Spinner) currentView.findViewById(R.id.gameType_select);
         mMaxPlayers = (EditText) currentView.findViewById(R.id.maxPlayers_text);
         mDate = (EditText) currentView.findViewById(R.id.date_text);
@@ -60,6 +69,10 @@ public class CreateGame_Fragment extends Fragment
         mDescription = (EditText) currentView.findViewById(R.id.description_text);
         mSubmit = (Button) currentView.findViewById(R.id.submit_button);
         mCancel = (Button) currentView.findViewById(R.id.cancel_button);
+
+
+        // Set autocomplete adapters
+        mLocation.setAdapter(new PlacesAutoCompleteAdapter(getActivity(), R.layout.autocomplete_list_item));
 
         // Load spinner values
         String[] gameTypeArray = new String[] {
@@ -103,6 +116,14 @@ public class CreateGame_Fragment extends Fragment
                 FragmentManager manager = getFragmentManager();
                 manager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
+            }
+        });
+
+        mLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String description = (String) parent.getItemAtPosition(position);
+                Toast.makeText(getActivity(), description, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -224,8 +245,14 @@ public class CreateGame_Fragment extends Fragment
 
         else
         {
-            System.out.println("----------GO TO GOOD-------------------");
+            System.out.println("----------GOOD TO GO-------------------");
         }
+
+    }
+
+    public static class PlacePickerFragment extends DialogFragment
+    {
+        private static final String TAG = "PlacePocer";
 
     }
 
@@ -318,8 +345,93 @@ public class CreateGame_Fragment extends Fragment
         {
             mDate.setText(month + "-" + day + "-" + year);
         }
-
     }
+
+    public static class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable
+    {
+        ArrayList<String> resultList;
+
+        Context mContext;
+        int mResource;
+
+        PlaceAPI mPlaceAPI = new PlaceAPI();
+
+        public PlacesAutoCompleteAdapter(Context context, int resource)
+        {
+            super(context, resource);
+
+            mContext = context;
+            mResource = resource;
+        }
+
+        /**
+         * Gets the size of the result list.
+         * @return
+         *  size of the result array list.
+         */
+//        public int getCount()
+//        {
+//            return resultList.size();
+//        }
+
+        /**
+         * Returns an item that exists at a specific index
+         * @param position
+         *  position wanted to index
+         * @return
+         *  item at specific index
+         */
+        public String getItem(int position)
+        {
+            return resultList.get(position);
+        }
+
+        @Override
+        public Filter getFilter()
+        {
+            Filter filter = new Filter()
+            {
+
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint)
+                {
+                    FilterResults filterResults = new FilterResults();
+                    if(constraint != null)
+                    {
+                        try
+                        {
+                            resultList = mPlaceAPI.autocomplete(constraint.toString());
+                            filterResults.values = resultList;
+                            filterResults.count = resultList.size();
+                        }
+                        catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                    return filterResults;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results)
+                {
+                    if(results != null && results.count > 0)
+                    {
+                        System.out.println("WE got to publishing the results");
+                        notifyDataSetChanged();
+                    }
+
+                    else
+                    {
+                        notifyDataSetChanged();
+                    }
+                }
+            };
+
+            return filter;
+        }
+    }
+
 }
 
 

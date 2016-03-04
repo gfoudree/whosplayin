@@ -21,7 +21,7 @@
             android:id="@+id/eventTitle_text"
             android:layout_gravity="center_horizontal" />
 
-        <EditText
+        <AutoCompleteTextView
             android:hint="Select a Location..."
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
