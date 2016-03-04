@@ -78,7 +78,7 @@ public class PlaceAPI
 
         try
         {
-            Log.d(TAG, jsonResults.toString());
+            // Log.d(TAG, jsonResults.toString());
 
             // Create a JSON Object hierarchy from the results.
             JSONObject jsonObj = new JSONObject(jsonResults.toString());
@@ -97,6 +97,8 @@ public class PlaceAPI
         {
             Log.e(TAG, "Cannot process JSON results", e);
         }
+
+        System.out.println(resultList.toString());
 
         return resultList;
     }

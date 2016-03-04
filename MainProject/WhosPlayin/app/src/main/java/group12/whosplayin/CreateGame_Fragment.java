@@ -41,7 +41,7 @@ public class CreateGame_Fragment extends Fragment
 {
     View currentView;
     private EditText mEventTitle;
-    private AutoCompleteTextView mLocation;
+    private static AutoCompleteTextView mLocation;
     private Spinner mGameType;
     private EditText mMaxPlayers;
     private static EditText mDate;
@@ -250,12 +250,6 @@ public class CreateGame_Fragment extends Fragment
 
     }
 
-    public static class PlacePickerFragment extends DialogFragment
-    {
-        private static final String TAG = "PlacePocer";
-
-    }
-
     /**
      * Inner Class for the time picker fragement that is loaded when a time picker is needed.
      */
@@ -369,10 +363,10 @@ public class CreateGame_Fragment extends Fragment
          * @return
          *  size of the result array list.
          */
-//        public int getCount()
-//        {
-//            return resultList.size();
-//        }
+        public int getCount()
+        {
+            return resultList.size();
+        }
 
         /**
          * Returns an item that exists at a specific index
@@ -403,6 +397,7 @@ public class CreateGame_Fragment extends Fragment
                             resultList = mPlaceAPI.autocomplete(constraint.toString());
                             filterResults.values = resultList;
                             filterResults.count = resultList.size();
+                            System.out.println("FILTER RESULTS: " + filterResults.values.toString());
                         }
                         catch (IOException e)
                         {
@@ -423,10 +418,11 @@ public class CreateGame_Fragment extends Fragment
 
                     else
                     {
-                        notifyDataSetChanged();
+                        notifyDataSetInvalidated();
                     }
                 }
             };
+
 
             return filter;
         }
