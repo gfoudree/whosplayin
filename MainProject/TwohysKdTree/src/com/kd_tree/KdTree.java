@@ -2,6 +2,8 @@ package com.kd_tree;
 
 /**
  * Created by twohyjr on 3/3/16.
+ * This class is the main KdTree class.  It is used to store points in a tree and allow the accessing of each node
+ * to be very quick.
  */
 public class KdTree {
 

@@ -2,6 +2,7 @@ package com.kd_tree;
 
 /**
  * Created by twohyjr on 3/3/16.
+ * This is my object test class.  I will save all of my test code in here for viewing.
  */
 public class TestClass {
 

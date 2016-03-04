@@ -8,7 +8,7 @@ public class Main {
 //        test.run3DTest();
 //        test.runTestPointDistance();
 //        test.runTestFindMin();//Not Working
-        test.testNullKdNode();
+//        test.testNullKdNode();
 
     }
 
