@@ -1,6 +1,7 @@
 package group12.whosplayin;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,9 +22,20 @@ public class MainActivity extends AppCompatActivity{
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
+    private String sessionUserName;
+    private String sessionID;
+    private int userID;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        sessionUserName = extras.getString("USERNAME");
+        sessionID = extras.getString("SESSION_ID");
+        userID = extras.getInt("USER_ID");
+        System.out.println("--EXTRAS USERNAME: " + sessionUserName + " SESSION ID: " + sessionID + " USER ID: " + userID);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -106,6 +118,15 @@ public class MainActivity extends AppCompatActivity{
         }catch (Exception e){
             e.printStackTrace();
         }
+
+        // WE NEED TO PASS THE FRAGMENTS DATA!!!!
+        Bundle bundle = new Bundle();
+        bundle.putString("USERNAME", sessionUserName);
+        bundle.putInt("USER_ID", userID);
+        bundle.putString("SESSION_ID", sessionID);
+
+        fragment.setArguments(bundle);
+
 
         //Insert the selected Fragment by replacing the previous Fragment
         FragmentManager fragmentManager = getFragmentManager();

@@ -51,11 +51,22 @@ public class CreateGame_Fragment extends Fragment
     private Button mSubmit;
     private Button mCancel;
 
+    private String sessionUserName;
+    private String sessionID;
+    private int sessionUserID;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+
+        Bundle bundle = this.getArguments();
+        sessionUserName = bundle.getString("USERNAME");
+        sessionUserID = bundle.getInt("USER_ID");
+        sessionID = bundle.getString("SESSION_ID");
+
+        System.out.println("FROM CREATE GAME: " + sessionID + ", " + sessionUserID + ", " + sessionUserName);
         currentView = inflater.inflate(R.layout.creategame_layout, container, false);
 
         // Make the Fields

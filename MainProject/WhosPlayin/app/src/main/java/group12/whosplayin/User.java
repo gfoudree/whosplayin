@@ -50,7 +50,11 @@ public class User {
             try
             {
                 JSONObject obj = new JSONObject(json);
+                this.username = username;
                 this.sessionId = obj.getString("sessionId");
+//                TODO THIS IS WHAT I WAS TYRING< TO WORKING.
+//                getUserInfo();
+//                Log.d("USER INFO", "EXIT GET USER INFO");
                 return true;
             }
             catch (Exception e)
@@ -64,6 +68,7 @@ public class User {
 
     public void getUserInfo() throws Exception
     {
+        Log.d("USER INFO", "Called User Info");
         if (sessionId.isEmpty() || username.isEmpty())
             throw new Exception("No username or session ID!");
 
@@ -89,6 +94,21 @@ public class User {
     public String toString()
     {
         return String.format("%d, %s, %s, %d, %s, %s, %d, %s, %s, %s, %d, %d", id, username, name, age, gender, location, rating, verified, dateCreated, profilePicture, gamesPlayed, gamesCreated);
+    }
+
+    public String getSessionId()
+    {
+        return this.sessionId;
+    }
+
+    public String getUsername()
+    {
+        return this.username;
+    }
+
+    public int getUserId()
+    {
+        return this.id;
     }
 
 }

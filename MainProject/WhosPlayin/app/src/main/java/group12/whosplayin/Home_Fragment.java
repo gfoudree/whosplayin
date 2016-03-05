@@ -16,12 +16,15 @@ import android.widget.Button;
 public class Home_Fragment extends Fragment
 {
     private Button mCreateGame;
+    private Bundle bundle;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        bundle = this.getArguments();
+
         View currentView = inflater.inflate(R.layout.home_layout, container, false);
 
         mCreateGame = (Button) currentView.findViewById(R.id.createGame_button);
@@ -43,6 +46,8 @@ public class Home_Fragment extends Fragment
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
+
+                fragment.setArguments(bundle);
 
                 // DO THE NAVIGATION
                 FragmentManager manager = getFragmentManager();
