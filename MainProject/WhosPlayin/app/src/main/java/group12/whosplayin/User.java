@@ -52,7 +52,7 @@ public class User {
                 JSONObject obj = new JSONObject(json);
                 this.username = username;
                 this.sessionId = obj.getString("sessionId");
-//                TODO THIS IS WHAT I WAS TYRING< TO WORKING.
+//                // TODO THIS IS WHAT I WAS TYRING< TO WORKING.
 //                getUserInfo();
 //                Log.d("USER INFO", "EXIT GET USER INFO");
                 return true;

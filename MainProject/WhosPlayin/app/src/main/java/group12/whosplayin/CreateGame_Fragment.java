@@ -9,6 +9,7 @@ import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -51,9 +52,11 @@ public class CreateGame_Fragment extends Fragment
     private Button mSubmit;
     private Button mCancel;
 
-    private String sessionUserName;
-    private String sessionID;
-    private int sessionUserID;
+    private static String sessionUserName;
+    private static String sessionID;
+    private static int sessionUserID;
+
+    private UserCreateGameTask mCreateGameTask = null;
 
 
     @Nullable
@@ -191,6 +194,11 @@ public class CreateGame_Fragment extends Fragment
         String endTime = mEndTime.getText().toString();
         String description = mDescription.getText().toString();
 
+        if(mCreateGameTask != null)
+        {
+            return;
+        }
+
         // Check for emtpy event title.
         if(TextUtils.isEmpty(eventTitle))
         {
@@ -256,9 +264,69 @@ public class CreateGame_Fragment extends Fragment
 
         else
         {
+            startTime = startTime.replaceAll("\\s", "");
+            endTime = endTime.replaceAll("\\s", "");
             System.out.println("----------GOOD TO GO-------------------");
+            String start = date + " " + startTime + ":00";
+            String end = date + " " + endTime+ ":00";
+            mCreateGameTask = new UserCreateGameTask(sessionUserName, sessionID, eventTitle, maxPlayers, start, end, gameType, sessionUserID);
+            mCreateGameTask.execute((Void) null);
         }
 
+    }
+
+    /**
+     * Represents an asynchonus create a game task used to create games.
+     */
+    public static class UserCreateGameTask extends AsyncTask<Void, Void, Boolean>
+    {
+        private String userName;
+        private String sessionID;
+        private String eventTitle;
+        private String maxPlayers;
+        private String startTime;
+        private String endTime;
+        private String gameType;
+        private int userId;
+
+        UserCreateGameTask(String userName, String sessionID, String eventTitle, String maxPlayers, String startTime, String endTime, String gameType, int userId)
+        {
+            this.userName = userName;
+            this.sessionID = sessionID;
+            this.eventTitle = eventTitle;
+            this.maxPlayers = maxPlayers;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.gameType = gameType;
+            this.userId = 1;
+        }
+
+
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+            Game game = new Game();
+
+            System.out.println(userName);
+            System.out.println(sessionID);
+            System.out.println(eventTitle);
+            System.out.println(maxPlayers);
+            System.out.println(startTime);
+            System.out.println(endTime);
+            System.out.println(gameType);
+            System.out.println(userId);
+
+            try
+            {
+                game.createGame(userName, sessionID, eventTitle, maxPlayers, startTime, endTime, gameType, userId);
+                return true;
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                return false;
+            }
+        }
     }
 
     /**
@@ -348,7 +416,7 @@ public class CreateGame_Fragment extends Fragment
          */
         public void setDate(int year, int month, int day)
         {
-            mDate.setText(month + "-" + day + "-" + year);
+            mDate.setText(year + "-" + month + "-" + day);
         }
     }
 

@@ -340,6 +340,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             {
                 System.out.println(user.toString());
                 //Create main screen activity
+                try {
+                    user.getUserInfo();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 Bundle extras = new Bundle();
                 extras.putString("USERNAME", user.getUsername());
