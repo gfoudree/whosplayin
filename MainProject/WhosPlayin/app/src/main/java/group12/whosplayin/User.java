@@ -25,13 +25,19 @@ public class User {
     public String name = "";
     public int age = 0;
     public String gender = "";
-    public String location = "";
+    public String locationX = "";
+    public String locationY = "";
+    public String locationZ = "";
+    public String zipcode = "";
     public int rating = 0;
+    public int upVotes = 0;
+    public int downVotes = 0;
     public String verified = "";
     public String dateCreated = "";
     public String profilePicture = "";
     public int gamesPlayed = 0;
-    private int gamesCreated = 0;
+    public int gamesCreated = 0;
+    public String bio = "";
 
     public boolean authenticate(String username, String password) throws Exception
     {
@@ -77,18 +83,20 @@ public class User {
         this.id = obj.getInt("id");
         this.age = obj.getInt("age");
         this.gender = obj.getString("gender");
-        this.location = obj.getString("location");
+        this.locationX = obj.getString("location");
         this.rating = obj.getInt("rating");
         this.verified = obj.getString("verified");
         this.dateCreated = obj.getString("dateCreated");
         this.gamesPlayed = obj.getInt("gamesPlayed");
         this.gamesCreated = obj.getInt("gamesCreated");
+
+        //TODO add upvote/downvote
     }
 
     @Override
     public String toString()
     {
-        return String.format("%d, %s, %s, %d, %s, %s, %d, %s, %s, %s, %d, %d", id, username, name, age, gender, location, rating, verified, dateCreated, profilePicture, gamesPlayed, gamesCreated);
+        return String.format("%d, %s, %s, %d, %s, %s, %d, %s, %s, %s, %d, %d", id, username, name, age, gender, locationX, rating, verified, dateCreated, profilePicture, gamesPlayed, gamesCreated);
     }
 
 }
