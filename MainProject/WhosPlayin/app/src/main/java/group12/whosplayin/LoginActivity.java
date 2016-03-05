@@ -346,11 +346,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     e.printStackTrace();
                 }
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                Bundle extras = new Bundle();
-                extras.putString("USERNAME", user.getUsername());
-                extras.putInt("USER_ID", user.getUserId());
-                extras.putString("SESSION_ID", user.getSessionId());
-                intent.putExtras(extras);
+
+                // Make outgoing bundle
+                Bundle outgoing = new Bundle();
+                outgoing.putString("USERNAME", user.getUsername());
+                outgoing.putInt("USER_ID", user.getUserId());
+                outgoing.putString("SESSION_ID", user.getSessionId());
+                Log.d("Login Outgiong Bundle", user.getUsername() + ", " + user.getUserId() + ", " + user.getSessionId());
+
+                intent.putExtras(outgoing);
                 startActivity(intent);
             }
 
