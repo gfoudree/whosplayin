@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +32,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.LogRecord;
 
 /**
@@ -63,13 +67,14 @@ public class CreateGame_Fragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        // Get incoming bundle.
+        Bundle incoming = this.getArguments();
+        sessionUserName = incoming.getString("USERNAME");
+        sessionUserID = incoming.getInt("USER_ID");
+        sessionID = incoming.getString("SESSION_ID");
+        Log.d("Incoming Create Game", sessionUserName + ", " + sessionUserID + ", " + sessionID);
 
-        Bundle bundle = this.getArguments();
-        sessionUserName = bundle.getString("USERNAME");
-        sessionUserID = bundle.getInt("USER_ID");
-        sessionID = bundle.getString("SESSION_ID");
 
-        System.out.println("FROM CREATE GAME: " + sessionID + ", " + sessionUserID + ", " + sessionUserName);
         currentView = inflater.inflate(R.layout.creategame_layout, container, false);
 
         // Make the Fields
@@ -118,6 +123,14 @@ public class CreateGame_Fragment extends Fragment
                 try
                 {
                     fragment = (Fragment) fragmentClass.newInstance();
+
+                    // Make the outgoing bundle.
+                    Bundle outgoing = new Bundle();
+                    outgoing.putString("USERNAME", sessionUserName);
+                    outgoing.putString("SESSION_ID", sessionID);
+                    outgoing.putInt("USER_ID", sessionUserID);
+                    fragment.setArguments(outgoing);
+                    Log.d("Create Game Out Bundle", sessionUserName + ", " + sessionUserID + ", " + sessionID);
                 }
 
                 catch (Exception e)
@@ -133,7 +146,8 @@ public class CreateGame_Fragment extends Fragment
             }
         });
 
-        mLocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mLocation.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String description = (String) parent.getItemAtPosition(position);
@@ -255,6 +269,36 @@ public class CreateGame_Fragment extends Fragment
             cancel = true;
         }
 
+        // End Time needs to be greater than Start Time.
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        Date endD = null;
+        Date startD = null;
+
+        try
+        {
+            startTime = startTime.replaceAll("\\s", "");
+            endTime = endTime.replaceAll("\\s", "");
+            startD = format.parse(startTime);
+            endD = format.parse(endTime);
+
+
+            Log.d("Start Time", startTime);
+            Log.d("End Time", endTime);
+            Log.d("Compare Times", Integer.toString(endD.compareTo(startD)));
+
+            if(endD.compareTo(startD) <= 0)
+            {
+                mEndTime.setError("End Time cannot be before Start Time");
+                focusView = mEndTime;
+                cancel = true;
+            }
+        }
+
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
         // no need to check description, not required.
         // check if cancel was set, if it was focus to the first error.
         if(cancel)
@@ -264,9 +308,6 @@ public class CreateGame_Fragment extends Fragment
 
         else
         {
-            startTime = startTime.replaceAll("\\s", "");
-            endTime = endTime.replaceAll("\\s", "");
-            System.out.println("----------GOOD TO GO-------------------");
             String start = date + " " + startTime + ":00";
             String end = date + " " + endTime+ ":00";
             mCreateGameTask = new UserCreateGameTask(sessionUserName, sessionID, eventTitle, maxPlayers, start, end, gameType, sessionUserID);
@@ -307,15 +348,6 @@ public class CreateGame_Fragment extends Fragment
         {
             Game game = new Game();
 
-            System.out.println(userName);
-            System.out.println(sessionID);
-            System.out.println(eventTitle);
-            System.out.println(maxPlayers);
-            System.out.println(startTime);
-            System.out.println(endTime);
-            System.out.println(gameType);
-            System.out.println(userId);
-
             try
             {
                 game.createGame(userName, sessionID, eventTitle, maxPlayers, startTime, endTime, gameType, userId);
@@ -340,7 +372,6 @@ public class CreateGame_Fragment extends Fragment
         {
 
             tag = this.getTag();
-            System.out.println("THIS TAG IS: " + tag);
 
             final Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -420,6 +451,9 @@ public class CreateGame_Fragment extends Fragment
         }
     }
 
+    /**
+     * Class that makes the Places Auto Complete Work.
+     */
     public static class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable
     {
         ArrayList<String> resultList;
@@ -476,7 +510,6 @@ public class CreateGame_Fragment extends Fragment
                             resultList = mPlaceAPI.autocomplete(constraint.toString());
                             filterResults.values = resultList;
                             filterResults.count = resultList.size();
-                            System.out.println("FILTER RESULTS: " + filterResults.values.toString());
                         }
                         catch (IOException e)
                         {
@@ -491,7 +524,6 @@ public class CreateGame_Fragment extends Fragment
                 {
                     if(results != null && results.count > 0)
                     {
-                        System.out.println("WE got to publishing the results");
                         notifyDataSetChanged();
                     }
 
