@@ -31,9 +31,13 @@ public class MainActivity extends AppCompatActivity{
     {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        sessionUserName = extras.getString("USERNAME");
-        sessionID = extras.getString("SESSION_ID");
-        userID = extras.getInt("USER_ID");
+//        sessionUserName = extras.getString("USERNAME");
+//        sessionID = extras.getString("SESSION_ID");
+//        userID = extras.getInt("USER_ID");
+
+        sessionUserName = "tom";
+        sessionID = "FAKEID";
+        userID = 1;
         System.out.println("--EXTRAS USERNAME: " + sessionUserName + " SESSION ID: " + sessionID + " USER ID: " + userID);
 
         super.onCreate(savedInstanceState);
@@ -64,7 +68,8 @@ public class MainActivity extends AppCompatActivity{
         mDrawer.setDrawerListener(drawerToggle);
     }
 
-    private ActionBarDrawerToggle setupDrawerToggle() {
+    private ActionBarDrawerToggle setupDrawerToggle()
+    {
         return new ActionBarDrawerToggle(this,mDrawer,toolbar,R.string.drawer_open,R.string.drawer_close);
     }
 
@@ -113,9 +118,12 @@ public class MainActivity extends AppCompatActivity{
         }
 
         //Error Checking to see if user entered the wrong input
-        try {
+        try
+        {
             fragment = (android.app.Fragment) fragmentClass.newInstance();
-        }catch (Exception e){
+        }
+
+        catch (Exception e){
             e.printStackTrace();
         }
 

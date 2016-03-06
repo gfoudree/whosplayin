@@ -11,6 +11,15 @@ import java.util.Objects;
 public class Game
 {
 
+    private String eventTitle;
+    private String location;
+    private int maxPlayers;
+    private int numCurrentPlayers;
+    private String startTime;
+    private String endTime;
+    private String gameType;
+    private int captainId;
+
     /**
      * Function to create a game. This funciton takes in the parameters passed, builds a URl,
      * and posts the information to datebase.
@@ -34,7 +43,7 @@ public class Game
      *  User ID of the person who created the game.
      * @throws Exception
      */
-    public void createGame(String userName, String sessionID, String eventTitle, String maxPlayers, String startTime, String endTime, String gameType, int captainID) throws Exception
+    public void createGame(String userName, String sessionID, String eventTitle, int maxPlayers, String startTime, String endTime, String gameType, int captainID) throws Exception
     {
         // We need to get rid of spaces, it messes thing up...
         eventTitle = eventTitle.replaceAll("\\s", "%20");
@@ -42,10 +51,19 @@ public class Game
         endTime = endTime.replaceAll("\\s", "%20");
         gameType = gameType.replaceAll("\\s", "%20");
 
+        //Update variables
+        this.eventTitle = eventTitle;
+        this.maxPlayers = maxPlayers;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.gameType = gameType;
+        this.captainId = captainId;
+        this.location = "DUMMY DATA";
+
         // Store the values and key in a hashmap
         HashMap<String, String> create = new HashMap<>();
         create.put("title", eventTitle);
-        create.put("maxPlayers", maxPlayers);
+        create.put("maxPlayers", Integer.toString(maxPlayers));
         create.put("startTime", startTime);
         create.put("endTime", endTime);
         create.put("gameType", gameType);
@@ -57,4 +75,58 @@ public class Game
         String json = WebAPI.getJson("games/newGame", url);
         Log.d("Create Game Info", json); // Should return success.
     }
+
+    public void getGameInfo()
+    {
+        // TODO: MAKE API CALL AND SET THE VARIABLES
+        //DUMMY DATA FOR NOW
+        this.eventTitle = "Jack's Test Data";
+        this.maxPlayers = 10;
+        this.startTime = "2016-03-05 18:45:00";
+        this.endTime = "2016-03-05 22:45:00";
+        this.gameType = "Basketball";
+        this.captainId = 1;
+        this.location = "Ames";
+    }
+
+    public String getEventTitle()
+    {
+        return this.eventTitle;
+    }
+
+    public int getMaxPlayers()
+    {
+        return this.maxPlayers;
+    }
+
+    public String getStartTime()
+    {
+        return this.startTime;
+    }
+
+    public String getEndTime()
+    {
+        return this.endTime;
+    }
+
+    public String getGameType()
+    {
+        return this.gameType;
+    }
+
+    public int getCaptainId()
+    {
+        return this.captainId;
+    }
+
+    public String getLocation()
+    {
+        return this.location;
+    }
+
+    public int getNumCurrentPlayers()
+    {
+        return this.numCurrentPlayers;
+    }
+
 }

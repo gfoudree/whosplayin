@@ -202,7 +202,7 @@ public class CreateGame_Fragment extends Fragment
         String eventTitle = mEventTitle.getText().toString();
         String location = mLocation.getText().toString();
         String gameType = mGameType.getSelectedItem().toString();
-        String maxPlayers = mMaxPlayers.getText().toString();
+        int maxPlayers = Integer.parseInt(mMaxPlayers.getText().toString());
         String date = mDate.getText().toString();
         String startTime = mStartTime.getText().toString();
         String endTime = mEndTime.getText().toString();
@@ -238,7 +238,7 @@ public class CreateGame_Fragment extends Fragment
         }
 
         // check for empty max player.
-        if(TextUtils.isEmpty(maxPlayers))
+        if(TextUtils.isEmpty(Integer.toString(maxPlayers)))
         {
             mMaxPlayers.setError("Max Players field cannot be empty.");
             focusView = mMaxPlayers;
@@ -324,13 +324,13 @@ public class CreateGame_Fragment extends Fragment
         private String userName;
         private String sessionID;
         private String eventTitle;
-        private String maxPlayers;
+        private int maxPlayers;
         private String startTime;
         private String endTime;
         private String gameType;
         private int userId;
 
-        UserCreateGameTask(String userName, String sessionID, String eventTitle, String maxPlayers, String startTime, String endTime, String gameType, int userId)
+        UserCreateGameTask(String userName, String sessionID, String eventTitle, int maxPlayers, String startTime, String endTime, String gameType, int userId)
         {
             this.userName = userName;
             this.sessionID = sessionID;

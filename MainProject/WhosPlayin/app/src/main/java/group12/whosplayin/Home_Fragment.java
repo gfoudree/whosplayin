@@ -2,15 +2,22 @@ package group12.whosplayin;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
 /**
  * Created by kjdwyer on 2/29/16.
  */
@@ -20,6 +27,7 @@ public class Home_Fragment extends Fragment
     private String sessionUserName;
     private String sessionID;
     private int sessionUserID;
+    private ListView gamesList;
 
 
     @Nullable
@@ -35,6 +43,31 @@ public class Home_Fragment extends Fragment
 
 
         View currentView = inflater.inflate(R.layout.home_layout, container, false);
+
+
+        ArrayList<Game> gameArray = new ArrayList<Game>();
+
+        // TODO FILL THE GAME ARRAY LIST
+        Game game = new Game();
+        game.getGameInfo();
+        gameArray.add(game);
+
+        Game[] finalGameArray = new Game[gameArray.size()];
+        finalGameArray= gameArray.toArray(finalGameArray);
+
+
+
+        Log.d("GAME INFO", game.getEventTitle());
+        Log.d("ARRAY SIZE", Integer.toString(finalGameArray.length));
+
+
+        // List View Stuff
+        gamesList = (ListView) currentView.findViewById(R.id.listView);
+        ListAdapter listAdapter = new MyAdapter(getActivity().getApplicationContext(), finalGameArray);
+        gamesList.setAdapter(listAdapter);
+
+        Log.d("ADAPTER", "Set Adapter");
+
 
         mCreateGame = (Button) currentView.findViewById(R.id.createGame_button);
         mCreateGame.setOnClickListener(new View.OnClickListener()
@@ -70,5 +103,35 @@ public class Home_Fragment extends Fragment
 
 
         return currentView;
+    }
+
+    public class MyAdapter extends ArrayAdapter<Game>
+    {
+        public MyAdapter(Context context, Game[] values)
+        {
+            super(context, R.layout.gamelist_layout, values);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent)
+        {
+            Log.d("MY ADAPTER", "In MY ADAPTER");
+            LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
+            View view = inflater.inflate(R.layout.gamelist_layout, parent, false);
+
+            Game game = getItem(position);
+            TextView locationText = (TextView) view.findViewById(R.id.location);
+            TextView timeText = (TextView) view.findViewById(R.id.gameTime);
+            TextView playersText = (TextView) view.findViewById(R.id.numPlayers);
+            TextView titleText = (TextView) view.findViewById(R.id.eventTitle);
+
+            titleText.setText(game.getEventTitle());
+            Log.d("Title Text", titleText.toString());
+            timeText.setText(game.getStartTime() + " - " + game.getEndTime());
+            playersText.setText(game.getNumCurrentPlayers() + "/" + game.getMaxPlayers());
+            locationText.setText(game.getLocation());
+
+            return view;
+        }
     }
 }
