@@ -3,6 +3,9 @@ package group12.whosplayin;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -20,8 +23,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,13 +36,18 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
+import android.app.FragmentManager;
 import com.google.gson.Gson;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import android.support.v7.app.ActionBarActivity;
+import android.widget.Toast;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -97,8 +107,33 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button mRegisterButton = (Button) findViewById(R.id.register_button);
+        mRegisterButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v)
+                {
+                    Registration_Fragment regfragment = new Registration_Fragment();
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_placeholder,regfragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+        });
+
+
+        Registration_Fragment regisFragment = new Registration_Fragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.add(R.id.fragment_placeholder,regisFragment);
+        transaction.commit();
+
+
+
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
+
+
 
     }
 
@@ -285,6 +320,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mEmailView.setAdapter(adapter);
     }
+
+
 
     private interface ProfileQuery {
         String[] PROJECTION = {
