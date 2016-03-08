@@ -30,99 +30,121 @@ public class RegistrationActivity extends Activity {
         setContentView(R.layout.registration_layout);
 
         //Name EditText
-        EditText editTextName = (EditText) findViewById(R.id.registration_name);
-        editTextName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    registerName = v.getText().toString();
-                }
-                return handled;
-            }
-        });
+        final EditText editTextName = (EditText) findViewById(R.id.registration_name);
+//        editTextName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                boolean handled = false;
+//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+//                    registerName = v.getText().toString();
+//                }
+//                return handled;
+//            }
+//        });
+//        editTextName.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+//                    registerName = editTextName.getText().toString();
+//                    return true;
+//                }
+//                return true;
+//
+//            }
+//        });
 
         //Email EditText
-        EditText editTextEmail = (EditText) findViewById(R.id.registration_email);
-        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    registerEmail = v.getText().toString();
-                }
-                return handled;
-            }
-        });
+        final EditText editTextEmail = (EditText) findViewById(R.id.registration_email);
+//        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                boolean handled = false;
+//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+//                    registerEmail = v.getText().toString();
+//                }
+//                return handled;
+//            }
+//        });
+//
+//        //Username TextEdit
+        final EditText editTextUsername = (EditText) findViewById(R.id.registration_username);
+//        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                boolean handled = false;
+//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+//                    registerUserName = v.getText().toString();
+//                }
+//                return handled;
+//            }
+//        });
+//
+//        //Gender TextEdit
+        final EditText editTextGender = (EditText) findViewById(R.id.registration_gender);
+//        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                boolean handled = false;
+//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+//                    registerGender = v.getText().toString();
+//                }
+//                return handled;
+//            }
+//        });
+//
+        final EditText editTextPassword = (EditText) findViewById(R.id.registration_password);
+//        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                boolean handled = false;
+//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+//                    registerPassword = v.getText().toString();
+//                }
+//                return handled;
+//            }
+//        });
+//
+//        //Phone Number EditText
+        final EditText editTextPhone = (EditText) findViewById(R.id.registration_phone);
+//        editTextPhone.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                boolean handled = false;
+//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+//                    registerPhone = v.getText().toString();
+//                }
+//                return handled;
+//            }
+//        });
+//
+        final EditText editTextLocation = (EditText) findViewById(R.id.registration_location);
+//        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                boolean handled = false;
+//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+//                    registerLocation = v.getText().toString();
+//                }
+//                return handled;
+//            }
+//        });
 
-        //Username TextEdit
-        EditText editTextUsername = (EditText) findViewById(R.id.registration_username);
-        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    registerUserName = v.getText().toString();
-                }
-                return handled;
-            }
-        });
-
-        //Gender TextEdit
-        EditText editTextGender = (EditText) findViewById(R.id.registration_gender);
-        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    registerGender = v.getText().toString();
-                }
-                return handled;
-            }
-        });
-
-        EditText editTextPassword = (EditText) findViewById(R.id.registration_password);
-        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    registerPassword = v.getText().toString();
-                }
-                return handled;
-            }
-        });
-
-        //Phone Number EditText
-        EditText editTextPhone = (EditText) findViewById(R.id.registration_phone);
-        editTextPhone.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    registerPhone = v.getText().toString();
-                }
-                return handled;
-            }
-        });
-
-        EditText editTextLocation = (EditText) findViewById(R.id.registration_location);
-        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    registerLocation = v.getText().toString();
-                }
-                return handled;
-            }
-        });
 
         //When they submit
         Button submitButton = (Button) findViewById(R.id.registration_submit_button);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                registerName = editTextName.getText().toString();
+                registerUserName = editTextUsername.getText().toString();
+                registerEmail = editTextEmail.getText().toString();
+                registerGender = editTextGender.getText().toString();
+                registerPhone = editTextPhone.getText().toString();
+                registerPassword = editTextPassword.getText().toString();
+                registerLocation = editTextLocation.getText().toString();
+
+                
                 regTask = new RegistrationTask(registerName, registerEmail, registerUserName, registerGender,
                         registerPassword, registerPhone);
                 try {
