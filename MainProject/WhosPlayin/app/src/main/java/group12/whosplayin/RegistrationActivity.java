@@ -22,6 +22,7 @@ public class RegistrationActivity extends Activity {
     private String registerGender;
     private String registerPassword;
     private String registerLocation;
+    private String registerAge;
     private RegistrationTask regTask = null;
 
     @Override
@@ -128,7 +129,7 @@ public class RegistrationActivity extends Activity {
 //                return handled;
 //            }
 //        });
-
+        final EditText editTextAge = (EditText) findViewById(R.id.registration_age);
 
         //When they submit
         Button submitButton = (Button) findViewById(R.id.registration_submit_button);
@@ -143,16 +144,11 @@ public class RegistrationActivity extends Activity {
                 registerPhone = editTextPhone.getText().toString();
                 registerPassword = editTextPassword.getText().toString();
                 registerLocation = editTextLocation.getText().toString();
+                registerAge = editTextAge.getText().toString();
 
-                
                 regTask = new RegistrationTask(registerName, registerEmail, registerUserName, registerGender,
-                        registerPassword, registerPhone);
-                try {
-                    regTask.doInBackground();
-                }catch (Exception e){
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "One of the fields was not filled in correctly", Toast.LENGTH_SHORT).show();
-                }
+                        registerPassword, registerPhone, registerLocation,registerAge);
+                regTask.doInBackground();
 
                 startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
 
@@ -170,8 +166,9 @@ public class RegistrationActivity extends Activity {
         String password;
         String phoneNumber;
         String location;
+        String age;
 
-        RegistrationTask(String name, String email, String username, String gender, String password, String phonenumber)
+        RegistrationTask(String name, String email, String username, String gender, String password, String phonenumber, String location, String age)
         {
             this.name = name;
             this.email = email;
@@ -179,6 +176,8 @@ public class RegistrationActivity extends Activity {
             this.gender = gender;
             this.password = password;
             this.phoneNumber = phonenumber;
+            this.location = location;
+            this.age = age;
         }
 
 
@@ -186,7 +185,7 @@ public class RegistrationActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... params) {
             User user = new User();
-            try{user.registerUser(username, email, name, gender, password, location, phoneNumber);
+            try{user.registerUser(username, email, name, gender, password, location, phoneNumber,age);
                 return true;
             }catch (Exception e){
                 e.printStackTrace();

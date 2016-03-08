@@ -91,14 +91,26 @@
         android:layout_margin="25dp"
         android:imeOptions="actionNext"/>
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text|number"
+        android:hint="Age"
+        android:ems="10"
+        android:id="@+id/registration_age"
+        android:layout_below="@+id/registration_location"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="25dp"
+        android:imeOptions="actionNext"/>
 
-    String location;
+
+
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:layout_below="@id/registration_location"
+        android:layout_below="@id/registration_age"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:id="@+id/registration_submit_button"/>

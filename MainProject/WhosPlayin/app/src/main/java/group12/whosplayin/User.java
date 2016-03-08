@@ -86,7 +86,7 @@ public class User {
         this.gamesCreated = obj.getInt("gamesCreated");
     }
 
-    public void registerUser(String username, String email, String name, String gender, String password, String location, String phoneNumber) throws Exception {
+    public void registerUser(String username, String email, String name, String gender, String password, String location, String phoneNumber, String age) throws Exception {
         this.name = name;
         this.username = username;
         this.email = email;
@@ -94,6 +94,7 @@ public class User {
         this.password = password;
         this.location = location;
         this.phoneNumber = phoneNumber;
+        this.age = Integer.parseInt(age);
 
         //This replaces all the spaces in the strings with %20 because JSON does not
         //react well to spaces
@@ -110,15 +111,17 @@ public class User {
 
         HashMap<String,String> regHashMap = new HashMap<>();
         regHashMap.put("username", username);
-        regHashMap.put("email", email);
+        regHashMap.put("email",email);
         regHashMap.put("name", name);
         regHashMap.put("gender", gender);
+        regHashMap.put("phoneNumber",phoneNumber);
         regHashMap.put("password", password);
         regHashMap.put("location", location);
-        regHashMap.put("phoneNumber", phoneNumber);
+        regHashMap.put("age",age);
 
         String url = WebAPI.queryBuilder(regHashMap, null,null);
         String json = WebAPI.getJson("user/create",url);
+        Log.d("Testing JSON", json);
     }
 
     @Override

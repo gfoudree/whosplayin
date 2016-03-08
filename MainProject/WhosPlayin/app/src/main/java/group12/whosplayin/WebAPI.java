@@ -22,6 +22,7 @@ public class WebAPI {
         con.setRequestMethod("POST");
         con.setDoOutput(true);
 
+        //Sha256 hash of password
         DataOutputStream ds = new DataOutputStream(con.getOutputStream());
         ds.writeBytes(query);
         ds.flush();
