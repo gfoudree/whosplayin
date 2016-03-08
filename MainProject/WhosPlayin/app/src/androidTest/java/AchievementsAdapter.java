@@ -14,14 +14,16 @@ import group12.whosplayin.R;
 
 /**
  * Created by twohyjr on 3/5/16.
+ * Used for creating a list view of Achievements
  */
-public class FriendsListAdapter extends ArrayAdapter {
+public class AchievementsAdapter extends ArrayAdapter {
 
     private Context context;
     private int id;
     private List<String> items;
 
-    public FriendsListAdapter(Context context, int textViewResourceId, List<String> colors){
+
+    public AchievementsAdapter(Context context, int textViewResourceId, List<String> colors){
         super(context,textViewResourceId,colors);
         this.context = context;
         this.id = textViewResourceId;

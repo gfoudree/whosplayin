@@ -58,7 +58,7 @@ public class MyProfile_Fragment extends Fragment{
         //setUserInfo(new User());
         Achievement[] achievements = getAchievements();
         ListAdapter friendsAdapter = new AchievmentAdapter(myActivity,achievements);
-        ListView friendsListView = (ListView)this.getActivity().findViewById(R.id.friendsListView);
+        ListView friendsListView = (ListView)this.getActivity().findViewById(R.id.AchievementsListView);
         friendsListView.setAdapter(friendsAdapter);
 
         friendsListView.setOnItemClickListener(
@@ -91,10 +91,6 @@ public class MyProfile_Fragment extends Fragment{
         downVoteText.setText(pageUser.downVotes);
         gamesPlayedText.setText(pageUser.gamesPlayed);
         genderText.setText(pageUser.gender);
-
-
-
-
     }
 
     public Achievement[] getAchievements(){
