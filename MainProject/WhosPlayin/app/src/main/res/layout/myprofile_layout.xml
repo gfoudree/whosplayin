@@ -181,11 +181,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Message Me"
-            android:id="@+id/button2"
+            android:id="@+id/messageButton"
             android:layout_below="@+id/bioText"
             android:layout_toRightOf="@+id/textView4"
             android:layout_alignRight="@+id/downVoteText"
-            android:layout_alignEnd="@+id/downVoteText" />
+            android:layout_alignEnd="@+id/downVoteText"
+            android:clickable="true" />
 
         <TextView
             android:layout_width="wrap_content"

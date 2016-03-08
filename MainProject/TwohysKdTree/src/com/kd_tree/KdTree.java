@@ -71,6 +71,10 @@ public class KdTree {
         }
     }
 
+
+
+
+
     public double getPointDist(double[] p1, double[] p2) {
         double distance = 0;
         if(p1 == null || p2 == null){
