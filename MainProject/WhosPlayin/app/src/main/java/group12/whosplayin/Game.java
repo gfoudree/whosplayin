@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class Game
 {
-
+    private int gameId;
     private String eventTitle;
     private String location;
     private int maxPlayers;
@@ -80,6 +80,7 @@ public class Game
     {
         // TODO: MAKE API CALL AND SET THE VARIABLES
         //DUMMY DATA FOR NOW
+        this.gameId = 1;
         this.eventTitle = "Jack's Test Data";
         this.maxPlayers = 10;
         this.startTime = "2016-03-05 18:45:00";
@@ -127,6 +128,11 @@ public class Game
     public int getNumCurrentPlayers()
     {
         return this.numCurrentPlayers;
+    }
+
+    public int getGameId()
+    {
+        return this.gameId;
     }
 
 }

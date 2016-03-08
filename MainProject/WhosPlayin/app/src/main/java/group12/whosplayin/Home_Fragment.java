@@ -4,12 +4,12 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -29,8 +29,6 @@ public class Home_Fragment extends Fragment
     private int sessionUserID;
     private ListView gamesList;
 
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -66,6 +64,42 @@ public class Home_Fragment extends Fragment
         ListAdapter listAdapter = new MyAdapter(getActivity().getApplicationContext(), finalGameArray);
         gamesList.setAdapter(listAdapter);
 
+        gamesList.setClickable(true);
+        gamesList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+
+                Game currentGame = (Game) gamesList.getItemAtPosition(position);
+                int gameId = currentGame.getGameId();
+
+                Class fragmentClass = ViewGame_Fragment.class;
+                Fragment fragment = null;
+
+                try
+                {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                }
+
+                catch(java.lang.InstantiationException e)
+                {
+                    e.printStackTrace();
+                }
+
+                catch(IllegalAccessException e)
+                {
+                    e.printStackTrace();
+                }
+
+                Bundle outgoing = new Bundle();
+                outgoing.putInt("GAME_ID", gameId);
+
+                FragmentManager manager = getFragmentManager();
+                manager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            }
+        });
+
         Log.d("ADAPTER", "Set Adapter");
 
 
@@ -85,10 +119,15 @@ public class Home_Fragment extends Fragment
                 catch (java.lang.InstantiationException e)
                 {
                     e.printStackTrace();
-                } catch (IllegalAccessException e) {
+                }
+
+                catch (IllegalAccessException e)
+                {
                     e.printStackTrace();
                 }
 
+
+                // Create the outgoing bundle
                 Bundle outgoing = new Bundle();
                 outgoing.putString("USERNAME", sessionUserName);
                 outgoing.putInt("USER_ID", sessionUserID);
