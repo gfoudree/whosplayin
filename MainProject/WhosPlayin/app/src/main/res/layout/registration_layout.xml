@@ -1,13 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="This is the Registration View"
-        android:textSize="30sp"
-        android:gravity="center"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName|textCapWords"
+        android:hint="Name"
+        android:ems="10"
+        android:id="@+id/registration_name"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="25dp"
+        android:imeOptions="actionNext"/>
 
-</LinearLayout>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Username"
+        android:ems="10"
+        android:id="@+id/registration_username"
+        android:layout_below="@+id/registration_name"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="25dp"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:hint="Email Address"
+        android:ems="10"
+        android:id="@+id/registration_email"
+        android:layout_below="@+id/registration_username"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="25dp"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text|number"
+        android:hint="Phone Number"
+        android:ems="10"
+        android:id="@+id/registration_phone"
+        android:layout_below="@+id/registration_email"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="25dp"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="Gender"
+        android:ems="10"
+        android:id="@+id/registration_gender"
+        android:layout_below="@+id/registration_phone"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="25dp"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:ems="10"
+        android:id="@+id/registration_password"
+        android:layout_below="@+id/registration_gender"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="25dp"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Location"
+        android:ems="10"
+        android:id="@+id/registration_location"
+        android:layout_below="@+id/registration_password"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="25dp"
+        android:imeOptions="actionNext"/>
+
+
+    String location;
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_below="@id/registration_location"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:id="@+id/registration_submit_button"/>
+
+
+
+
+</RelativeLayout>
+</ScrollView>

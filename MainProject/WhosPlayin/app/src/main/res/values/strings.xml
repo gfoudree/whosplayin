@@ -30,10 +30,11 @@
     <string name="nav_home2_title">Home</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-
+    <string name="title_activity_registration">RegistrationActivity</string>
+    <string name="action_register_activity">Register (Activity)</string>
 
 
     <!--Strings for the Misc. Menu-->
 
 
-    </resources>
+</resources>

@@ -120,13 +120,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
 
-        Registration_Fragment regisFragment = new Registration_Fragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(R.id.fragment_placeholder,regisFragment);
-        transaction.commit();
-
-
-
+        Button mRegisterActivityButton = (Button) findViewById(R.id.register2_button);
+        mRegisterActivityButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this,RegistrationActivity.class));
+            }
+        });
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);

@@ -18,8 +18,9 @@ public class User {
     // "lastLogin":null,"picture":null,"gamesPlayed":null,"gamesCreated":null}]
 
     private String sessionId = "";
-
-
+    private String email = "";
+    private String password = "";
+    private String phoneNumber = "";
     public int id = 0;
     public String username = "";
     public String name = "";
@@ -83,6 +84,41 @@ public class User {
         this.dateCreated = obj.getString("dateCreated");
         this.gamesPlayed = obj.getInt("gamesPlayed");
         this.gamesCreated = obj.getInt("gamesCreated");
+    }
+
+    public void registerUser(String username, String email, String name, String gender, String password, String location, String phoneNumber) throws Exception {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.gender = gender;
+        this.password = password;
+        this.location = location;
+        this.phoneNumber = phoneNumber;
+
+        //This replaces all the spaces in the strings with %20 because JSON does not
+        //react well to spaces
+        name = name.replaceAll("\\s","%20");
+        username = username.replaceAll("\\s","%20");
+        location = location.replaceAll("\\s","%20");
+        password = password.replaceAll("\\s","%20");
+        gender = gender.replaceAll("\\s","%20");
+        phoneNumber = phoneNumber.replaceAll("\\s","%20");
+
+
+
+        //Do for all strings with spaces in them
+
+        HashMap<String,String> regHashMap = new HashMap<>();
+        regHashMap.put("username", username);
+        regHashMap.put("email", email);
+        regHashMap.put("name", name);
+        regHashMap.put("gender", gender);
+        regHashMap.put("password", password);
+        regHashMap.put("location", location);
+        regHashMap.put("phoneNumber", phoneNumber);
+
+        String url = WebAPI.queryBuilder(regHashMap, null,null);
+        String json = WebAPI.getJson("user/create",url);
     }
 
     @Override
