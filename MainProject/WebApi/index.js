@@ -29,8 +29,6 @@ app.get('/', function(request, response) //Main index
   response.send('<a href=http://localhost:5000/user/authenticate?user=tom&password=password>Login</a>');
 });
 
-
-
 /* ---------------------- USERS --------------------------- */
 app.post('/user/info', users.getInfo); //Users
 app.post('/user/authenticate', users.authenticate);
