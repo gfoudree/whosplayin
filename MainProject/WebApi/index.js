@@ -42,6 +42,7 @@ app.post('/games/info', games.getGames);
 app.post('/games/newGame', games.newGame);
 app.post('/games/addplayer', games.addPlayer);
 app.post('/games/getPlayers', games.getPlayers);
+app.post('/games/getCurrentGames', games.getGames);
 
 /* ---------------------- MESSAGES --------------------------- */
 

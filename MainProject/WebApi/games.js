@@ -4,11 +4,20 @@ var users = require('./users');
 //TODO: make this work with REDIS to store current games instead of using mysql
 var getGames = function(request, response)
 {
-  db.getValueRedis('test', function(value)
+  var sessionId = request.body.sessionId;
+  var username = request.body.username;
+
+  var query = "CALL db309grp12.stp_GetCurrentGames();";
+
+  users.validateUser(sessionId, username, query, function(reply)
   {
-    response.send(value);
+    if (reply == 'Error retrieving SQL data')
+      response.send('Invalid');
+    else {
+      //Maybe set a redis key with TTL that expires that contains the list of current games We need to get gameID somehow
+      response.send(reply);
+    }
   });
-  db.setValueRedis('test', 'testData');
 }
 
 var newGame = function(request, response)
@@ -30,10 +39,10 @@ var newGame = function(request, response)
   var sessionId = request.body.sessionId;
   var username = request.body.username;
 
-
-    var query = "CALL `db309grp12`.`stp_CreateGame`(\'" + gameTitle + "\',\'" + gameTypeID+ "\',\'" +  numPlayers+ "\',\'" +  maxPlayers+ "\',\'" +  dateCreated + "\',\'" +  startTime+ "\',\'" +  endTime+ "\',\'" +  captainID+ "\',\'" +  zipcode+ "\',\'" +  altitude+ "\',\'" +  latitude+ "\',\'" +  longitude + "\',\'" + state + "\',\'" + city + "\')";
+    var query = "CALL db309grp12.stp_CreateGame (\'" + gameTitle + "\',\'" + gameTypeID+ "\',\'" +  numPlayers+ "\',\'" +  maxPlayers+ "\',\'" +  dateCreated + "\',\'" +  startTime+ "\',\'" +  endTime+ "\',\'" +  captainID+ "\',\'" +  zipcode + "\',\'" +  altitude + "\',\'" +  latitude+ "\',\'" +  longitude + "\',\'" + state + "\',\'" + city + "\');";
 
     console.log(query);
+
     users.validateUser(sessionId, username, query, function(reply) //Validate user before we do anything
     {
       if (reply == 'Error retrieving SQL data')

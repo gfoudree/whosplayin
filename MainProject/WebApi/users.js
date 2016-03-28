@@ -11,7 +11,7 @@ function RNG(username)
 //Returns invalid if the user is not authenticated, and returns valid if authenticated
 var validateUser = function(sessionId, username, sqlStmt, done)
 {
-  if (!sessionId || !username || sessionId.length === 0 ||  username.length === 0)
+  if (!sessionId || !username || sessionId.length < 1 ||  username.length < 1)
   {
     done('Invalid query');
   }
@@ -21,7 +21,7 @@ var validateUser = function(sessionId, username, sqlStmt, done)
       {
         if (reply == sessionId && reply != null) //Check if the passed sessionId == stored sessionId
         {
-          if (sqlStmt.length > 0 && sqlStmt)
+          if (sqlStmt && sqlStmt.length > 0)
           {
             db.sqlQuery(sqlStmt, function(rows)
             {
