@@ -54,10 +54,11 @@ var getInfo = function(request, response)
 
 var authenticate = function(request, response)
 {
+  console.log(request);
   var password = request.body.password;
   var username = request.body.username;
   var hash = crypto.createHash('sha256');
-
+  hash.update(password);
   console.log(password);
   if (!password || !username || password.length < 1 || username.length < 1)
   {
@@ -65,7 +66,7 @@ var authenticate = function(request, response)
   }
   db.sqlQuery('SELECT USR_password FROM User WHERE USR_username = \'' + username + '\'', function(storedPassword) //Check if user exists
   {
-    hash.update(password);
+
     var hashedPw = hash.digest('hex');
     var loginStatus = {correct : 'false', sessionId : ''};
     if (hashedPw.toLowerCase() == storedPassword[0]['USR_password'].toLowerCase())
