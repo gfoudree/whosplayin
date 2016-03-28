@@ -29,8 +29,6 @@ app.get('/', function(request, response) //Main index
   response.send('<a href=http://localhost:5000/user/authenticate?user=tom&password=password>Login</a>');
 });
 
-
-
 /* ---------------------- USERS --------------------------- */
 app.post('/user/info', users.getInfo); //Users
 app.post('/user/authenticate', users.authenticate);
@@ -44,6 +42,7 @@ app.post('/games/info', games.getGames);
 app.post('/games/newGame', games.newGame);
 app.post('/games/addplayer', games.addPlayer);
 app.post('/games/getPlayers', games.getPlayers);
+app.post('/games/getCurrentGames', games.getGames);
 
 /* ---------------------- MESSAGES --------------------------- */
 
