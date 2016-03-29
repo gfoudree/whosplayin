@@ -33,6 +33,16 @@ public class User {
     public int gamesPlayed = 0;
     private int gamesCreated = 0;
 
+    public String getSessionId()
+    {
+	return sessionId;
+    }
+
+    public String getUsername()
+    {
+	return username;
+    }
+
     public boolean authenticate(String username, String password) throws Exception
     {
         if (username == null || username.isEmpty() || password == null || password.isEmpty() )
