@@ -4,33 +4,45 @@ var users = require('./users');
 //TODO: make this work with REDIS to store current games instead of using mysql
 var getGames = function(request, response)
 {
-  db.getValueRedis('test', function(value)
+  var sessionId = request.body.sessionId;
+  var username = request.body.username;
+
+  var query = "CALL db309grp12.stp_GetCurrentGames();";
+
+  users.validateUser(sessionId, username, query, function(reply)
   {
-    response.send(value);
+    if (reply == 'Error retrieving SQL data')
+      response.send('Invalid');
+    else {
+      //Maybe set a redis key with TTL that expires that contains the list of current games We need to get gameID somehow
+      response.send(reply);
+    }
   });
-  db.setValueRedis('test', 'testData');
 }
 
 var newGame = function(request, response)
 {
-  var title = request.body.title;
+  var gameTitle = request.body.gameTitle;
+  var gameTypeID = request.body.gameTypeID;
+  var numPlayers = request.body.numPlayers;
   var maxPlayers = request.body.maxPlayers;
+  var dateCreated = request.body.dateCreated;
   var startTime = request.body.startTime;
   var endTime = request.body.endTime;
-  var gameType = request.body.gameType;
+  var captainID = request.body.captainID;
+  var zipcode = request.body.zipcode;
+  var altitude = request.body.altitude;
+  var latitude = request.body.latitude;
+  var longitude = request.body.longitude;
+  var state = request.body.state;
+  var city = request.body.city;
   var sessionId = request.body.sessionId;
   var username = request.body.username;
-  var captainId = request.body.captainId;
 
-  if (!title || !maxPlayers || !startTime || !endTime || !gameType || !sessionId || !username || !captainId)
-  {
-    response.send('Invalid');
-  }
-  else {
-    var query = 'INSERT INTO games (title,numPlayers,maxPlayers,startTime,endTime,gameType,captainId) VALUES (\'' + title + '\',\'0\',\'' + maxPlayers + '\',\'' + startTime + '\', \
-      \'' + endTime + '\',\'' + gameType + '\',\'' + captainId +'\')';
+    var query = "CALL db309grp12.stp_CreateGame (\'" + gameTitle + "\',\'" + gameTypeID+ "\',\'" +  numPlayers+ "\',\'" +  maxPlayers+ "\',\'" +  dateCreated + "\',\'" +  startTime+ "\',\'" +  endTime+ "\',\'" +  captainID+ "\',\'" +  zipcode + "\',\'" +  altitude + "\',\'" +  latitude+ "\',\'" +  longitude + "\',\'" + state + "\',\'" + city + "\');";
 
-      console.log(query);
+    console.log(query);
+
     users.validateUser(sessionId, username, query, function(reply) //Validate user before we do anything
     {
       if (reply == 'Error retrieving SQL data')
@@ -40,7 +52,7 @@ var newGame = function(request, response)
         response.send('Success');
       }
     });
-  }
+
 }
 
 var addPlayer = function(request, response)

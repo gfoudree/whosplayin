@@ -43,7 +43,16 @@ public class User {
         queries.put("password", password);
 
         String url = WebAPI.queryBuilder(queries, null, null);
-        String json = WebAPI.getJson("user/authenticate", url);
+        String json = "";
+
+        try {
+            json = WebAPI.getJson("user/authenticate", url);
+        }
+        catch (Exception e)
+        {
+            Log.d("ERROR", "Error talking to the webapi" + e.getMessage());
+        }
+
         Log.d("Info", json);
         if (json.compareTo("Invalid") != 0) //Is it valid?
         {
@@ -52,10 +61,11 @@ public class User {
                 JSONObject obj = new JSONObject(json);
                 this.username = username;
                 this.sessionId = obj.getString("sessionId");
-//                // TODO THIS IS WHAT I WAS TYRING< TO WORKING.
-//                getUserInfo();
-//                Log.d("USER INFO", "EXIT GET USER INFO");
-                return true;
+
+                if (sessionId != null && !sessionId.isEmpty())
+                    return true;
+                else
+                    return false;
             }
             catch (Exception e)
             {

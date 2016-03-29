@@ -11,7 +11,7 @@ function RNG(username)
 //Returns invalid if the user is not authenticated, and returns valid if authenticated
 var validateUser = function(sessionId, username, sqlStmt, done)
 {
-  if (!sessionId || !username || sessionId.length === 0 ||  username.length === 0)
+  if (!sessionId || !username || sessionId.length < 1 ||  username.length < 1)
   {
     done('Invalid query');
   }
@@ -21,7 +21,7 @@ var validateUser = function(sessionId, username, sqlStmt, done)
       {
         if (reply == sessionId && reply != null) //Check if the passed sessionId == stored sessionId
         {
-          if (sqlStmt.length > 0 && sqlStmt)
+          if (sqlStmt && sqlStmt.length > 0)
           {
             db.sqlQuery(sqlStmt, function(rows)
             {
@@ -54,21 +54,22 @@ var getInfo = function(request, response)
 
 var authenticate = function(request, response)
 {
+  console.log(request);
   var password = request.body.password;
   var username = request.body.username;
   var hash = crypto.createHash('sha256');
-
+  hash.update(password);
   console.log(password);
   if (!password || !username || password.length < 1 || username.length < 1)
   {
     response.send('Invalid data');
   }
-  db.sqlQuery('SELECT PASSWORD FROM users WHERE username = \'' + username + '\'', function(storedPassword) //Check if user exists
+  db.sqlQuery('SELECT USR_password FROM User WHERE USR_username = \'' + username + '\'', function(storedPassword) //Check if user exists
   {
-    hash.update(password);
+
     var hashedPw = hash.digest('hex');
     var loginStatus = {correct : 'false', sessionId : ''};
-    if (hashedPw.toLowerCase() == storedPassword[0]['PASSWORD'].toLowerCase())
+    if (hashedPw.toLowerCase() == storedPassword[0]['USR_password'].toLowerCase())
     {
       loginStatus.correct = 'true'; //Password is correct
       loginStatus.sessionId = RNG(username);
@@ -110,7 +111,7 @@ var create = function(request, response) //Create a user
       response.send("Invalid!");
     }
     else{
-      var query = "INSERT INTO users (username, email, name, age, gender, password, location, dateCreated, phoneNumber) VALUES (\'" + username + "\',\'" + email + "\',\'" + name + "\',\'" + age+ "\',\'" +gender+ "\',\'" +password+ "\',\'" +location + "\',NOW(),\'" +  phoneNumber + "\')";
+      var query = "INSERT INTO User (username, email, name, age, gender, password, location, dateCreated, phoneNumber) VALUES (\'" + username + "\',\'" + email + "\',\'" + name + "\',\'" + age+ "\',\'" +gender+ "\',\'" +password+ "\',\'" +location + "\',NOW(),\'" +  phoneNumber + "\')";
       db.sqlQuery(query, function()
       {
         response.send("OK");
@@ -147,7 +148,7 @@ var getId = function(request, response)
   var username = request.body.username;
   var user = request.body.user;
   console.log("Test");
-  validateUser(sessionId, username, 'SELECT id FROM users WHERE username=\'' + user + '\'', function (done)
+  validateUser(sessionId, username, 'SELECT id FROM User WHERE username=\'' + user + '\'', function (done)
   {
     response.send(done);
   });
