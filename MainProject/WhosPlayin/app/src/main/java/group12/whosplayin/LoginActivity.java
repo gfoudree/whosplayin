@@ -338,7 +338,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success)
             {
-                System.out.println(user.toString());
                 //Create main screen activity
                 try {
                     user.getUserInfo();

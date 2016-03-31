@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.app.Fragment;
@@ -31,14 +32,11 @@ public class MainActivity extends AppCompatActivity{
     {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-//        sessionUserName = extras.getString("USERNAME");
-//        sessionID = extras.getString("SESSION_ID");
-//        userID = extras.getInt("USER_ID");
+        sessionUserName = extras.getString("USERNAME");
+        sessionID = extras.getString("SESSION_ID");
+        userID = extras.getInt("USER_ID");
 
-        sessionUserName = "tom";
-        sessionID = "FAKEID";
-        userID = 1;
-        System.out.println("--EXTRAS USERNAME: " + sessionUserName + " SESSION ID: " + sessionID + " USER ID: " + userID);
+       Log.d("User Info", sessionUserName + " SESSION ID: " + sessionID + " USER ID: " + userID);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

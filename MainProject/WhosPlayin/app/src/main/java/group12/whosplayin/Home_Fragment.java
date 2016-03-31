@@ -39,9 +39,15 @@ public class Home_Fragment extends Fragment
         sessionUserID = incoming.getInt("USER_ID");
         Log.d("HOME INCOMING BUNDLE", sessionUserName + ", " + sessionUserID + ", " + sessionID);
 
-
         View currentView = inflater.inflate(R.layout.home_layout, container, false);
 
+
+        GetAllGames allGames = new GetAllGames();
+        try {
+            allGames.getAllGames(sessionUserName, sessionID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         ArrayList<Game> gameArray = new ArrayList<Game>();
 

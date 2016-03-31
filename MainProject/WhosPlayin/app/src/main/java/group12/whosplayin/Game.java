@@ -45,12 +45,6 @@ public class Game
      */
     public void createGame(String userName, String sessionID, String eventTitle, int maxPlayers, String startTime, String endTime, String gameType, int captainID) throws Exception
     {
-        // We need to get rid of spaces, it messes thing up...
-        eventTitle = eventTitle.replaceAll("\\s", "%20");
-        startTime = startTime.replaceAll("\\s", "%20");
-        endTime = endTime.replaceAll("\\s", "%20");
-        gameType = gameType.replaceAll("\\s", "%20");
-
         //Update variables
         this.eventTitle = eventTitle;
         this.maxPlayers = maxPlayers;
@@ -88,6 +82,10 @@ public class Game
         this.gameType = "Basketball";
         this.captainId = 1;
         this.location = "Ames";
+    }
+
+    public void getAllGames(String username, String sessionID) throws Exception {
+
     }
 
     public String getEventTitle()
