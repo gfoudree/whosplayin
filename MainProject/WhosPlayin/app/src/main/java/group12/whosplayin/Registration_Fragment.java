@@ -67,6 +67,7 @@ public class Registration_Fragment extends Fragment{
                         registerPassword, registerPhone, registerLocation,registerAge);
                 regTask.doInBackground();
 
+                //Starts the registration activity
                 Intent i = new Intent(getActivity(), LoginActivity.class);
                 startActivity(i);
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
