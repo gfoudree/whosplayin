@@ -156,7 +156,9 @@ var getId = function(request, response)
 
   if (user && username && sessionId)
   {
-    validateUser(sessionId, username, 'SELECT id FROM User WHERE username=\'' + user + '\'', function (done)
+    var query = 'SELECT USR_id FROM db309grp12.User WHERE USR_username=\'' + user + '\';';
+    console.log(query);
+    validateUser(sessionId, username, query, function (done)
     {
       response.send(done);
     });
