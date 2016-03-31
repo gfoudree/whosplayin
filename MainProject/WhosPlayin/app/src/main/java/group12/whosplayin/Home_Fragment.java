@@ -3,18 +3,22 @@ package group12.whosplayin;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -29,6 +33,8 @@ public class Home_Fragment extends Fragment
     private int sessionUserID;
     private ListView gamesList;
 
+    private String allGamesString;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -42,12 +48,10 @@ public class Home_Fragment extends Fragment
         View currentView = inflater.inflate(R.layout.home_layout, container, false);
 
 
-        GetAllGames allGames = new GetAllGames();
-        try {
-            allGames.getAllGames(sessionUserName, sessionID);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        GetAllGamesTask task = new GetAllGamesTask(sessionUserName, sessionID);
+        task.execute((Void) null);
+        System.out.println(allGamesString);
+
 
         ArrayList<Game> gameArray = new ArrayList<Game>();
 
@@ -177,6 +181,52 @@ public class Home_Fragment extends Fragment
             locationText.setText(game.getLocation());
 
             return view;
+        }
+    }
+
+    public class GetAllGamesTask extends AsyncTask<Void, Void, Boolean>
+    {
+
+        private final String username;
+        private final String sessionID;
+
+        GetAllGamesTask(String username, String sessionID)
+        {
+            this.username = username;
+            this.sessionID = sessionID;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params){
+            GetAllGames allGames = new GetAllGames();
+            try {
+                System.out.println("Right before Get All Games");
+                allGamesString = allGames.getAllGames(this.username, this.sessionID);
+                Log.d("ALL GAMES", allGamesString);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success) {
+                try {
+                    JSONArray ja = new JSONArray(allGamesString);
+                    JSONObject obj = ja.getJSONObject(0);
+                    int gameID = obj.getInt("GAM_id");
+                    System.out.println(gameID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            else {
+                Log.e("ERROR", "ERROR");
+            }
         }
     }
 }

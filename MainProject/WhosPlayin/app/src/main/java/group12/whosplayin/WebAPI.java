@@ -41,8 +41,13 @@ public class WebAPI {
         while((line = br.readLine()) != null)
             ret += line;
 
-        br.close();
+	br.close();
         dw.close();
+
+	if (ret.equals("Invalid"))
+	{
+		throw new Exception("Invalid API Call");
+	}
         return ret;
     }
 

@@ -9,11 +9,11 @@ import java.util.HashMap;
  */
 public class GetAllGames
 {
-    public static void getAllGames(String username, String sessionID) throws Exception {
+    public static String getAllGames(String username, String sessionID) throws Exception {
 
         String url = WebAPI.queryBuilder(new HashMap<String, String>(), username, sessionID);
-        String json = WebAPI.getJson("games/getGames", url);
-        Log.d("ALL GAMES", json);
+        String json = WebAPI.getJson("games/getCurrentGames", url);
 
+        return json;
     }
 }
