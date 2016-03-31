@@ -1,10 +1,18 @@
 package group12.whosplayin;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,20 +29,25 @@ public class WebAPI {
 
         con.setRequestMethod("POST");
         con.setDoOutput(true);
+        con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
 
-        DataOutputStream ds = new DataOutputStream(con.getOutputStream());
-        ds.writeBytes(query);
-        ds.flush();
-        ds.close();
+        DataOutputStream dw = new DataOutputStream(con.getOutputStream());
+        dw.writeBytes(query);
+        dw.flush();
 
-        BufferedReader bReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
+        BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String ret = "", line ="";
 
-        while((line = bReader.readLine()) != null)
+        while((line = br.readLine()) != null)
             ret += line;
 
-        bReader.close();
+	br.close();
+        dw.close();
+
+	if (ret.equals("Invalid"))
+	{
+		throw new Exception("Invalid API Call");
+	}
         return ret;
     }
 
@@ -45,17 +58,23 @@ public class WebAPI {
      */
     public static String queryBuilder(final HashMap<String, String> queries, String username, String sessionId)
     {
-        String params = "";
-        for (Map.Entry<String, String> e : queries.entrySet())
-        {
-            if (!params.isEmpty())
-                params += "&";
-            params += String.format("%s=%s", e.getKey(), e.getValue());
+        JSONObject json = new JSONObject();
+
+        try {
+            for (Map.Entry<String, String> e : queries.entrySet()) {
+                json.put(e.getKey(), e.getValue());
+            }
+
+            if (username != null && sessionId != null) {
+                json.put("username", username);
+                json.put("sessionId", sessionId);
+            }
+
         }
-
-        if (username != null && sessionId != null)
-            params += String.format("&username=%s&sessionId=%s", username, sessionId);
-
-        return params;
+        catch (JSONException je)
+        {
+            Log.d("JSON ERROR", je.toString());
+        }
+        return json.toString();
     }
 }
