@@ -3,6 +3,8 @@ package group12.whosplayin;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -34,6 +36,44 @@ public class User {
     public int gamesPlayed = 0;
     private int gamesCreated = 0;
 
+    public String getSessionId()
+    {
+	    return sessionId;
+    }
+
+    public String getUsername()
+    {
+        return username;
+    }
+
+    public int getUserId()
+    {
+        HashMap<String, String> queries = new HashMap<>();
+        queries.put("user", this.username);
+        String url = WebAPI.queryBuilder(queries, this.username, this.sessionId);
+        String json = "";
+        try {
+            json = WebAPI.getJson("user/getId", url);
+        }
+        catch (Exception e)
+        {
+            Log.d("ERROR", "Error talking to the webapi" + e.getMessage());
+            return -1;
+        }
+        try {
+                JSONArray ja = new JSONArray(json);
+                JSONObject obj = ja.getJSONObject(0);
+                int userId = obj.getInt("USR_id");
+                this.id = userId;
+                return userId;
+        }
+        catch (JSONException e)
+        {
+                Log.d("ERROR", "JSON ERROR");
+                return -1;
+        }
+    }
+
     public boolean authenticate(String username, String password) throws Exception
     {
         if (username == null || username.isEmpty() || password == null || password.isEmpty() )
@@ -44,15 +84,31 @@ public class User {
         queries.put("password", password);
 
         String url = WebAPI.queryBuilder(queries, null, null);
-        String json = WebAPI.getJson("user/authenticate", url);
+        String json = "";
+
+        try {
+            json = WebAPI.getJson("user/authenticate", url);
+        }
+        catch (Exception e)
+        {
+            Log.d("ERROR", "Error talking to the webapi" + e.getMessage());
+        }
+
         Log.d("Info", json);
         if (json.compareTo("Invalid") != 0) //Is it valid?
         {
             try
             {
                 JSONObject obj = new JSONObject(json);
-                this.sessionId = obj.getString("sessionId");
-                return true;
+                String sessId = obj.getString("sessionId");
+                if (sessId != null && !sessId.isEmpty()) {
+                    this.sessionId = sessId;
+                    this.username = username;
+                    getUserId();
+                    return true;
+                }
+                else
+                    return false;
             }
             catch (Exception e)
             {
