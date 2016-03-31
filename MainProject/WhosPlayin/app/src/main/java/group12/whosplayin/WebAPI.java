@@ -12,7 +12,7 @@ import java.util.Map;
  * Created by gfoudree on 2/23/16.
  */
 public class WebAPI {
-    static final String baseUrl = "http://proj-309-12.cs.iastate.edu:5000/";
+    static final String baseUrl = "http://10.26.49.239:5000/";
 
     public static String getJson(String path, String query) throws Exception
     {

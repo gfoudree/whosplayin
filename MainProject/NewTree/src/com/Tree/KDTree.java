@@ -184,9 +184,9 @@ public class KDTree {
         return false;
     }
 
-    //This will take a list of
+    //This will take a list of points and find the node that is closest
     public KdNode getNearestNeighbors(double[] pointToCompare, int numberOfPointsToReturn){
-
+        //TODO
         return null;
     }
 
