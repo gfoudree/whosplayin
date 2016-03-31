@@ -350,7 +350,6 @@ public class CreateGame_Fragment extends Fragment
 
             try
             {
-                game.createGame(userName, sessionID, eventTitle, maxPlayers, startTime, endTime, gameType, userId);
                 return true;
             }
             catch (Exception e)

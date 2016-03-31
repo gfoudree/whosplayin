@@ -65,10 +65,10 @@ public class ViewGame_Fragment extends Fragment
         mGameControl = (Button) currentView.findViewById(R.id.gameControl_button);
         mSendMessage = (Button) currentView.findViewById(R.id.gameControl_button);
 
-        mTitle.setText(currentGame.getEventTitle());
-        mLocation.setText(currentGame.getLocation());
+        mTitle.setText(currentGame.getTitle());
+        mLocation.setText("THIS IS MESSED UP");
         mTime.setText(currentGame.getStartTime() + " - " + currentGame.getEndTime());
-        mGameType.setText(currentGame.getGameType());
+        mGameType.setText("THIS IS MESSED UP");
 
         // On click listeners
         // TODO, WAITING FOR BACKEND STUFF TO GET DONE.

@@ -10,57 +10,157 @@ import java.util.Objects;
  */
 public class Game
 {
-    private int gameId;
-    private String eventTitle;
-    private String location;
+
+    private int ID;
+    private String title;
+    private int gameTypeID;
+    private int numPlayers;
     private int maxPlayers;
-    private int numCurrentPlayers;
     private String startTime;
     private String endTime;
-    private String gameType;
-    private int captainId;
+    private int captainID;
+    private int zipCode;
+    private String state;
+    private String city;
+    private double latitude;
+    private double longitude;
+    private double altitude;
+    /**
+     *
+     * @param gameID game's id
+     * @param gameTitle title of the game
+     * @param gameTypeID id of the game type
+     * @param numPlayers number of players currently in the game
+     * @param maxPlayers max players allowed in the game
+     * @param gameStartTime start time of the game
+     * @param gameEndTime end time of the game
+     * @param captainID id of the captain of the game
+     * @param zipCode zip code for the location of the game
+     * @param state state for the location of the game
+     * @param city city for the location of the game
+     * @param latitude latitude for the location of the game
+     * @param longitude longitude for the location of the game
+     * @param altitude altiude for the location of the game
+     */
+    public Game(int gameID, String gameTitle, int gameTypeID, int numPlayers, int maxPlayers,
+                String gameStartTime, String gameEndTime, int captainID, int zipCode, String state,
+                String city, double latitude, double longitude, double altitude)
+    {
+        this.ID = gameID;
+        this.title = gameTitle;
+        this.gameTypeID = gameTypeID;
+        this.numPlayers = numPlayers;
+        this.maxPlayers = maxPlayers;
+        this.startTime = gameStartTime;
+        this.endTime = gameEndTime;
+        this.captainID = captainID;
+        this.zipCode = zipCode;
+        this.state = state;
+        this.city = city;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.altitude = altitude;
+    }
 
     /**
-     * Function to create a game. This funciton takes in the parameters passed, builds a URl,
-     * and posts the information to datebase.
      *
-     * TODO Add Location Support
-     * @param userName
-     *  userName of the user who created the game. "The Captain"
-     * @param sessionID
-     *  sessionID of the logged in user.
-     * @param eventTitle
-     *  title of the event
-     * @param maxPlayers
-     *  max players allowed in the game.
-     * @param startTime
-     *  start time of the game.
-     * @param endTime
-     *  end time of the game.
-     * @param gameType
-     *  game type to be played.
-     * @param captainID
-     *  User ID of the person who created the game.
-     * @throws Exception
      */
-    public void createGame(String userName, String sessionID, String eventTitle, int maxPlayers, String startTime, String endTime, String gameType, int captainID) throws Exception
+    public Game()
+    {
+
+    }
+
+    public int getID()
+    {
+        return ID;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public int getGameTypeID()
+    {
+        return gameTypeID;
+    }
+
+    public int getNumPlayers()
+    {
+        return numPlayers;
+    }
+
+    public int getMaxPlayers()
+    {
+        return maxPlayers;
+    }
+
+    public String getStartTime()
+    {
+        return startTime;
+    }
+
+    public String getEndTime()
+    {
+        return endTime;
+    }
+
+    public int getCaptainID()
+    {
+        return captainID;
+    }
+
+    public int getZipCode()
+    {
+        return zipCode;
+    }
+
+    public String getState()
+    {
+        return state;
+    }
+
+    public String getCity()
+    {
+        return city;
+    }
+
+    public double getLatitude()
+    {
+        return latitude;
+    }
+
+    public double getLongitude()
+    {
+        return longitude;
+    }
+
+    public double getAltitude()
+    {
+        return altitude;
+    }
+
+
+    public void createGame(String userName, String sessionID, int gameID, String gameTitle,
+                           int gameTypeID, int numPlayers, int maxPlayers, String gameStartTime,
+                           String gameEndTime, int captainID, int zipCode, String state, String city,
+                           float latitude, float longitude, float altitude) throws Exception
     {
         //Update variables
-        this.eventTitle = eventTitle;
+        this.title = gameTitle;
         this.maxPlayers = maxPlayers;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.gameType = gameType;
-        this.captainId = captainId;
-        this.location = "DUMMY DATA";
+        this.gameTypeID = gameTypeID;
+        this.captainID = captainID;
 
         // Store the values and key in a hashmap
         HashMap<String, String> create = new HashMap<>();
-        create.put("title", eventTitle);
+        create.put("title", title);
         create.put("maxPlayers", Integer.toString(maxPlayers));
         create.put("startTime", startTime);
         create.put("endTime", endTime);
-        create.put("gameType", gameType);
+        create.put("gameType", "5");
         create.put("captainId", Integer.toString(captainID));
 
         // Build the URl.
@@ -74,63 +174,12 @@ public class Game
     {
         // TODO: MAKE API CALL AND SET THE VARIABLES
         //DUMMY DATA FOR NOW
-        this.gameId = 1;
-        this.eventTitle = "Jack's Test Data";
+        this.ID = 1;
+        this.title = "Jack's Test Data";
         this.maxPlayers = 10;
         this.startTime = "2016-03-05 18:45:00";
         this.endTime = "2016-03-05 22:45:00";
-        this.gameType = "Basketball";
-        this.captainId = 1;
-        this.location = "Ames";
+        this.gameTypeID = 5;
+        this.captainID = 1;
     }
-
-    public void getAllGames(String username, String sessionID) throws Exception {
-
-    }
-
-    public String getEventTitle()
-    {
-        return this.eventTitle;
-    }
-
-    public int getMaxPlayers()
-    {
-        return this.maxPlayers;
-    }
-
-    public String getStartTime()
-    {
-        return this.startTime;
-    }
-
-    public String getEndTime()
-    {
-        return this.endTime;
-    }
-
-    public String getGameType()
-    {
-        return this.gameType;
-    }
-
-    public int getCaptainId()
-    {
-        return this.captainId;
-    }
-
-    public String getLocation()
-    {
-        return this.location;
-    }
-
-    public int getNumCurrentPlayers()
-    {
-        return this.numCurrentPlayers;
-    }
-
-    public int getGameId()
-    {
-        return this.gameId;
-    }
-
 }
