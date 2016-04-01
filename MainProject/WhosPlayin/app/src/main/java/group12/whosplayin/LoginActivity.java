@@ -107,17 +107,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-//        Button mRegisterButton = (Button) findViewById(R.id.register_button);
-//        mRegisterButton.setOnClickListener(new View.OnClickListener(){
-//                public void onClick(View v)
-//                {
-//                    Registration_Fragment regfragment = new Registration_Fragment();
-//                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                    transaction.replace(R.id.fragment_placeholder,regfragment);
-//                    transaction.addToBackStack(null);
-//                    transaction.commit();
-//                }
-//        });
 
 
         Button mRegisterActivityButton = (Button) findViewById(R.id.register2_button);
@@ -383,10 +372,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
 }
 

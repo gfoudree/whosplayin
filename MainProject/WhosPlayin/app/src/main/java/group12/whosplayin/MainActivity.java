@@ -11,10 +11,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.app.Fragment;
-
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -124,6 +128,21 @@ public class MainActivity extends AppCompatActivity{
     @Override
     //This method opens or closes the drawer when the action bar home/up action happens
     public boolean onOptionsItemSelected(MenuItem item) {
+//        super.onOptionsItemSelected(item);
+//        switch(item.getItemId()) {
+//            case R.id.misc_menu_logout:
+//                //TODO
+//                return true;
+//            case R.id.misc_menu_contact:
+//                //TODO
+//                return true;
+//            case R.id.misc_menu_help:
+//                //TODO
+//                return true;
+//            case R.id.misc_menu_settings:
+//                //TODO
+//                return true;
+//        }
         if (drawerToggle.onOptionsItemSelected(item)){
             return true;
         }
@@ -142,4 +161,33 @@ public class MainActivity extends AppCompatActivity{
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
     }
+
+    //Creates an options menu after user logs into app. Because the app uses Fragments
+    //for navigation, this method only needs to implemented once.
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+//    public boolean onOptionsItemSelected(MenuItem item){
+//        super.onOptionsItemSelected(item);
+//        switch(item.getItemId()){
+//            case R.id.misc_menu_logout:
+//                //TODO
+//                return true;
+//            case R.id.misc_menu_contact:
+//                //TODO
+//                return true;
+//            case R.id.misc_menu_help:
+//                //TODO
+//                return true;
+//            case R.id.misc_menu_settings:
+//                //TODO
+//                return true;
+//
+//        }
+//        return false;
+//    }
+
 }

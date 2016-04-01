@@ -39,7 +39,7 @@ public class Registration_Fragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.registration_layout,container,false);
 
-        Button regButton = (Button) rootView.findViewById(R.id.register_button);
+//        Button regButton = (Button) rootView.findViewById(R.id.register_button);
 
         final EditText editTextName = (EditText) rootView.findViewById(R.id.registration_name);
         final EditText editTextEmail = (EditText) rootView.findViewById(R.id.registration_email);

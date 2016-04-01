@@ -32,103 +32,19 @@ public class RegistrationActivity extends Activity {
 
         //Name EditText
         final EditText editTextName = (EditText) findViewById(R.id.registration_name);
-//        editTextName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                boolean handled = false;
-//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-//                    registerName = v.getText().toString();
-//                }
-//                return handled;
-//            }
-//        });
-//        editTextName.setOnKeyListener(new View.OnKeyListener() {
-//            @Override
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
-//                    registerName = editTextName.getText().toString();
-//                    return true;
-//                }
-//                return true;
-//
-//            }
-//        });
-
         //Email EditText
         final EditText editTextEmail = (EditText) findViewById(R.id.registration_email);
-//        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                boolean handled = false;
-//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-//                    registerEmail = v.getText().toString();
-//                }
-//                return handled;
-//            }
-//        });
-//
 //        //Username TextEdit
         final EditText editTextUsername = (EditText) findViewById(R.id.registration_username);
-//        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                boolean handled = false;
-//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-//                    registerUserName = v.getText().toString();
-//                }
-//                return handled;
-//            }
-//        });
-//
 //        //Gender TextEdit
         final EditText editTextGender = (EditText) findViewById(R.id.registration_gender);
-//        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                boolean handled = false;
-//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-//                    registerGender = v.getText().toString();
-//                }
-//                return handled;
-//            }
-//        });
-//
+
         final EditText editTextPassword = (EditText) findViewById(R.id.registration_password);
-//        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                boolean handled = false;
-//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-//                    registerPassword = v.getText().toString();
-//                }
-//                return handled;
-//            }
-//        });
-//
 //        //Phone Number EditText
         final EditText editTextPhone = (EditText) findViewById(R.id.registration_phone);
-//        editTextPhone.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                boolean handled = false;
-//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-//                    registerPhone = v.getText().toString();
-//                }
-//                return handled;
-//            }
-//        });
-//
+
         final EditText editTextLocation = (EditText) findViewById(R.id.registration_location);
-//        editTextEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                boolean handled = false;
-//                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-//                    registerLocation = v.getText().toString();
-//                }
-//                return handled;
-//            }
-//        });
+
         final EditText editTextAge = (EditText) findViewById(R.id.registration_age);
 
         //When they submit
@@ -148,7 +64,7 @@ public class RegistrationActivity extends Activity {
 
                 regTask = new RegistrationTask(registerName, registerEmail, registerUserName, registerGender,
                         registerPassword, registerPhone, registerLocation,registerAge);
-                regTask.doInBackground();
+                regTask.execute((Void) null);
 
                 startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
 
@@ -158,26 +74,26 @@ public class RegistrationActivity extends Activity {
     }
 
 
-    public static class RegistrationTask extends AsyncTask<Void, Void, Boolean>{
-        String name;
-        String email;
-        String username;
-        String gender;
-        String password;
-        String phoneNumber;
-        String location;
-        String age;
+    public class RegistrationTask extends AsyncTask<Void, Void, Boolean>{
+        private final String rName;
+        private final String rEmail;
+        private final String rUsername;
+        private final String rGender;
+        private final String rPassword;
+        private final String rPhoneNumber;
+        private final String rLocation;
+        private final String rAge;
 
         RegistrationTask(String name, String email, String username, String gender, String password, String phonenumber, String location, String age)
         {
-            this.name = name;
-            this.email = email;
-            this.username = username;
-            this.gender = gender;
-            this.password = password;
-            this.phoneNumber = phonenumber;
-            this.location = location;
-            this.age = age;
+            this.rName = name;
+            this.rEmail = email;
+            this.rUsername = username;
+            this.rGender = gender;
+            this.rPassword = password;
+            this.rPhoneNumber = phonenumber;
+            this.rLocation = location;
+            this.rAge = age;
         }
 
 
@@ -185,14 +101,17 @@ public class RegistrationActivity extends Activity {
         @Override
         protected Boolean doInBackground(Void... params) {
             User user = new User();
-            try{user.registerUser(username, email, name, gender, password, location, phoneNumber,age);
-                return true;
+            try{
+                return user.registerUser(rUsername,rEmail, rName,rGender, rPassword, rLocation, rPhoneNumber, rAge);
             }catch (Exception e){
                 e.printStackTrace();
                 return false;
             }
-
-
         }
+
+//        @Override
+//        protected void onPostExecute(Boolean aBoolean) {
+//
+//        }
     }
 }

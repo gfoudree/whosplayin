@@ -1,13 +1,17 @@
 package group12.whosplayin;
 
 
+import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+
+import static android.support.v4.app.ActivityCompat.startActivity;
 
 /**
  * Created by twohyjr on 2/16/16.
@@ -142,7 +146,7 @@ public class User {
         this.gamesCreated = obj.getInt("gamesCreated");
     }
 
-    public void registerUser(String username, String email, String name, String gender, String password, String location, String phoneNumber, String age) throws Exception {
+    public boolean registerUser(String username, String email, String name, String gender, String password, String location, String phoneNumber, String age) throws Exception {
         this.name = name;
         this.username = username;
         this.email = email;
@@ -176,8 +180,44 @@ public class User {
         regHashMap.put("age",age);
 
         String url = WebAPI.queryBuilder(regHashMap, null,null);
-        String json = WebAPI.getJson("user/create",url);
-        Log.d("Testing JSON", json);
+        String json = "";
+
+
+        try {
+            json = WebAPI.getJson("user/create",url);
+        }catch (Exception e){
+            Log.d("ERROR", "Error talking to the webapi" + e.getMessage());
+        }
+
+        Log.d("Info", json);
+
+        if (json.compareTo("Invalid") != 0)
+        {
+
+        }
+//        if (json.compareTo("Invalid") != 0)
+//        {
+//            try
+//            {
+//                JSONObject obj = new JSONObject(json);
+//                String sessId = obj.getString("sessionId");
+//                if (sessId != null && !sessId.isEmpty()) {
+//                    this.sessionId = sessId;
+//                    this.username = username;
+//                    getUserId();
+//                    return true;
+//                }
+//                else
+//                    return false;
+//            }
+//            catch (Exception e)
+//            {
+//                return false;
+//            }
+//        }
+
+
+        return false;
     }
 
     @Override
