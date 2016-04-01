@@ -132,17 +132,20 @@ public class MainActivity extends AppCompatActivity{
         super.onOptionsItemSelected(item);
         switch(item.getItemId()) {
             case R.id.misc_menu_logout:
-                Intent intent = new Intent(MainActivity.this, LogoutActivity.class);
-                startActivity(intent);
+                Intent logoutIntent = new Intent(MainActivity.this, LogoutActivity.class);
+                startActivity(logoutIntent);
                 return true;
             case R.id.misc_menu_contact:
-                //TODO
-                return true;
-            case R.id.misc_menu_help:
-                //TODO
+                Intent contactIntent = new Intent(MainActivity.this, ContactActivity.class);
+                startActivity(contactIntent);
                 return true;
             case R.id.misc_menu_settings:
-                //TODO
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            case R.id.misc_menu_report:
+                Intent reportIntent = new Intent(MainActivity.this, ReportActivity.class);
+                startActivity(reportIntent);
                 return true;
         }
         if (drawerToggle.onOptionsItemSelected(item)){

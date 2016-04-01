@@ -17,5 +17,9 @@
         android:title="Contact"
         android:orderInCategory="103"/>
 
+    <item android:id="@+id/misc_menu_report"
+        android:title="Report Player"
+        android:orderInCategory="104"/>
+
 
 </menu>

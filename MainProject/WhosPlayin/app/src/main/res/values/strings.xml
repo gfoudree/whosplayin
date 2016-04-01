@@ -33,6 +33,9 @@
     <string name="title_activity_registration">RegistrationActivity</string>
     <string name="action_register_activity">Register</string>
     <string name="title_activity_logout">LogoutActivity</string>
+    <string name="title_activity_contact">ContactActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_report">ReportActivity</string>
 
 
     <!--Strings for the Misc. Menu-->
