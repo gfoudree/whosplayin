@@ -32,6 +32,7 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="title_activity_registration">RegistrationActivity</string>
     <string name="action_register_activity">Register</string>
+    <string name="title_activity_logout">LogoutActivity</string>
 
 
     <!--Strings for the Misc. Menu-->

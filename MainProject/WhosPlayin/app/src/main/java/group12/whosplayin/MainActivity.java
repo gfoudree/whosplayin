@@ -1,6 +1,7 @@
 package group12.whosplayin;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -128,21 +129,22 @@ public class MainActivity extends AppCompatActivity{
     @Override
     //This method opens or closes the drawer when the action bar home/up action happens
     public boolean onOptionsItemSelected(MenuItem item) {
-//        super.onOptionsItemSelected(item);
-//        switch(item.getItemId()) {
-//            case R.id.misc_menu_logout:
-//                //TODO
-//                return true;
-//            case R.id.misc_menu_contact:
-//                //TODO
-//                return true;
-//            case R.id.misc_menu_help:
-//                //TODO
-//                return true;
-//            case R.id.misc_menu_settings:
-//                //TODO
-//                return true;
-//        }
+        super.onOptionsItemSelected(item);
+        switch(item.getItemId()) {
+            case R.id.misc_menu_logout:
+                Intent intent = new Intent(MainActivity.this, LogoutActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.misc_menu_contact:
+                //TODO
+                return true;
+            case R.id.misc_menu_help:
+                //TODO
+                return true;
+            case R.id.misc_menu_settings:
+                //TODO
+                return true;
+        }
         if (drawerToggle.onOptionsItemSelected(item)){
             return true;
         }
