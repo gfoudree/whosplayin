@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -147,6 +148,62 @@ public class User {
         this.gamesCreated = obj.getInt("gamesCreated");
 
         //TODO add upvote/downvote
+
+        Log.d("TESTING", this.gender);
+    }
+
+    public User getUserData(int userID){
+        username = "twohyjr";
+        name = "Rick Twohy";
+        gender = "Male";
+        bio = "I'm cool as fuzz.  My middle name is Jasper.  Play with me!";
+        age = 17;
+        id = 17;
+        return this;
+    }
+
+
+    //Works with fake data.  Needs web Api.
+    public User[] getUserFriends(){
+
+        User friend1 = new User();
+        friend1.name = "Friend1";
+
+        User friend2 = new User();
+        friend2.name = "Friend2";
+
+        User friend3 = new User();
+        friend3.name = "Friend3";
+        User[] friendsList = {friend1,friend2,friend3};
+
+        return friendsList;
+    }
+
+    //Works with fake data.  Needs web Api.
+    public ArrayList<Achievement> getAchievements(){
+        ArrayList<Achievement> achievementsList = new ArrayList<Achievement>();
+
+        Achievement achievement1 = new Achievement();
+        achievement1.setTitle("GOOD JOB");
+        achievement1.setDescription("You did a good job");
+
+        Achievement achievement2 = new Achievement();
+        achievement2.setTitle("BETTER JOB");
+        achievement2.setDescription("You did a better than good job");
+
+        Achievement achievement3 = new Achievement();
+        achievement3.setTitle("MVP");
+        achievement3.setDescription("You are a 5 time mvp");
+
+        achievementsList.add(achievement1);
+        achievementsList.add(achievement2);
+        achievementsList.add(achievement3);
+
+        return achievementsList;
+    }
+
+    public void getVotes(){
+
     }
 
     @Override

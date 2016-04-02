@@ -34,11 +34,39 @@ public class MyProfile_Fragment extends Fragment{
     private String sessionId;
 
     private Activity myActivity;
-    private Button goToButton;
+
+    private TextView usernameLabel;
+    private TextView editProfileButton;
+    private TextView usersNameView;
+    private TextView usersAgeView;
+    private TextView usersGenderView;
+    private TextView usersBioView;
+    private ListView friendsListView;
+
+
+    private User myUser;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //Retrieve user information
+        Bundle incoming = this.getArguments();
+        sessionUserName = incoming.getString("USERNAME");
+        sessionId = incoming.getString("SESSION_ID");
+        sessionUserID = incoming.getInt("USER_ID");
+
+        //LOG THE CREDETIALS HERE
+        Log.d("userLog", "Username:  " + sessionUserName + "\n"
+                     + "User ID:   " + sessionUserID + "\n"
+                    + "SessionID: " + sessionId + "\n"
+
+        );
+
+        myUser = new User();
+        myUser.getUserData(sessionUserID);
+
+
 
         return inflater.inflate(R.layout.myprofile_layout, container, false);
     }
@@ -47,18 +75,42 @@ public class MyProfile_Fragment extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         myActivity = this.getActivity();
-        goToButton = (Button)myActivity.findViewById(R.id.ButtonClick);
 
-        goToButton.setOnClickListener(new View.OnClickListener() {
+        usernameLabel = (TextView)myActivity.findViewById(R.id.usernameLabel);
+        usersNameView = (TextView)myActivity.findViewById(R.id.userNameLabel);
+        usersAgeView = (TextView)myActivity.findViewById(R.id.usersAgeLabel);
+        usersGenderView = (TextView)myActivity.findViewById(R.id.usersGenderLabel);
+        usersBioView = (TextView)myActivity.findViewById(R.id.userBioLabel);
+        friendsListView = (ListView)myActivity.findViewById(R.id.friendsListView);
+
+        editProfileButton = (TextView)myActivity.findViewById(R.id.editProfileButton);
+        friendsListView = (ListView)this.getActivity().findViewById(R.id.friendsListView);
+
+        User[] friends = myUser.getUserFriends();
+        ListAdapter friendsAdapter = new FriendsAdaptor(getActivity().getApplicationContext(),friends);
+        friendsListView.setAdapter(friendsAdapter);
+
+        friendsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                goToFriend();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                User user = (User) friendsListView.getItemAtPosition(position);
+                goToFriend(user);
             }
         });
 
+        setLabelData();
     }
 
-    private void goToFriend(){
+    private void setLabelData(){
+        usernameLabel.setText(myUser.username);
+        usersNameView.setText(myUser.name);
+        usersAgeView.setText(String.valueOf(myUser.age));
+        usersBioView.setText(myUser.bio);
+        usersGenderView.setText(myUser.gender);
+    }
+
+
+    private void goToFriend(User user){
         Class fragmentClass = FriendsProfile_Fragment.class;
         Fragment fragment = null;
 
@@ -71,11 +123,9 @@ public class MyProfile_Fragment extends Fragment{
         }
 
         //Outgoing bundle
-//        Bundle outgoing = new Bundle();
-//        outgoing.putString("USERNAME", sessionUserName);
-//        outgoing.putInt("USER_ID", sessionUserID);
-//        outgoing.putString("SESSION_ID", sessionId);
-//        fragment.setArguments(outgoing);
+        Bundle outgoing = new Bundle();
+        outgoing.putInt("USER_ID", user.id);
+        fragment.setArguments(outgoing);
 //
         //Navigating to the fragment
         FragmentManager manager = getFragmentManager();

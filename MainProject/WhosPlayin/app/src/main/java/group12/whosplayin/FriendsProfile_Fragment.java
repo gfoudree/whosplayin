@@ -48,10 +48,26 @@ public class FriendsProfile_Fragment extends Fragment{
     private Button sendMessageButton;
     private Button addFriendButton;
 
+    private User myUser;
+
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//Retrieve user information
+        Bundle incoming = this.getArguments();
+        sessionUserID = incoming.getInt("USER_ID");
 
+        //LOG THE CREDETIALS HERE
+        Log.d("userLog", "Username:  " + sessionUserName + "\n"
+                        + "User ID:   " + sessionUserID + "\n"
+                        + "SessionID: " + sessionId + "\n"
+
+        );
+
+        myUser = new User();
+        myUser.getUserData(sessionUserID);
         return inflater.inflate(R.layout.friends_profile_layout, container, false);
     }
 
@@ -70,8 +86,6 @@ public class FriendsProfile_Fragment extends Fragment{
         sendMessageButton = (Button)myActivity.findViewById(R.id.messageButton);
         addFriendButton = (Button)myActivity.findViewById(R.id.addFriendButton);
 
-//        currentUser = getUserInfo("DUMMY");
-
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,11 +99,10 @@ public class FriendsProfile_Fragment extends Fragment{
             }
         });
 
-
-        Achievement[] achievements = getAchievements();
-        ListAdapter friendsAdapter = new AchievmentAdapter(myActivity,achievements);
-        ListView friendsListView = (ListView)this.getActivity().findViewById(R.id.AchievementsListView);
-        friendsListView.setAdapter(friendsAdapter);
+//        Achievement[] achievements = getAchievements();
+//        ListAdapter friendsAdapter = new AchievmentAdapter(myActivity,achievements);
+//        ListView friendsListView = (ListView)this.getActivity().findViewById(R.id.AchievementsListView);
+//        friendsListView.setAdapter(friendsAdapter);
 
 
     }
@@ -131,9 +144,6 @@ public class FriendsProfile_Fragment extends Fragment{
     }
 
     public void sendUserMessage(){
-
-
-
         Class fragmentClass = Messages_Fragment.class;
         Fragment fragment = null;
 
@@ -184,21 +194,5 @@ public class FriendsProfile_Fragment extends Fragment{
 //        return pageUser;
 //    }
 ////
-    public Achievement[] getAchievements(){
-        Achievement achievement1 = new Achievement();
-        achievement1.setTitle("GOOD JOB");
-        achievement1.setDescription("You did a good job");
 
-        Achievement achievement2 = new Achievement();
-        achievement2.setTitle("BETTER JOB");
-        achievement2.setDescription("You did a better than good job");
-
-        Achievement achievement3 = new Achievement();
-        achievement3.setTitle("MVP");
-        achievement3.setDescription("You are a 5 time mvp");
-
-        Achievement[] achievements = {achievement1,achievement2,achievement3};
-
-        return achievements;
-    }
 }
