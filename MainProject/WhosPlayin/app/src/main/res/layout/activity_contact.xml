@@ -29,6 +29,7 @@
         />
 
     <EditText
+        android:id="@+id/contact_concern"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:inputType="textCapSentences|textMultiLine"

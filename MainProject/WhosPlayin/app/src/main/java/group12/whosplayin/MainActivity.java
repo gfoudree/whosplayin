@@ -177,24 +177,5 @@ public class MainActivity extends AppCompatActivity{
         return true;
     }
 
-//    public boolean onOptionsItemSelected(MenuItem item){
-//        super.onOptionsItemSelected(item);
-//        switch(item.getItemId()){
-//            case R.id.misc_menu_logout:
-//                //TODO
-//                return true;
-//            case R.id.misc_menu_contact:
-//                //TODO
-//                return true;
-//            case R.id.misc_menu_help:
-//                //TODO
-//                return true;
-//            case R.id.misc_menu_settings:
-//                //TODO
-//                return true;
-//
-//        }
-//        return false;
-//    }
 
 }
