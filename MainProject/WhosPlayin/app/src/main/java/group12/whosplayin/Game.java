@@ -10,7 +10,6 @@ import java.util.Objects;
  */
 public class Game
 {
-
     private int ID;
     private String title;
     private int gameTypeID;
@@ -22,6 +21,7 @@ public class Game
     private int zipCode;
     private String state;
     private String city;
+    private String locationName;
     private double latitude;
     private double longitude;
     private double altitude;
@@ -63,7 +63,8 @@ public class Game
     }
 
     /**
-     *
+     * This is the constructor. This constructor would be used in situations where no information
+     * is known yet, for example viewing a game
      */
     public Game()
     {
@@ -125,6 +126,11 @@ public class Game
         return city;
     }
 
+    public String getLocationName()
+    {
+        return locationName;
+    }
+
     public double getLatitude()
     {
         return latitude;
@@ -170,16 +176,37 @@ public class Game
         Log.d("Create Game Info", json); // Should return success.
     }
 
-    public void getGameInfo()
+    public void getGameInfo(int gameID, String username, String sessionID)
     {
-        // TODO: MAKE API CALL AND SET THE VARIABLES
-        //DUMMY DATA FOR NOW
-        this.ID = 1;
-        this.title = "Jack's Test Data";
+        // Currently we will just be using dummy data, the api for this portion of the application is
+        // currently not completed.
+
+        // CALL QUERY BUILDER RIGHT HERE.
+
+        // fake data
+        this.title = "FAKE TITLE";
+        this.gameTypeID = 1;
+        this.ID = gameID;
         this.maxPlayers = 10;
-        this.startTime = "2016-03-05 18:45:00";
-        this.endTime = "2016-03-05 22:45:00";
-        this.gameTypeID = 5;
+        this.startTime = "FAKE START TIME";
+        this.endTime = "FAKE END TIME";
         this.captainID = 1;
+        this.zipCode = 00000;
+        this.altitude = 100.000;
+        this.latitude = 14.111;
+        this.longitude = 14.1111;
+        this.locationName = "FAKE LOCATION NAME";
+        this.state = "FAKE STATE";
+        this.city = "FAKE CITY";
+    }
+
+    public void getUsersInGame(int gameID, String username, String sessionID) throws Exception {
+        HashMap<String, String> query = new HashMap<>();
+        query.put("gameId", Integer.toString(gameID));
+        Log.d("INFO", username + ", " + sessionID);
+        String url = WebAPI.queryBuilder(query, username, sessionID);
+        Log.d("URL", url);
+        String json = WebAPI.getJson("games/getPlayers", url);
+        Log.d("JSON", json);
     }
 }

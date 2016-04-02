@@ -249,6 +249,8 @@ public class Home_Fragment extends Fragment
 
                 Bundle outgoing = new Bundle();
                 outgoing.putInt("GAME_ID", gameId);
+                outgoing.putString("USERNAME", sessionUserName);
+                outgoing.putString("SESSION_ID", sessionID);
 
                 FragmentManager manager = getFragmentManager();
                 manager.beginTransaction().replace(R.id.flContent, fragment).commit();
