@@ -59,25 +59,16 @@ public class Home_Fragment extends Fragment
 
 
         mCreateGame = (Button) currentView.findViewById(R.id.createGame_button);
-        mCreateGame.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
+        mCreateGame.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 Class fragmentClass = CreateGame_Fragment.class;
                 Fragment fragment = null;
 
-                try
-                {
+                try {
                     fragment = (Fragment) fragmentClass.newInstance();
-                }
-
-                catch (java.lang.InstantiationException e)
-                {
+                } catch (java.lang.InstantiationException e) {
                     e.printStackTrace();
-                }
-
-                catch (IllegalAccessException e)
-                {
+                } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
 
@@ -228,6 +219,10 @@ public class Home_Fragment extends Fragment
 
                 Game currentGame = (Game) gamesList.getItemAtPosition(position);
                 int gameId = currentGame.getID();
+                String title = currentGame.getTitle();
+                String startTime = currentGame.getStartTime();
+                String endTime = currentGame.getEndTime();
+                String location = currentGame.getLocationName();
 
                 Class fragmentClass = ViewGame_Fragment.class;
                 Fragment fragment = null;
@@ -252,6 +247,10 @@ public class Home_Fragment extends Fragment
                 outgoing.putString("USERNAME", sessionUserName);
                 outgoing.putString("SESSION_ID", sessionID);
                 outgoing.putInt("USER_ID", sessionUserID);
+                outgoing.putString("TITLE", title);
+                outgoing.putString("START_TIME", startTime);
+                outgoing.putString("END_TIME", endTime);
+                outgoing.putString("LOCATION", location);
                 Log.d("LV CLICK OUTGOING", gameId + ", " + sessionUserName + ", " + sessionID);
                 fragment.setArguments(outgoing);
                 FragmentManager manager = getFragmentManager();

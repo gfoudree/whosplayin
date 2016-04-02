@@ -29,6 +29,10 @@ public class ViewGame_Fragment extends Fragment
     private String username;
     private String sessionID;
     private int userID;
+    private String title;
+    private String startTime;
+    private String endTime;
+    private String location;
 
     private Game currentGame;
 
@@ -63,6 +67,10 @@ public class ViewGame_Fragment extends Fragment
         username = incoming.getString("USERNAME");
         sessionID = incoming.getString("SESSION_ID");
         userID = incoming.getInt("USER_ID");
+        title = incoming.getString("TITLE");
+        startTime = incoming.getString("START_TIME");
+        endTime = incoming.getString("END_TIME");
+        location = incoming.getString("LOCATION");
         Log.d("INCOMING VIEW GAME", gameID + ", " + username + ", " + sessionID + ", " + userID);
 
         View currentView = inflater.inflate(R.layout.viewgame_layout, container, false);
@@ -75,11 +83,14 @@ public class ViewGame_Fragment extends Fragment
         mMessageText = (EditText) currentView.findViewById(R.id.message_text);
         mGameControl = (Button) currentView.findViewById(R.id.gameControl_button);
         mSendMessage = (Button) currentView.findViewById(R.id.gameControl_button);
+        mTitle.setText(title);
+        mLocation.setText(location);
+        mTime.setText(startTime + " - " + endTime);
+        mLocation.setText(location);
 
 
         currentGame = new Game();
-        GetGameInfoTask infoTask = new GetGameInfoTask(username, sessionID, gameID);
-        infoTask.execute((Void) null);
+
         GetUsersInGameTask usersTask = new GetUsersInGameTask(username, sessionID, gameID);
         usersTask.execute((Void) null);
         System.out.println(currentGame.getTitle());
@@ -110,47 +121,6 @@ public class ViewGame_Fragment extends Fragment
         return currentView;
     }
 
-    /**
-     * Async task to get the game information. This will call the getGameInfo function that will
-     * set our game information. On post executiong, we will load the main screen.
-     */
-    public class GetGameInfoTask extends AsyncTask<Void, Void, Boolean>
-    {
-        private String username;
-        private String sessionID;
-        private int gameID;
-
-        GetGameInfoTask(String username, String sessionID, int gameID)
-        {
-            this.username = username;
-            this.sessionID = sessionID;
-            this.gameID = gameID;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params)
-        {
-            currentGame.getGameInfo(gameID, username, sessionID);
-            Log.d("GAME INFO", currentGame.getTitle());
-
-            if(currentGame != null) {
-                return true;
-            }
-
-            else {
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success)
-        {
-            mTitle.setText(currentGame.getTitle());
-            mLocation.setText(currentGame.getLocationName());
-            mTime.setText(currentGame.getStartTime() + " - " + currentGame.getEndTime());
-            mGameType.setText(Integer.toString(currentGame.getGameTypeID()));
-        }
-    }
 
     public class GetUsersInGameTask extends AsyncTask<Void, Void, Boolean>
     {
@@ -228,7 +198,7 @@ public class ViewGame_Fragment extends Fragment
         @Override
         protected void onPostExecute(final Boolean success)
         {
-
+            return;
         }
     }
 

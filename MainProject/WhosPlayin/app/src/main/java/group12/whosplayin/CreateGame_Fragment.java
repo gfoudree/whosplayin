@@ -1,5 +1,6 @@
 package group12.whosplayin;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -9,6 +10,7 @@ import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,7 +31,11 @@ import android.widget.Filterable;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -89,9 +95,24 @@ public class CreateGame_Fragment extends Fragment
         mSubmit = (Button) currentView.findViewById(R.id.submit_button);
         mCancel = (Button) currentView.findViewById(R.id.cancel_button);
 
+        mLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Click");
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    Intent intent = builder.build(getActivity().getApplicationContext());
+                    startActivityForResult(intent, 1);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         // Set autocomplete adapters
-        mLocation.setAdapter(new PlacesAutoCompleteAdapter(getActivity(), R.layout.autocomplete_list_item));
+//        mLocation.setAdapter(new PlacesAutoCompleteAdapter(getActivity(), R.layout.autocomplete_list_item));
 
         // Load spinner values
         String[] gameTypeArray = new String[] {
@@ -146,14 +167,17 @@ public class CreateGame_Fragment extends Fragment
             }
         });
 
-        mLocation.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String description = (String) parent.getItemAtPosition(position);
-                Toast.makeText(getActivity(), description, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        mLocation.setOnItemClickListener(new AdapterView.OnItemClickListener()
+//        {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+////                String description = (String) parent.getItemAtPosition(position);
+////                Toast.makeText(getActivity(), description, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+
 
         // On date text select, we need to open a datepicker. So call the DatePickerFragment inner
         // class below.
@@ -187,6 +211,33 @@ public class CreateGame_Fragment extends Fragment
         });
 
         return currentView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+
+        if (requestCode == 1
+                && resultCode == Activity.RESULT_OK) {
+
+            // The user has selected a place. Extract the name and address.
+            final Place place = PlacePicker.getPlace(data, getActivity().getApplicationContext());
+
+            final CharSequence name = place.getName();
+            final CharSequence address = place.getAddress();
+            String attributions = PlacePicker.getAttributions(data);
+            if (attributions == null) {
+                attributions = "";
+            }
+
+            mLocation.setText(name);
+
+        }
+
+        else
+        {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     /**
@@ -497,7 +548,6 @@ public class CreateGame_Fragment extends Fragment
         {
             Filter filter = new Filter()
             {
-
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint)
                 {
@@ -537,7 +587,6 @@ public class CreateGame_Fragment extends Fragment
             return filter;
         }
     }
-
 }
 
 
