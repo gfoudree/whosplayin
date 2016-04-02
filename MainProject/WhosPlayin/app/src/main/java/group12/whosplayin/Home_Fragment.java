@@ -251,7 +251,9 @@ public class Home_Fragment extends Fragment
                 outgoing.putInt("GAME_ID", gameId);
                 outgoing.putString("USERNAME", sessionUserName);
                 outgoing.putString("SESSION_ID", sessionID);
-
+                outgoing.putInt("USER_ID", sessionUserID);
+                Log.d("LV CLICK OUTGOING", gameId + ", " + sessionUserName + ", " + sessionID);
+                fragment.setArguments(outgoing);
                 FragmentManager manager = getFragmentManager();
                 manager.beginTransaction().replace(R.id.flContent, fragment).commit();
             }

@@ -28,6 +28,7 @@ public class ViewGame_Fragment extends Fragment
     private int gameID;
     private String username;
     private String sessionID;
+    private int userID;
 
     private Game currentGame;
 
@@ -50,17 +51,20 @@ public class ViewGame_Fragment extends Fragment
         super.onCreate(savedInstanceState);
         if (getArguments() != null)
         {
-            Bundle incoming = this.getArguments();
-            gameID = incoming.getInt("GAME_ID");
-            username = incoming.getString("USERNAME");
-            sessionID = incoming.getString("SESSION_ID");
-            Log.d("VIEW GAME", gameID + ", " + username + ", " + sessionID);
+
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        Bundle incoming = this.getArguments();
+        gameID = incoming.getInt("GAME_ID");
+        username = incoming.getString("USERNAME");
+        sessionID = incoming.getString("SESSION_ID");
+        userID = incoming.getInt("USER_ID");
+        Log.d("INCOMING VIEW GAME", gameID + ", " + username + ", " + sessionID + ", " + userID);
+
         View currentView = inflater.inflate(R.layout.viewgame_layout, container, false);
 
         mTitle = (TextView) currentView.findViewById(R.id.title_text);
@@ -98,7 +102,8 @@ public class ViewGame_Fragment extends Fragment
             @Override
             public void onClick(View v)
             {
-
+                AddPlayerToGameTask addPlayerToGameTask = new AddPlayerToGameTask(username, sessionID, gameID, userID);
+                addPlayerToGameTask.execute((Void) null);
             }
         });
 
@@ -164,6 +169,7 @@ public class ViewGame_Fragment extends Fragment
         protected Boolean doInBackground(Void... params)
         {
             try {
+                System.out.println(gameID + ", " + username + ", " + sessionID);
                 currentGame.getUsersInGame(gameID, username, sessionID);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -183,4 +189,48 @@ public class ViewGame_Fragment extends Fragment
         {
 
         }
-    }}
+    }
+
+    public class AddPlayerToGameTask extends AsyncTask<Void, Void, Boolean>
+    {
+        private String username;
+        private String sessionID;
+        private int gameID;
+        private int userID;
+
+        AddPlayerToGameTask(String username, String sessionID, int gameID, int userID)
+        {
+            this.username = username;
+            this.sessionID = sessionID;
+            this.gameID = gameID;
+            this.userID = userID;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+            try {
+                System.out.println(gameID + ", " + username + ", " + sessionID);
+                currentGame.addPlayerToGame(gameID, userID, username, sessionID);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if(currentGame != null) {
+                return true;
+            }
+
+            else {
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success)
+        {
+
+        }
+    }
+
+
+}

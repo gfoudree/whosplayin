@@ -201,12 +201,24 @@ public class Game
     }
 
     public void getUsersInGame(int gameID, String username, String sessionID) throws Exception {
+        Log.d("GAME ID", Integer.toString(gameID));
         HashMap<String, String> query = new HashMap<>();
         query.put("gameId", Integer.toString(gameID));
         Log.d("INFO", username + ", " + sessionID);
         String url = WebAPI.queryBuilder(query, username, sessionID);
         Log.d("URL", url);
         String json = WebAPI.getJson("games/getPlayers", url);
+        Log.d("JSON", json);
+    }
+
+    public void addPlayerToGame(int gameID, int userID, String username, String sessionID) throws Exception {
+        HashMap<String, String> query = new HashMap<String, String>();
+        query.put("gameId", Integer.toString(gameID));
+        query.put("playerId", Integer.toString(userID));
+
+        String url = WebAPI.queryBuilder(query, username, sessionID);
+        Log.d("URL", url);
+        String json = WebAPI.getJson("games/addPlayer", url);
         Log.d("JSON", json);
     }
 }

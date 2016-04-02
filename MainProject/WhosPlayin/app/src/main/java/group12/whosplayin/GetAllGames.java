@@ -12,6 +12,7 @@ public class GetAllGames
     public static String getAllGames(String username, String sessionID) throws Exception {
 
         String url = WebAPI.queryBuilder(new HashMap<String, String>(), username, sessionID);
+        Log.d("URL", url);
         String json = WebAPI.getJson("games/getCurrentGames", url);
 
         return json;
