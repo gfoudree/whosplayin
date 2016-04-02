@@ -10,10 +10,34 @@
     tools:context="group12.whosplayin.LogoutActivity">
 
     <TextView
+        android:id="@+id/logout_question"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Logout Activity"
-        android:textSize="30sp"
-        android:gravity="center"/>
+        android:text="Are you sure want to Log out?"
+        android:layout_above="@+id/logout_yes_button"
+        android:textSize="45sp"
+        android:gravity="center_horizontal"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Yes"
+        android:textSize="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:id="@+id/logout_yes_button"
+        android:layout_above="@+id/logout_no_button"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No"
+        android:textSize="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:id="@+id/logout_no_button"
+        android:layout_alignParentBottom="true"/>
+
+
 
 </RelativeLayout>

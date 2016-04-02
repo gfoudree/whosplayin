@@ -127,7 +127,9 @@ public class MainActivity extends AppCompatActivity{
 
 
     @Override
-    //This method opens or closes the drawer when the action bar home/up action happens
+    //This method opens or closes the drawer when the action bar home/up action happens.
+    //This method also opens the options menu by pressing upper right, and then navigates to
+    //desired page
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         switch(item.getItemId()) {
