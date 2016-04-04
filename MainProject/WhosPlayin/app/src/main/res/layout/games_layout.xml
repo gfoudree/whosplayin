@@ -13,14 +13,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <TextView
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Messages Fragment"
-            android:id="@+id/textView11"
-            android:layout_centerVertical="true"
+            android:text="Go Back"
+            android:id="@+id/games_goBackButton"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/gamesListView"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/games_goBackButton"
+            android:headerDividersEnabled="false" />
+
+
     </RelativeLayout>
 </LinearLayout>

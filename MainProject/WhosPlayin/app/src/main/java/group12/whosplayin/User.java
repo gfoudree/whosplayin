@@ -168,20 +168,33 @@ public class User {
 
         User friend1 = new User();
         friend1.name = "Friend1";
+        friend1.id = 1;
 
         User friend2 = new User();
         friend2.name = "Friend2";
+        friend2.id = 2;
 
         User friend3 = new User();
         friend3.name = "Friend3";
+        friend3.id = 3;
         User[] friendsList = {friend1,friend2,friend3};
 
         return friendsList;
     }
 
+    public Game[] getUserGames(){
+        Game game1 = new Game();
+        game1.setEventTitle("Game 1");
+
+        Game game2 = new Game();
+        game2.setEventTitle("Game2");
+
+        return new Game[]{game1,game2};
+    }
+
     //Works with fake data.  Needs web Api.
-    public ArrayList<Achievement> getAchievements(){
-        ArrayList<Achievement> achievementsList = new ArrayList<Achievement>();
+    public Achievement[] getAchievements(){
+        Achievement[] achievements;
 
         Achievement achievement1 = new Achievement();
         achievement1.setTitle("GOOD JOB");
@@ -195,11 +208,9 @@ public class User {
         achievement3.setTitle("MVP");
         achievement3.setDescription("You are a 5 time mvp");
 
-        achievementsList.add(achievement1);
-        achievementsList.add(achievement2);
-        achievementsList.add(achievement3);
+        achievements = new Achievement[]{achievement1,achievement2,achievement3};
 
-        return achievementsList;
+        return achievements;
     }
 
     public void getVotes(){

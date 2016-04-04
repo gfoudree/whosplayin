@@ -138,27 +138,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="My Friends"
-            android:id="@+id/textView16"
-            android:layout_below="@+id/userBioLabel"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="10dp"
-            android:textStyle="normal|bold|italic" />
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/friendsListView"
-            android:layout_below="@+id/textView16"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Edit Profile"
             android:id="@+id/editProfileButton"
@@ -166,6 +145,32 @@
             android:layout_centerHorizontal="true"
             android:textColor="#39a3e1"
             android:clickable="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Friends List"
+            android:id="@+id/goToFriendsListButton"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Games List"
+            android:id="@+id/myGamesListButton"
+            android:layout_marginTop="37dp"
+            android:layout_below="@+id/goToFriendsListButton"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Achievements List"
+            android:id="@+id/myAchievementsButton"
+            android:layout_marginTop="42dp"
+            android:layout_below="@+id/myGamesListButton"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 </LinearLayout>
