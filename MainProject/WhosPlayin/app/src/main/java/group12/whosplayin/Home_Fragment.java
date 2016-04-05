@@ -54,10 +54,6 @@ public class Home_Fragment extends Fragment
         task.execute((Void) null);
 
 
-
-        Log.d("ADAPTER", "Set Adapter");
-
-
         mCreateGame = (Button) currentView.findViewById(R.id.createGame_button);
         mCreateGame.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

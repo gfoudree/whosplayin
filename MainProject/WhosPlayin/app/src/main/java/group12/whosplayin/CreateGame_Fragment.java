@@ -36,6 +36,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -52,7 +53,7 @@ public class CreateGame_Fragment extends Fragment
 {
     View currentView;
     private EditText mEventTitle;
-    private static AutoCompleteTextView mLocation;
+    private static EditText mLocation;
     private Spinner mGameType;
     private EditText mMaxPlayers;
     private static EditText mDate;
@@ -65,6 +66,13 @@ public class CreateGame_Fragment extends Fragment
     private static String sessionUserName;
     private static String sessionID;
     private static int sessionUserID;
+
+    private double latitude;
+    private double longitude;
+    private double altitude;
+    private int zipCode;
+    private String city;
+    private String state;
 
     private UserCreateGameTask mCreateGameTask = null;
 
@@ -85,7 +93,7 @@ public class CreateGame_Fragment extends Fragment
 
         // Make the Fields
         mEventTitle = (EditText) currentView.findViewById(R.id.eventTitle_text);
-        mLocation = (AutoCompleteTextView) currentView.findViewById(R.id.location_text);
+        mLocation = (EditText) currentView.findViewById(R.id.location_text);
         mGameType = (Spinner) currentView.findViewById(R.id.gameType_select);
         mMaxPlayers = (EditText) currentView.findViewById(R.id.maxPlayers_text);
         mDate = (EditText) currentView.findViewById(R.id.date_text);
@@ -124,7 +132,8 @@ public class CreateGame_Fragment extends Fragment
         mGameType.setAdapter(adapter);
 
 
-        // Set on Click Listener
+        // Submit button on click listner. On click we'll submit their data and go back to the
+        // home screen.
         mSubmit.setOnClickListener(new View.OnClickListener()
         {
             // Submit button does some database stuff.
@@ -134,6 +143,7 @@ public class CreateGame_Fragment extends Fragment
             }
         });
 
+        // Cancel on click listener. On click we would go back to the home screen.
         mCancel.setOnClickListener(new View.OnClickListener()
         {
             // Cancel button goes back to the home page.
@@ -167,17 +177,6 @@ public class CreateGame_Fragment extends Fragment
             }
         });
 
-//        mLocation.setOnItemClickListener(new AdapterView.OnItemClickListener()
-//        {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-////                String description = (String) parent.getItemAtPosition(position);
-////                Toast.makeText(getActivity(), description, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
-
 
         // On date text select, we need to open a datepicker. So call the DatePickerFragment inner
         // class below.
@@ -191,6 +190,7 @@ public class CreateGame_Fragment extends Fragment
             }
         });
 
+        // Start time on click listener. On click we are going to launch a time picker.
         mStartTime.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -201,6 +201,7 @@ public class CreateGame_Fragment extends Fragment
             }
         });
 
+        // End time on lick listener. ON click we are going to launch a time picker.
         mEndTime.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -214,6 +215,9 @@ public class CreateGame_Fragment extends Fragment
     }
 
     @Override
+    /**
+     * On activity result for the place picker.
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
 
@@ -225,6 +229,13 @@ public class CreateGame_Fragment extends Fragment
 
             final CharSequence name = place.getName();
             final CharSequence address = place.getAddress();
+            final LatLng latLong = place.getLatLng();
+            latitude = latLong.latitude;
+            longitude = latLong.longitude;
+            city = "Ames";
+            state = "Iowa";
+            zipCode = 50014;
+
             String attributions = PlacePicker.getAttributions(data);
             if (attributions == null) {
                 attributions = "";
@@ -258,6 +269,8 @@ public class CreateGame_Fragment extends Fragment
         String startTime = mStartTime.getText().toString();
         String endTime = mEndTime.getText().toString();
         String description = mDescription.getText().toString();
+
+        int gameTypeID = 1;
 
         if(mCreateGameTask != null)
         {
@@ -359,9 +372,14 @@ public class CreateGame_Fragment extends Fragment
 
         else
         {
-            String start = date + " " + startTime + ":00";
-            String end = date + " " + endTime+ ":00";
-            mCreateGameTask = new UserCreateGameTask(sessionUserName, sessionID, eventTitle, maxPlayers, start, end, gameType, sessionUserID);
+//            String start = date + " " + startTime + ":00";
+//            String end = date + " " + endTime+ ":00";
+
+            String start = startTime + ":00.0000";
+            String end = endTime + ":00.0000";
+            mCreateGameTask = new UserCreateGameTask(eventTitle, gameTypeID, 1, maxPlayers, "2016-05-05 00:00:00",
+                    start, end, sessionUserID, zipCode, altitude, latitude, longitude,
+                    state, city, sessionID, sessionUserName);
             mCreateGameTask.execute((Void) null);
         }
 
@@ -372,25 +390,44 @@ public class CreateGame_Fragment extends Fragment
      */
     public static class UserCreateGameTask extends AsyncTask<Void, Void, Boolean>
     {
-        private String userName;
-        private String sessionID;
-        private String eventTitle;
+        private String gameTitle;
+        private int gameTypeID;
+        private int numPlayers;
         private int maxPlayers;
+        private String dateCreated;
         private String startTime;
         private String endTime;
-        private String gameType;
-        private int userId;
+        private int captainID;
+        private int zipCode;
+        private double altitude;
+        private double latitude;
+        private double longitude;
+        private String state;
+        private String city;
+        private String sessionID;
+        private String username;
 
-        UserCreateGameTask(String userName, String sessionID, String eventTitle, int maxPlayers, String startTime, String endTime, String gameType, int userId)
+        UserCreateGameTask(String gameTitle, int gameTypeID, int numPlayers, int maxPlayers,
+                           String dateCreated, String startTime, String endTime, int captainID,
+                           int zipCode, double altitude, double latitude, double longitude,
+                           String state, String city, String sessionID, String username)
         {
-            this.userName = userName;
-            this.sessionID = sessionID;
-            this.eventTitle = eventTitle;
+            this.gameTitle = gameTitle;
+            this.gameTypeID = gameTypeID;
+            this.numPlayers = numPlayers;
             this.maxPlayers = maxPlayers;
+            this.dateCreated = dateCreated;
             this.startTime = startTime;
             this.endTime = endTime;
-            this.gameType = gameType;
-            this.userId = 1;
+            this.captainID = captainID;
+            this.zipCode = zipCode;
+            this.altitude = altitude;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.state =  state;
+            this.city = city;
+            this.sessionID = sessionID;
+            this.username = username;
         }
 
 
@@ -398,6 +435,13 @@ public class CreateGame_Fragment extends Fragment
         protected Boolean doInBackground(Void... params)
         {
             Game game = new Game();
+            try {
+                game.createGame(gameTitle, gameTypeID, numPlayers, maxPlayers, dateCreated, startTime,
+                        endTime, captainID, zipCode, altitude, latitude, longitude, state, city, sessionID,
+                        username);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             try
             {

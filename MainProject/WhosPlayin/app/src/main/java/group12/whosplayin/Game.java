@@ -15,6 +15,7 @@ public class Game
     private int gameTypeID;
     private int numPlayers;
     private int maxPlayers;
+    private String dateCreated;
     private String startTime;
     private String endTime;
     private int captainID;
@@ -147,30 +148,46 @@ public class Game
     }
 
 
-    public void createGame(String userName, String sessionID, int gameID, String gameTitle,
-                           int gameTypeID, int numPlayers, int maxPlayers, String gameStartTime,
-                           String gameEndTime, int captainID, int zipCode, String state, String city,
-                           float latitude, float longitude, float altitude) throws Exception
+    public void createGame(String gameTitle, int gameTypeID, int numPlayers, int maxPlayers,
+                           String dateCreated, String startTime, String endTime, int captainID,
+                           int zipCode, double altitude, double latitude, double longitude,
+                           String state, String city, String sessionID, String username) throws Exception
     {
         //Update variables
         this.title = gameTitle;
+        this.gameTypeID = gameTypeID;
+        this.numPlayers = numPlayers;
         this.maxPlayers = maxPlayers;
+        this.dateCreated = dateCreated;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.gameTypeID = gameTypeID;
         this.captainID = captainID;
+        this.zipCode = zipCode;
+        this.altitude = altitude;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.state = state;
+        this.city = city;
 
         // Store the values and key in a hashmap
         HashMap<String, String> create = new HashMap<>();
         create.put("title", title);
+        create.put("gameTypeID", Integer.toString(gameTypeID));
+        create.put("numPlayers", Integer.toString(numPlayers));
         create.put("maxPlayers", Integer.toString(maxPlayers));
+        create.put("dateCreated", dateCreated);
         create.put("startTime", startTime);
         create.put("endTime", endTime);
-        create.put("gameType", "5");
         create.put("captainId", Integer.toString(captainID));
+        create.put("zipCode", Integer.toString(zipCode));
+        create.put("altitude", Double.toString(altitude));
+        create.put("latitude", Double.toString(latitude));
+        create.put("longitude", Double.toString(longitude));
+        create.put("state", state);
+        create.put("city", city);
 
         // Build the URl.
-        String url = WebAPI.queryBuilder(create, userName, sessionID);
+        String url = WebAPI.queryBuilder(create, username, sessionID);
         Log.d("URL", url);
         String json = WebAPI.getJson("games/newGame", url);
         Log.d("Create Game Info", json); // Should return success.
