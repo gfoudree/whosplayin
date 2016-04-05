@@ -99,13 +99,11 @@ public class Home_Fragment extends Fragment
 
         @Override
         protected Boolean doInBackground(Void... params){
-            GetAllGames allGames = new GetAllGames();
+            Game game = new Game();
+            User user = User.getInstance();
+
             try {
-                // Get all of the games.
-                allGamesString = allGames.getAllGames(this.username, this.sessionID);
-                int index = allGamesString.indexOf("],");
-                allGamesString = allGamesString.substring(1);
-                allGamesString = allGamesString.substring(0, index);
+                game.getCurrentGames()
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -214,11 +212,11 @@ public class Home_Fragment extends Fragment
             {
 
                 Game currentGame = (Game) gamesList.getItemAtPosition(position);
-                int gameId = currentGame.getID();
+                int gameId = currentGame.getId();
                 String title = currentGame.getTitle();
                 String startTime = currentGame.getStartTime();
                 String endTime = currentGame.getEndTime();
-                String location = currentGame.getLocationName();
+                String location = "FAKE LOCATION";
 
                 Class fragmentClass = ViewGame_Fragment.class;
                 Fragment fragment = null;

@@ -1,241 +1,245 @@
 package group12.whosplayin;
 
-import android.util.Log;
-
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
-/**
- * Created by Jack on 3/4/2016.
- */
-public class Game
-{
-    private int ID;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class Game {
+
+    private int id;
     private String title;
-    private int gameTypeID;
+    private int gameType;
     private int numPlayers;
     private int maxPlayers;
     private String dateCreated;
     private String startTime;
     private String endTime;
-    private int captainID;
-    private int zipCode;
+    private int captainId;
+    private int zipcode;
+    private double altitude;
+    private double longitude;
     private String state;
     private String city;
-    private String locationName;
-    private double latitude;
-    private double longitude;
-    private double altitude;
-    /**
-     *
-     * @param gameID game's id
-     * @param gameTitle title of the game
-     * @param gameTypeID id of the game type
-     * @param numPlayers number of players currently in the game
-     * @param maxPlayers max players allowed in the game
-     * @param gameStartTime start time of the game
-     * @param gameEndTime end time of the game
-     * @param captainID id of the captain of the game
-     * @param zipCode zip code for the location of the game
-     * @param state state for the location of the game
-     * @param city city for the location of the game
-     * @param latitude latitude for the location of the game
-     * @param longitude longitude for the location of the game
-     * @param altitude altiude for the location of the game
-     */
-    public Game(int gameID, String gameTitle, int gameTypeID, int numPlayers, int maxPlayers,
-                String gameStartTime, String gameEndTime, int captainID, int zipCode, String state,
-                String city, double latitude, double longitude, double altitude)
+
+    public Game(int id, String title, int gameType, int numPlayers, int maxPlayers, String dateCreated, String startTime, String endTime, int captainId)
     {
-        this.ID = gameID;
-        this.title = gameTitle;
-        this.gameTypeID = gameTypeID;
-        this.numPlayers = numPlayers;
-        this.maxPlayers = maxPlayers;
-        this.startTime = gameStartTime;
-        this.endTime = gameEndTime;
-        this.captainID = captainID;
-        this.zipCode = zipCode;
-        this.state = state;
-        this.city = city;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.altitude = altitude;
+        this.setId(id);
+        this.setTitle(title);
+        this.setNumPlayers(numPlayers);
+        this.setMaxPlayers(maxPlayers);
+        this.setGameType(gameType);
+        this.setDateCreated(dateCreated);
+        this.setStartTime(startTime);
+        this.setEndTime(endTime);
+        this.setCaptainId(captainId);
     }
 
-    /**
-     * This is the constructor. This constructor would be used in situations where no information
-     * is known yet, for example viewing a game
-     */
-    public Game()
-    {
+    public Game() {
 
     }
 
-    public int getID()
+    public static boolean removeUserFromGame(User user, int userId, int gameId) throws Exception
     {
-        return ID;
+        HashMap<String, String> queries = new HashMap<>();
+        queries.put("gameId", Integer.toString(gameId));
+        queries.put("userId", Integer.toString(userId));
+
+        String url = WebAPI.queryBuilder(queries, user.getUsername(), user.getSessionId());
+        String json = WebAPI.getJson("games/removeUserFromGame", url);
+        if (json.compareTo("Success") == 0)
+            return true;
+        else
+            return false;
     }
 
-    public String getTitle()
+    public static boolean addPlayerToGame(User user, int gameId, int userId) throws Exception
     {
+        HashMap<String, String> queries = new HashMap<>();
+        queries.put("gameId", Integer.toString(gameId));
+        queries.put("userId", Integer.toString(userId));
+
+        String url = WebAPI.queryBuilder(queries, user.getUsername(), user.getSessionId());
+        String json = WebAPI.getJson("games/addPlayerToGame", url);
+        if (json.compareTo("Success") == 0)
+            return true;
+        else
+            return false;
+    }
+
+    public static ArrayList<Game> getCurrentGames(User user) throws Exception
+    {
+        ArrayList<Game> games = new ArrayList<Game>();
+        HashMap<String, String> queries = new HashMap<>();
+        String url = WebAPI.queryBuilder(queries, user.getUsername(), user.getSessionId());
+
+        String json = WebAPI.getJson("games/getCurrentGames", url);
+
+        JSONArray root = new JSONArray(json);
+        JSONArray data = root.getJSONArray(0);
+
+        for (int i = 0; i < data.length(); i++)
+        {
+            JSONObject obj = data.getJSONObject(i);
+
+            Game gameObj = new Game(
+                    obj.getInt("GAM_id"),
+                    obj.getString("GAM_title"),
+                    obj.getInt("GAM_gameTypeID"),
+                    obj.getInt("GAM_numPlayers"),
+                    obj.getInt("GAM_maxPlayers"),
+                    obj.getString("GAM_dateCreated"),
+                    obj.getString("GAM_startTime"),
+                    obj.getString("GAM_endTime"),
+                    obj.getInt("GAM_captainID")
+            );
+
+            games.add(gameObj);
+        }
+        return games;
+    }
+
+    public static boolean createGame(User user, Game game) throws Exception
+    {
+        HashMap<String, String> queries = new HashMap<>();
+        queries.put("gameTitle", game.getTitle());
+        queries.put("gameTypeId", Integer.toString(game.getGameType()));
+        queries.put("numPlayers", Integer.toString(game.getNumPlayers()));
+        queries.put("maxPlayers", Integer.toString(game.getMaxPlayers()));
+        queries.put("dateCreated", game.getDateCreated());
+        queries.put("startTime", game.getStartTime());
+        queries.put("endTime", game.getEndTime());
+        queries.put("captainId", Integer.toString(game.getCaptainId()));
+        queries.put("zipcode", Integer.toString(game.getZipcode()));
+        queries.put("altitude", Double.toString(game.getAltitude()));
+        queries.put("latitude", Double.toString(game.getLongitude()));
+        queries.put("state", game.getState());
+        queries.put("city", game.getCity());
+
+        String url = WebAPI.queryBuilder(queries, user.getUsername(), user.getSessionId());
+        String json = WebAPI.getJson("games/newGame", url);
+        if (json.compareTo("Success") == 0)
+            return true;
+        else
+            return false;
+
+    }
+
+    public String toString()
+    {
+        return String.format("%d, %s, %d, %d, %d, %s, %s, %s, %d", id, title, gameType, numPlayers, maxPlayers, dateCreated, startTime, endTime, captainId);
+    }
+
+    public String getTitle() {
         return title;
     }
 
-    public int getGameTypeID()
-    {
-        return gameTypeID;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public int getNumPlayers()
-    {
+    public int getNumPlayers() {
         return numPlayers;
     }
 
-    public int getMaxPlayers()
-    {
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
+
+    public int getGameType() {
+        return gameType;
+    }
+
+    public void setGameType(int gameType) {
+        this.gameType = gameType;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getMaxPlayers() {
         return maxPlayers;
     }
 
-    public String getStartTime()
-    {
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public String getStartTime() {
         return startTime;
     }
 
-    public String getEndTime()
-    {
-        return endTime;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
-    public int getCaptainID()
-    {
-        return captainID;
+    public int getCaptainId() {
+        return captainId;
     }
 
-    public int getZipCode()
-    {
-        return zipCode;
+    public void setCaptainId(int captainId) {
+        this.captainId = captainId;
     }
 
-    public String getState()
-    {
-        return state;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
-    public String getCity()
-    {
-        return city;
+    public String getEndTime() {
+        return this.endTime;
     }
 
-    public String getLocationName()
-    {
-        return locationName;
+    public int getZipcode() {
+        return zipcode;
     }
 
-    public double getLatitude()
-    {
-        return latitude;
+    public void setZipcode(int zipcode) {
+        this.zipcode = zipcode;
     }
 
-    public double getLongitude()
-    {
-        return longitude;
-    }
-
-    public double getAltitude()
-    {
+    public double getAltitude() {
         return altitude;
     }
 
-
-    public void createGame(String gameTitle, int gameTypeID, int numPlayers, int maxPlayers,
-                           String dateCreated, String startTime, String endTime, int captainID,
-                           int zipCode, double altitude, double latitude, double longitude,
-                           String state, String city, String sessionID, String username) throws Exception
-    {
-        //Update variables
-        this.title = gameTitle;
-        this.gameTypeID = gameTypeID;
-        this.numPlayers = numPlayers;
-        this.maxPlayers = maxPlayers;
-        this.dateCreated = dateCreated;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.captainID = captainID;
-        this.zipCode = zipCode;
+    public void setAltitude(double altitude) {
         this.altitude = altitude;
-        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
         this.state = state;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
         this.city = city;
-
-        // Store the values and key in a hashmap
-        HashMap<String, String> create = new HashMap<>();
-        create.put("title", title);
-        create.put("gameTypeID", Integer.toString(gameTypeID));
-        create.put("numPlayers", Integer.toString(numPlayers));
-        create.put("maxPlayers", Integer.toString(maxPlayers));
-        create.put("dateCreated", dateCreated);
-        create.put("startTime", startTime);
-        create.put("endTime", endTime);
-        create.put("captainId", Integer.toString(captainID));
-        create.put("zipCode", Integer.toString(zipCode));
-        create.put("altitude", Double.toString(altitude));
-        create.put("latitude", Double.toString(latitude));
-        create.put("longitude", Double.toString(longitude));
-        create.put("state", state);
-        create.put("city", city);
-
-        // Build the URl.
-        String url = WebAPI.queryBuilder(create, username, sessionID);
-        Log.d("URL", url);
-        String json = WebAPI.getJson("games/newGame", url);
-        Log.d("Create Game Info", json); // Should return success.
-    }
-
-    public void getGameInfo(int gameID, String username, String sessionID)
-    {
-        // Currently we will just be using dummy data, the api for this portion of the application is
-        // currently not completed.
-
-        // CALL QUERY BUILDER RIGHT HERE.
-
-        // fake data
-        this.title = "FAKE TITLE";
-        this.gameTypeID = 1;
-        this.ID = gameID;
-        this.maxPlayers = 10;
-        this.startTime = "FAKE START TIME";
-        this.endTime = "FAKE END TIME";
-        this.captainID = 1;
-        this.zipCode = 00000;
-        this.altitude = 100.000;
-        this.latitude = 14.111;
-        this.longitude = 14.1111;
-        this.locationName = "FAKE LOCATION NAME";
-        this.state = "FAKE STATE";
-        this.city = "FAKE CITY";
-    }
-
-    public void getUsersInGame(int gameID, String username, String sessionID) throws Exception {
-        Log.d("GAME ID", Integer.toString(gameID));
-        HashMap<String, String> query = new HashMap<>();
-        query.put("gameId", Integer.toString(gameID));
-        Log.d("INFO", username + ", " + sessionID);
-        String url = WebAPI.queryBuilder(query, username, sessionID);
-        Log.d("URL", url);
-        String json = WebAPI.getJson("games/getPlayers", url);
-        Log.d("JSON", json);
-    }
-
-    public void addPlayerToGame(int gameID, int userID, String username, String sessionID) throws Exception {
-        HashMap<String, String> query = new HashMap<String, String>();
-        query.put("gameId", Integer.toString(gameID));
-        query.put("playerId", Integer.toString(userID));
-
-        String url = WebAPI.queryBuilder(query, username, sessionID);
-        Log.d("URL", url);
-        String json = WebAPI.getJson("games/addPlayer", url);
-        Log.d("JSON", json);
     }
 }
