@@ -11,6 +11,7 @@ function RNG(username)
 //Returns invalid if the user is not authenticated, and returns valid if authenticated
 var validateUser = function(sessionId, username, sqlStmt, done)
 {
+  console.log(sqlStmt);
   if (!sessionId || !username || sessionId.length < 1 ||  username.length < 1)
   {
     done('Invalid query');
@@ -94,10 +95,18 @@ var getFriendsList = function(request, response)
   var sessionId = request.body.sessionId;
   var username = request.body.username;
 
-  validateUser(sessionId, username, 'CALL `db309grp12`.`stp_sel_userFriends`(' + id + ');', function(data) //Call stored proceedure to get friends list
-  {
-    response.send(data);
-  });
+  if (!id || !sessionId || !username)
+    response.send('Invalid');
+  else {
+    validateUser(sessionId, username, 'CALL db309grp12.stp_GetFriendsList(' + id + ');', function(data) //Call stored proceedure to get friends list
+    {
+      if (data == 'Error retrieving SQL data')
+        response.send('Invalid');
+      else
+        response.send(data);
+    });
+  }
+
 }
 
 var create = function(request, response) //Create a user
@@ -108,19 +117,21 @@ var create = function(request, response) //Create a user
   var age = request.body.age;
   var gender = request.body.gender;
   var password = request.body.password;
-  var location = request.body.location;
-  var phoneNumber = request.body.phoneNumber;
+  var phone = request.body.phone;
 
-  if (!username || !email || !name || !age || !gender || !password || !location || !phoneNumber || username.length === 0 || email.length === 0 || name.length === 0 ||
-    gender.length === 0 || password.length === 0 || location.length === 0 || phoneNumber.length === 0 || age < 1)
+  if (!username || !email || !name || !age || !gender || !password || !phone)
     {
-      response.send("Invalid!");
+      response.send("Invalid");
     }
     else{
-      var query = "INSERT INTO User (username, email, name, age, gender, password, location, dateCreated, phoneNumber) VALUES (\'" + username + "\',\'" + email + "\',\'" + name + "\',\'" + age+ "\',\'" +gender+ "\',\'" +password+ "\',\'" +location + "\',NOW(),\'" +  phoneNumber + "\')";
-      db.sqlQuery(query, function()
+      var query = "CALL db309grp12.CreateUser(\'" + username + "\',\'" + password + "\',\'" + name + "\',\'" + age+ "\',\'" +gender+ "\',\'" +email+  + "\',\'" + phone + "\',\'\');";
+      console.log(query);
+      db.sqlQuery(query, function(res)
       {
-        response.send("OK");
+        if (res == "Error retrieving SQL data")
+          response.send("Invalid");
+        else
+          response.send("Success");
       });
     }
 }
@@ -157,7 +168,6 @@ var getId = function(request, response)
   if (user && username && sessionId)
   {
     var query = 'SELECT USR_id FROM db309grp12.User WHERE USR_username=\'' + user + '\';';
-    console.log(query);
     validateUser(sessionId, username, query, function (done)
     {
       response.send(done);
