@@ -1,7 +1,3 @@
-package group12.whosplayin;
-
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,11 +12,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by gfoudree on 2/23/16.
- */
 public class WebAPI {
-    static final String baseUrl = "http://proj-309-12.cs.iastate.edu:5000/";
+    static final String baseUrl = "http://localhost:5000/";
 
     public static String getJson(String path, String query) throws Exception
     {
@@ -73,7 +66,7 @@ public class WebAPI {
         }
         catch (JSONException je)
         {
-            Log.d("JSON ERROR", je.toString());
+           
         }
         return json.toString();
     }

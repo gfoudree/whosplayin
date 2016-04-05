@@ -32,17 +32,18 @@ app.get('/', function(request, response) //Main index
 /* ---------------------- USERS --------------------------- */
 app.post('/user/info', users.getInfo); //Users
 app.post('/user/authenticate', users.authenticate);
-app.post('/user/friendsList', users.getFriendsList);
+app.post('/user/getFriendsList', users.getFriendsList);
 app.post('/user/create', users.create);
 app.post('/user/status', users.status);
 app.post('/user/getId', users.getId);
+app.post('/user/addFriend', users.addFriend);
 
 /* ---------------------- GAMES --------------------------- */
-app.post('/games/info', games.getGames);
 app.post('/games/newGame', games.newGame);
-app.post('/games/addplayer', games.addPlayer);
+app.post('/games/addPlayerToGame', games.addPlayer);
 app.post('/games/getPlayers', games.getPlayers);
 app.post('/games/getCurrentGames', games.getGames);
+app.post('/games/removeUserFromGame', games.removeUserFromGame);
 
 /* ---------------------- MESSAGES --------------------------- */
 
