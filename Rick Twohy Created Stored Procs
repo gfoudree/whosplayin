@@ -1,0 +1,163 @@
+CREATE DEFINER=`dbu309grp12`@`%` PROCEDURE `stp_AddUserFriend`(
+    IN userID int,
+    IN friendID int
+)
+BEGIN
+	insert into db309grp12.FriendRelations(FRI_userID,FRI_friendID)
+    values(userID,friendID);
+
+    insert into db309grp12.FriendRelations(FRI_userID,FRI_friendID)
+    values(friendID,userID);
+END
+
+-----------------------------------------------------------------------------
+
+CREATE DEFINER=`dbu309grp12`@`%` PROCEDURE `stp_AddUserToGame`(
+    IN userID int,
+    IN gameID int
+)
+BEGIN
+SET @currentNumPlayers =(SELECT GAM_numPlayers FROM db309grp12.Game where GAM_id = gameID);
+SET @currentMaxPlayers =(SELECT GAM_maxPlayers FROM db309grp12.Game where GAM_id = gameID);
+Set @gameExists = (Select count(*) FROM db309grp12.Game where GAM_id = gameID);
+if(@currentNumPlayers < @currentMaxPlayers) then
+	if(@gameExists > 0) then
+		insert into db309grp12.GamePlayers(GAM_id,PLY_id)
+		values(gameID,userID);
+
+			update db309grp12.Game
+		set GAM_numPlayers = @currentNumPlayers + 1
+		where GAM_id = gameID;
+    end if;
+end if;
+
+-----------------------------------------------------------------------------
+CREATE DEFINER=`dbu309grp12`@`%` PROCEDURE `stp_CreateGame`(
+	    IN gameTitle varchar(75),
+        IN gameTypeID int,
+        IN numPlayers int,
+        IN maxPlayers int,
+        IN dateCreated DATETIME,
+        IN startTime TIME,
+        IN endTime TIME,
+        IN captainID int,
+
+        IN zipcode int,
+		IN altitude double,
+        IN latitude double,
+        IN longitude double,
+        IN state varchar(50),
+        IN city varchar(75)
+)
+BEGIN
+
+	insert into db309grp12.Game(GAM_title,GAM_gameTypeID,GAM_numPlayers,GAM_maxPlayers,GAM_dateCreated,GAM_startTime,GAM_endTime,GAM_captainID)
+    values(gameTitle,gameTypeID,numPlayers,maxPlayers,dateCreated,startTime,endTime,captainID);
+
+    insert into db309grp12.GameLocation(GAM_zip,GAM_altitude,GAM_latitude,GAM_longitude,GAM_state,GAM_city)
+    values(zipcode,altitude,latitude,longitude,state,city);
+
+END
+-----------------------------------------------------------------------------
+CREATE DEFINER=`dbu309grp12`@`%` PROCEDURE `stp_CreateUser`(
+	IN username varchar(20),
+    IN password varchar(100),
+    IN name varchar(100),
+    IN age INT(10),
+    IN gender varchar(20),
+    IN email varchar(100),
+    IN phone varchar(20),
+    IN profilePic blob
+)
+BEGIN
+
+insert into db309grp12.User(USR_username,USR_password,USR_name,USR_age,USR_gender,USR_email,USR_phone,USR_profilePic)
+values(username,password,name,age,gender,email,phone,profilePic);
+
+insert into db309grp12.UserLocation(ULOC_userID)
+values(LAST_INSERT_ID());
+
+insert into db309grp12.UserRating(USR_id)
+values(LAST_INSERT_ID());
+
+insert into db309grp12.MvpPlayers(MVP_id)
+values(LAST_INSERT_ID());
+
+
+END
+-----------------------------------------------------------------------------
+CREATE DEFINER=`dbu309grp12`@`%` PROCEDURE `stp_DeleteUserFromGame`(
+    IN userID int,
+    IN gameID int
+)
+BEGIN
+
+Set @gameExists = (Select count(*) FROM db309grp12.Game where GAM_id = gameID);
+
+	if(@gameExists > 0) then
+		delete from db309grp12.GamePlayers where userID = PLY_id;
+
+		update db309grp12.Game
+		set GAM_numPlayers = @currentNumPlayers - 1
+		where GAM_id = gameID;
+end if;
+
+END
+-----------------------------------------------------------------------------
+CREATE DEFINER=`dbu309grp12`@`%` PROCEDURE `stp_GetCurrentGames`()
+BEGIN
+	SELECT * FROM db309grp12.Game WHERE GAM_endTime > CURTIME();
+END
+-----------------------------------------------------------------------------
+CREATE DEFINER=`dbu309grp12`@`%` PROCEDURE `stp_GetFriendsList`(
+	IN incomingUserID INT
+)
+BEGIN
+
+select
+	FRI_userID as User,
+    FRI_friendID as Friend,
+    USR_name as Name
+from db309grp12.FriendRelations
+inner join db309grp12.User
+on FRI_friendID = USR_id
+where FRI_userID = incomingUserID;
+
+END
+-----------------------------------------------------------------------------
+CREATE DEFINER=`dbu309grp12`@`%` PROCEDURE `stp_GetGameInfo`(
+	IN gameID int
+)
+BEGIN
+	select *
+	from db309grp12.Game as game
+	inner join db309grp12.PopularGameTypes as pop
+    inner join db309grp12.GameLocation as loc
+	on  game.GAM_gameTypeID = pop.POP_id and game.GAM_id = loc.GAM_id
+	where game.GAM_id = gameID;
+END
+-----------------------------------------------------------------------------
+CREATE DEFINER=`dbu309grp12`@`%` PROCEDURE `stp_GetUsersInGame`(
+    IN gameID int
+)
+BEGIN
+	Select * from db309grp12.GamePlayers
+	where GAM_id = 2;
+END
+-----------------------------------------------------------------------------
+CREATE DEFINER=`dbu309grp12`@`%` PROCEDURE `stp_UpdateUserLocation`(
+	IN currentUserID int
+)
+BEGIN
+
+Update db309grp12.UserLocation
+Set		ULOC_latitude = 5,
+		ULOC_longitude = 10,
+		ULOC_altitude = 15,
+		ULOC_zipcode = 95336,
+		ULOC_city = "Manteca",
+		ULOC_state = "CA"
+Where UserLocation.ULOC_userID = currentUserID;
+
+END
+-----------------------------------------------------------------------------
