@@ -1,5 +1,7 @@
 package group12.whosplayin;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,6 +22,7 @@ public class Game {
     private int zipcode;
     private double altitude;
     private double longitude;
+    private double latitude;
     private String state;
     private String city;
 
@@ -38,6 +41,18 @@ public class Game {
 
     public Game() {
 
+    }
+
+    public static boolean getPlayersInGame(User user, int gameId) throws Exception {
+        HashMap<String, String> queries = new HashMap<>();
+        queries.put("gameId", Integer.toString(gameId));
+
+        String url = WebAPI.queryBuilder(queries, user.getUsername(), user.getSessionId());
+        Log.d("URL", url);
+        String json = WebAPI.getJson("games/getPlayers", url);
+
+        Log.d("JSON", json);
+        return true;
     }
 
     public static boolean removeUserFromGame(User user, int userId, int gameId) throws Exception
@@ -104,20 +119,22 @@ public class Game {
     {
         HashMap<String, String> queries = new HashMap<>();
         queries.put("gameTitle", game.getTitle());
-        queries.put("gameTypeId", Integer.toString(game.getGameType()));
+        queries.put("gameTypeID", Integer.toString(game.getGameType()));
         queries.put("numPlayers", Integer.toString(game.getNumPlayers()));
         queries.put("maxPlayers", Integer.toString(game.getMaxPlayers()));
         queries.put("dateCreated", game.getDateCreated());
         queries.put("startTime", game.getStartTime());
         queries.put("endTime", game.getEndTime());
-        queries.put("captainId", Integer.toString(game.getCaptainId()));
+        queries.put("captainID", Integer.toString(game.getCaptainId()));
         queries.put("zipcode", Integer.toString(game.getZipcode()));
         queries.put("altitude", Double.toString(game.getAltitude()));
-        queries.put("latitude", Double.toString(game.getLongitude()));
+        queries.put("longitude", Double.toString(game.getLongitude()));
+        queries.put("latitude", Double.toString(game.getLatitude()));
         queries.put("state", game.getState());
         queries.put("city", game.getCity());
 
         String url = WebAPI.queryBuilder(queries, user.getUsername(), user.getSessionId());
+        Log.d("URL", url);
         String json = WebAPI.getJson("games/newGame", url);
         if (json.compareTo("Success") == 0)
             return true;
@@ -225,6 +242,16 @@ public class Game {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public Double getLatitude()
+    {
+        return this.latitude;
+    }
+
+    public void setLatitude(double latitude)
+    {
+        this.latitude = latitude;
     }
 
     public String getState() {

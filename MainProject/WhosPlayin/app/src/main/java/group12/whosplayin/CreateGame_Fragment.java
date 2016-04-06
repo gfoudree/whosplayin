@@ -69,7 +69,7 @@ public class CreateGame_Fragment extends Fragment
 
     private double latitude;
     private double longitude;
-    private double altitude;
+    private double altitude = 1.0;
     private int zipCode;
     private String city;
     private String state;
@@ -81,11 +81,12 @@ public class CreateGame_Fragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        // Get incoming bundle.
-        Bundle incoming = this.getArguments();
-        sessionUserName = incoming.getString("USERNAME");
-        sessionUserID = incoming.getInt("USER_ID");
-        sessionID = incoming.getString("SESSION_ID");
+
+        // Get important user information... TODO Figure out why the userID always returns 0...
+        // Something is wrong with the authentication... hard coding in user id of 19.
+        sessionUserName = User.getInstance().getUsername();
+        sessionUserID = 19;
+        sessionID = User.getInstance().getSessionId();
         Log.d("Incoming Create Game", sessionUserName + ", " + sessionUserID + ", " + sessionID);
 
 
@@ -226,7 +227,6 @@ public class CreateGame_Fragment extends Fragment
 
             // The user has selected a place. Extract the name and address.
             final Place place = PlacePicker.getPlace(data, getActivity().getApplicationContext());
-
             final CharSequence name = place.getName();
             final CharSequence address = place.getAddress();
             final LatLng latLong = place.getLatLng();
@@ -237,7 +237,8 @@ public class CreateGame_Fragment extends Fragment
             zipCode = 50014;
 
             String attributions = PlacePicker.getAttributions(data);
-            if (attributions == null) {
+            if (attributions == null)
+            {
                 attributions = "";
             }
 
@@ -340,15 +341,10 @@ public class CreateGame_Fragment extends Fragment
 
         try
         {
-            startTime = startTime.replaceAll("\\s", "");
+
             endTime = endTime.replaceAll("\\s", "");
             startD = format.parse(startTime);
             endD = format.parse(endTime);
-
-
-            Log.d("Start Time", startTime);
-            Log.d("End Time", endTime);
-            Log.d("Compare Times", Integer.toString(endD.compareTo(startD)));
 
             if(endD.compareTo(startD) <= 0)
             {
@@ -363,8 +359,6 @@ public class CreateGame_Fragment extends Fragment
             e.printStackTrace();
         }
 
-        // no need to check description, not required.
-        // check if cancel was set, if it was focus to the first error.
         if(cancel)
         {
             focusView.requestFocus();
@@ -372,17 +366,32 @@ public class CreateGame_Fragment extends Fragment
 
         else
         {
-//            String start = date + " " + startTime + ":00";
-//            String end = date + " " + endTime+ ":00";
 
-            String start = startTime + ":00.0000";
-            String end = endTime + ":00.0000";
+            String finalStart = convertTime(startTime);
+            String finalEnd = convertTime(endTime);
+
+
+            Log.d("TIME", finalStart + " - " + finalEnd);
+
             mCreateGameTask = new UserCreateGameTask(eventTitle, gameTypeID, 1, maxPlayers, "2016-05-05 00:00:00",
-                    start, end, sessionUserID, zipCode, altitude, latitude, longitude,
+                    finalStart, finalEnd, sessionUserID, zipCode, altitude, latitude, longitude,
                     state, city, sessionID, sessionUserName);
             mCreateGameTask.execute((Void) null);
         }
 
+    }
+
+    /**
+     * Helper function to converts times to the proper format for the datbase.
+     * @param time
+     * @return
+     */
+    private String convertTime(String time)
+    {
+        time = time.replaceAll("\\s", "");
+        time = time + ":00.0000";
+
+        return time;
     }
 
     /**
@@ -434,24 +443,27 @@ public class CreateGame_Fragment extends Fragment
         @Override
         protected Boolean doInBackground(Void... params)
         {
-            Game game = new Game();
+            Boolean success = false;
+            Game game = new Game(0, gameTitle, gameTypeID, numPlayers, maxPlayers, dateCreated, startTime, endTime, captainID);
+            Log.d("Game", game.toString());
+            game.setZipcode(zipCode);
+            game.setAltitude(altitude);
+            game.setLatitude(latitude);
+            game.setLongitude(longitude);
+            game.setState(state);
+            game.setCity(city);
+
             try {
-                game.createGame(gameTitle, gameTypeID, numPlayers, maxPlayers, dateCreated, startTime,
-                        endTime, captainID, zipCode, altitude, latitude, longitude, state, city, sessionID,
-                        username);
+                success = game.createGame(User.getInstance(), game);
+                Log.d("User", User.getInstance().toString());
             } catch (Exception e) {
                 e.printStackTrace();
+                success = false;
             }
 
-            try
-            {
-                return true;
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                return false;
-            }
+
+            return success;
+
         }
     }
 

@@ -31,12 +31,6 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState)
     {
         Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        sessionUserName = extras.getString("USERNAME");
-        sessionID = extras.getString("SESSION_ID");
-        userID = extras.getInt("USER_ID");
-
-       Log.d("User Info", sessionUserName + " SESSION ID: " + sessionID + " USER ID: " + userID);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

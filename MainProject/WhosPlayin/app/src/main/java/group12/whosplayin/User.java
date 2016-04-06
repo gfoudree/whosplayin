@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 
 public class User {
+    private static User instance;
 
     private String sessionId = "";
     private int id = 0;
@@ -56,6 +57,13 @@ public class User {
     public String getUsername()
     {
         return username;
+    }
+
+    public static synchronized User getInstance()
+    {
+        if (instance == null)
+            instance = new User();
+        return instance;
     }
 
     public static boolean createUser(String username, String password, String name, int age, String gender, String email, String phone) throws Exception
@@ -117,11 +125,16 @@ public class User {
         String url = WebAPI.queryBuilder(queries, this.username, this.sessionId);
         String json = WebAPI.getJson("user/getId", url);
 
-        JSONArray ja = new JSONArray(json);
-        JSONObject obj = ja.getJSONObject(0);
-        int userId = obj.getInt("USR_id");
-        this.id = userId;
-        return userId;
+        if (!json.isEmpty()) {
+            JSONArray ja = new JSONArray(json);
+            JSONObject obj = ja.getJSONObject(0);
+            int userId = obj.getInt("USR_id");
+            return userId;
+        }
+        else
+        {
+            throw new Exception("Error getting userID from WEBAPI");
+        }
     }
 
     public boolean authenticate(String username, String password) throws Exception
@@ -144,7 +157,7 @@ public class User {
             return false;
         }
 
-        if (json.compareTo("Invalid") != 0) //Is it valid?
+        if (json.compareTo("Invalid") != 0 && !json.isEmpty()) //Is it valid?
         {
             try
             {
@@ -153,7 +166,7 @@ public class User {
                 if (sessId != null && !sessId.isEmpty()) {
                     this.sessionId = sessId;
                     this.username = username;
-                    getUserId();
+                    this.id = getUserId();
                     return true;
                 }
                 else
@@ -170,7 +183,6 @@ public class User {
 
     public void getUserInfo() throws Exception
     {
-        Log.d("USER INFO", "Called User Info");
         if (sessionId.isEmpty() || username.isEmpty())
             throw new Exception("No username or session ID!");
 
@@ -180,16 +192,20 @@ public class User {
         String url = WebAPI.queryBuilder(queries, username, sessionId); //Replace sessionID with the id after being authenticated
         String json = WebAPI.getJson("user/info", url);
 
-        JSONObject obj = new JSONObject(json);
-        this.id = obj.getInt("id");
-        this.setAge(obj.getInt("age"));
-        this.setGender(obj.getString("gender"));
-        this.setLocation(obj.getString("location"));
-        this.setRating(obj.getInt("rating"));
-        this.setVerified(obj.getString("verified"));
-        this.setDateCreated(obj.getString("dateCreated"));
-        this.setGamesPlayed(obj.getInt("gamesPlayed"));
-        this.setGamesCreated(obj.getInt("gamesCreated"));
+        if (json.compareTo("Success") == 0) {
+            JSONObject obj = new JSONObject(json);
+            this.id = obj.getInt("id");
+            this.setAge(obj.getInt("age"));
+            this.setGender(obj.getString("gender"));
+            this.setLocation(obj.getString("location"));
+            this.setRating(obj.getInt("rating"));
+            this.setVerified(obj.getString("verified"));
+            this.setDateCreated(obj.getString("dateCreated"));
+            this.setGamesPlayed(obj.getInt("gamesPlayed"));
+            this.setGamesCreated(obj.getInt("gamesCreated"));
+        }
+        else
+            throw new Exception("Error getting user info from WebAPI");
     }
 
     @Override

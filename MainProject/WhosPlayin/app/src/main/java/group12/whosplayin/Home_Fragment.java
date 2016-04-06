@@ -50,7 +50,7 @@ public class Home_Fragment extends Fragment
         currentView = inflater.inflate(R.layout.home_layout, container, false);
 
         gameArray = new ArrayList<Game>();
-        GetAllGamesTask task = new GetAllGamesTask(sessionUserName, sessionID);
+        GetAllGamesTask task = new GetAllGamesTask();
         task.execute((Void) null);
 
 
@@ -86,44 +86,42 @@ public class Home_Fragment extends Fragment
         return currentView;
     }
 
+    /**
+     * Async task for getting all of the current games. It gets all the current games and then on
+     * post execute sets the list view adapter.
+     */
     public class GetAllGamesTask extends AsyncTask<Void, Void, Boolean>
     {
-        private final String username;
-        private final String sessionID;
-
-        GetAllGamesTask(String username, String sessionID)
+        GetAllGamesTask()
         {
-            this.username = username;
-            this.sessionID = sessionID;
+
         }
 
         @Override
         protected Boolean doInBackground(Void... params){
             Game game = new Game();
-            User user = User.getInstance();
-
-            try {
-                game.getCurrentGames()
+            try
+            {
+                gameArray = game.getCurrentGames(User.getInstance());
                 return true;
-            } catch (Exception e) {
+            }
+
+            catch (Exception e)
+            {
                 e.printStackTrace();
                 return false;
             }
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            if(success) {
-                try {
-                    // Turn it into a JSON object.
-                    JSONArray jsonArray = new JSONArray(allGamesString);
-                    Game[] games = getGameArrayList(jsonArray);
-                    makeListView(games);
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+        protected void onPostExecute(final Boolean success)
+        {
+            // If we were successful getting the current arrays, we'll make the lsit view.
+            if(success)
+            {
+                    Game[] finalGameArray = new Game[gameArray.size()];
+                    finalGameArray = gameArray.toArray(finalGameArray);
+                    makeListView(finalGameArray);
             }
 
             else {
@@ -132,33 +130,6 @@ public class Home_Fragment extends Fragment
         }
     }
 
-    private Game[] getGameArrayList(JSONArray array) throws JSONException {
-        // Loop through and add our results to an array!
-        for(int i = 0; i < array.length(); i++)
-        {
-            JSONObject obj = array.getJSONObject(i);
-            int id = obj.getInt("GAM_id");
-            String title = obj.getString("GAM_title");
-            int gameTypeID = obj.getInt("GAM_gameTypeID");
-            int currentPlayers = obj.getInt("GAM_numPlayers");
-            int maxPlayers = obj.getInt("GAM_maxPlayers");
-            String startTime = obj.getString("GAM_startTime");
-            String endTime = obj.getString("GAM_endTime");
-            int captainID = obj.getInt("GAM_captainID");
-
-            Game game = new Game(id, title, gameTypeID, currentPlayers, maxPlayers, startTime,
-                    endTime, captainID, 00000, "FAKE STATE", "FAKE CITY",
-                    0.000, 0.000, 000);
-            gameArray.add(game);
-
-        }
-
-
-        Game[] finalGameArray = new Game[gameArray.size()];
-        finalGameArray = gameArray.toArray(finalGameArray);
-
-        return finalGameArray;
-    }
 
     /**
      * Adapter which helps in displaying the data on the list view. On the list we are going to show

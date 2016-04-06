@@ -44,20 +44,17 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
+
+
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
      */
+    private final boolean development = false;
+
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -68,7 +65,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private group12.whosplayin.User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,7 +180,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
-        if (cancel) {
+        if (cancel && !development) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
@@ -287,8 +283,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView.setAdapter(adapter);
     }
 
-    private interface ProfileQuery
-    {
+    private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
                 ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
@@ -302,33 +297,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean>
-    {
+    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
 
-        UserLoginTask(String email, String password)
-        {
+        UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
         }
 
         @Override
-        protected Boolean doInBackground(Void... params)
-        {
+        protected Boolean doInBackground(Void... params) {
 
-            user = new User();
-            try
+            if (development)
             {
-                return user.authenticate(mEmail, mPassword);
+                return true;
             }
-            catch (Exception e)
-            {
-                return false;
+            else {
+                User user = User.getInstance();
+                try {
+                    return user.authenticate(mEmail, mPassword);
+                } catch (Exception e) {
+                    return false;
+                }
             }
-
-
         }
 
         @Override
@@ -336,37 +329,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
 
-            if (success)
-            {
+            if (success) {
                 //Create main screen activity
-                try {
-                    user.getUserInfo();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-
-                // Make outgoing bundle
-                Bundle outgoing = new Bundle();
-                outgoing.putString("USERNAME", user.getUsername());
-                outgoing.putInt("USER_ID", user.getUserId());
-                outgoing.putString("SESSION_ID", user.getSessionId());
-                Log.d("Login Outgiong Bundle", user.getUsername() + ", " + user.getUserId() + ", " + user.getSessionId());
-
-                intent.putExtras(outgoing);
                 startActivity(intent);
-            }
-
-            else
-            {
+            } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
         }
 
         @Override
-        protected void onCancelled()
-        {
+        protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
         }
@@ -375,10 +349,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 }
-

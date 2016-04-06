@@ -18,6 +18,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.location.places.ui.PlacePicker;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -64,29 +66,24 @@ public class ViewGame_Fragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
-        {
-
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        // Get the incoming arguments. We need game id, title, start time/end time and location.
         Bundle incoming = this.getArguments();
         gameID = incoming.getInt("GAME_ID");
-        username = incoming.getString("USERNAME");
-        sessionID = incoming.getString("SESSION_ID");
-        userID = incoming.getInt("USER_ID");
         title = incoming.getString("TITLE");
         startTime = incoming.getString("START_TIME");
         endTime = incoming.getString("END_TIME");
         location = incoming.getString("LOCATION");
-        Log.d("INCOMING VIEW GAME", gameID + ", " + username + ", " + sessionID + ", " + userID);
+        Log.d("INCOMING VIEW GAME", Integer.toString(gameID));
 
 
         currentView = inflater.inflate(R.layout.viewgame_layout, container, false);
 
+        // Get access to all of the
         mTitle = (TextView) currentView.findViewById(R.id.title_text);
         mLocation = (TextView) currentView.findViewById(R.id.location_text);
         mTime = (TextView) currentView.findViewById(R.id.time_text);
@@ -94,7 +91,6 @@ public class ViewGame_Fragment extends Fragment
         mChatText = (TextView) currentView.findViewById(R.id.chat_text);
         mMessageText = (EditText) currentView.findViewById(R.id.message_text);
         mGameControl = (Button) currentView.findViewById(R.id.gameControl_button);
-        mSendMessage = (Button) currentView.findViewById(R.id.gameControl_button);
         mTitle.setText(title);
         mLocation.setText(location);
         mTime.setText(startTime + " - " + endTime);
@@ -104,78 +100,57 @@ public class ViewGame_Fragment extends Fragment
         currentGame = new Game();
 
         userArrayList = new ArrayList<User>();
-        GetUsersInGameTask usersTask = new GetUsersInGameTask(username, sessionID, gameID);
-        usersTask.execute((Void) null);
+//        GetUsersInGameTask usersTask = new GetUsersInGameTask(gameID);
+//        usersTask.execute((Void) null);
 
 
-        // On click listeners
-        // TODO, WAITING FOR BACKEND STUFF TO GET DONE.
+        // Game control button click listener. This button will appear join game if the user is not
+        // currently in the game. And leave game if they are already in the game.
         mGameControl.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
+                Log.d("VIEW GAME", "click");
+                Boolean success = false;
 
-            }
-        });
-
-        // TODO IMPLEMENT THIS WHITH GRANT
-        mSendMessage.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                AddPlayerToGameTask addPlayerToGameTask = new AddPlayerToGameTask(username, sessionID, gameID, userID);
+                AddPlayerToGameTask addPlayerToGameTask = new AddPlayerToGameTask();
                 addPlayerToGameTask.execute((Void) null);
             }
         });
+
 
         return currentView;
     }
 
 
+    /**
+     * Background Async task that gets the current users in the game. In the background it makes the
+     * call to the datbase. Then on post execute it makes the list view.
+     */
     public class GetUsersInGameTask extends AsyncTask<Void, Void, Boolean>
     {
-        private String username;
-        private String sessionID;
         private int gameID;
 
-        GetUsersInGameTask(String username, String sessionID, int gameID)
+        GetUsersInGameTask(int gameID)
         {
-            this.username = username;
-            this.sessionID = sessionID;
             this.gameID = gameID;
         }
 
         @Override
         protected Boolean doInBackground(Void... params)
         {
-            try {
-                System.out.println(gameID + ", " + username + ", " + sessionID);
-//                currentGame.getUsersInGame(gameID, username, sessionID);
-
-                User user = new User();
-
-                user.id = 19;
-                user.username = "jack";
-                user.name = "Jack Meyer";
-                user.age = 20;
-                user.gender = "Male";
-                user.gamesPlayed = 0;
-
-                userArrayList.add(user);
-
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            if(currentGame != null) {
+            // Get the plaers in the game.
+            try
+            {
+                Game game = new Game();
+                game.getPlayersInGame(User.getInstance(), gameID);
                 return true;
             }
 
-            else {
+            catch (Exception e)
+            {
+                e.printStackTrace();
                 return false;
             }
         }
@@ -183,6 +158,7 @@ public class ViewGame_Fragment extends Fragment
         @Override
         protected void onPostExecute(final Boolean success)
         {
+            // Make the list view.
             User[] finalUserArray = new User[userArrayList.size()];
             finalUserArray = userArrayList.toArray(finalUserArray);
             makeListView(finalUserArray);
@@ -210,7 +186,7 @@ public class ViewGame_Fragment extends Fragment
             TextView mFullName = (TextView) view.findViewById(R.id.userFullName);
 
 
-            mFullName.setText(user.name);
+//            mFullName.setText(user.name);
 
             return view;
         }
@@ -230,9 +206,9 @@ public class ViewGame_Fragment extends Fragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 User currentUser = (User) listView.getItemAtPosition(position);
-                int userID = currentUser.getUserId();
-                String userName = currentUser.getUsername();
-                String name = currentUser.name;
+//                int userID = currentUser.getUserId();
+//                String userName = currentUser.getUsername();
+//                String name = currentUser.name;
 
 //                Class fragmentClass = ViewGame_Fragment.class;
 //                Fragment fragment = null;
@@ -252,42 +228,40 @@ public class ViewGame_Fragment extends Fragment
      */
     public class AddPlayerToGameTask extends AsyncTask<Void, Void, Boolean>
     {
-        private String username;
-        private String sessionID;
-        private int gameID;
-        private int userID;
-
-        AddPlayerToGameTask(String username, String sessionID, int gameID, int userID)
+        AddPlayerToGameTask()
         {
-            this.username = username;
-            this.sessionID = sessionID;
-            this.gameID = gameID;
-            this.userID = userID;
+            // Empty Default Constructor
         }
 
         @Override
         protected Boolean doInBackground(Void... params)
         {
-            try {
-                System.out.println(gameID + ", " + username + ", " + sessionID);
-                currentGame.addPlayerToGame(gameID, userID, username, sessionID);
-            } catch (Exception e) {
+            Boolean success = false;
+            try
+            {
+                Game game = new Game();
+                success = game.addPlayerToGame(User.getInstance(), gameID, 19);
+            }
+            catch (Exception e)
+            {
                 e.printStackTrace();
             }
 
-            if(currentGame != null) {
-                return true;
-            }
-
-            else {
-                return false;
-            }
+            return success;
         }
 
         @Override
         protected void onPostExecute(final Boolean success)
         {
-            return;
+            if(success)
+            {
+                mGameControl.setText("Leave Game");
+            }
+
+            else
+            {
+                mGameControl.setError("Could not add you to the game. Try again later");
+            }
         }
     }
 
