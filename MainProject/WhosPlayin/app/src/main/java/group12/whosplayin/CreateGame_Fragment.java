@@ -104,13 +104,14 @@ public class CreateGame_Fragment extends Fragment
         mSubmit = (Button) currentView.findViewById(R.id.submit_button);
         mCancel = (Button) currentView.findViewById(R.id.cancel_button);
 
+        // Location Text Box jack
         mLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("Click");
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try {
-                    Intent intent = builder.build(getActivity().getApplicationContext());
+                    Intent intent = builder.build(getActivity());
                     startActivityForResult(intent, 1);
                 } catch (GooglePlayServicesRepairableException e) {
                     e.printStackTrace();
@@ -119,9 +120,6 @@ public class CreateGame_Fragment extends Fragment
                 }
             }
         });
-
-        // Set autocomplete adapters
-//        mLocation.setAdapter(new PlacesAutoCompleteAdapter(getActivity(), R.layout.autocomplete_list_item));
 
         // Load spinner values
         String[] gameTypeArray = new String[] {

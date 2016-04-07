@@ -3,6 +3,7 @@ package group12.whosplayin;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 public class Home_Fragment extends Fragment
 {
     private Button mCreateGame;
+    private Button mMapView;
     private String sessionUserName;
     private String sessionID;
     private int sessionUserID;
@@ -53,6 +55,16 @@ public class Home_Fragment extends Fragment
         GetAllGamesTask task = new GetAllGamesTask();
         task.execute((Void) null);
 
+        mMapView = (Button) currentView.findViewById(R.id.viewmap_button);
+        mMapView.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getActivity(), MapsActivity.class);
+                startActivity(intent);
+            }
+
+        });
 
         mCreateGame = (Button) currentView.findViewById(R.id.createGame_button);
         mCreateGame.setOnClickListener(new View.OnClickListener() {
