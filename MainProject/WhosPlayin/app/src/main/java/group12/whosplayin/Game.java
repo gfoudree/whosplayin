@@ -2,175 +2,271 @@ package group12.whosplayin;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.util.Log;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Objects;
-
-/**
- * Created by Jack on 3/4/2016.
- */
-public class Game
-{
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+public class Game {
+    
+    private int id;
+    private String title;
+    private int gameType;
+    private int numPlayers;
+    private int maxPlayers;
+    private String dateCreated;
+    private String startTime;
+    private String endTime;
+    private int captainId;
+    private int zipcode;
+    private double altitude;
+    private double longitude;
+    private double latitude;
+    private String state;
+    private String city;
+    
+    public Game(int id, String title, int gameType, int numPlayers, int maxPlayers, String dateCreated, String startTime, String endTime, int captainId)
+    {
+        this.setId(id);
+        this.setTitle(title);
+        this.setNumPlayers(numPlayers);
+        this.setMaxPlayers(maxPlayers);
+        this.setGameType(gameType);
+        this.setDateCreated(dateCreated);
+        this.setStartTime(startTime);
+        this.setEndTime(endTime);
+        this.setCaptainId(captainId);
     }
-
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
+    
+    public Game() {
+        
     }
-
-    public void setLocation(String location) {
-        this.location = location;
+    
+    public static boolean getPlayersInGame(User user, int gameId) throws Exception {
+        HashMap<String, String> queries = new HashMap<>();
+        queries.put("gameId", Integer.toString(gameId));
+        
+        String url = WebAPI.queryBuilder(queries, user.getUsername(), user.getSessionId());
+        Log.d("URL", url);
+        String json = WebAPI.getJson("games/getPlayers", url);
+        
+        Log.d("JSON", json);
+        return true;
     }
-
+    
+    public static boolean removeUserFromGame(User user, int userId, int gameId) throws Exception
+    {
+        HashMap<String, String> queries = new HashMap<>();
+        queries.put("gameId", Integer.toString(gameId));
+        queries.put("userId", Integer.toString(userId));
+        
+        String url = WebAPI.queryBuilder(queries, user.getUsername(), user.getSessionId());
+        String json = WebAPI.getJson("games/removeUserFromGame", url);
+        if (json.compareTo("Success") == 0)
+            return true;
+        else
+            return false;
+    }
+    
+    public static boolean addPlayerToGame(User user, int gameId, int userId) throws Exception
+    {
+        HashMap<String, String> queries = new HashMap<>();
+        queries.put("gameId", Integer.toString(gameId));
+        queries.put("userId", Integer.toString(userId));
+        
+        String url = WebAPI.queryBuilder(queries, user.getUsername(), user.getSessionId());
+        String json = WebAPI.getJson("games/addPlayerToGame", url);
+        if (json.compareTo("Success") == 0)
+            return true;
+        else
+            return false;
+    }
+    
+    public static ArrayList<Game> getCurrentGames(User user) throws Exception
+    {
+        ArrayList<Game> games = new ArrayList<Game>();
+        HashMap<String, String> queries = new HashMap<>();
+        String url = WebAPI.queryBuilder(queries, user.getUsername(), user.getSessionId());
+        
+        String json = WebAPI.getJson("games/getCurrentGames", url);
+        
+        JSONArray root = new JSONArray(json);
+        JSONArray data = root.getJSONArray(0);
+        
+        for (int i = 0; i < data.length(); i++)
+        {
+            JSONObject obj = data.getJSONObject(i);
+            
+            Game gameObj = new Game(
+                                    obj.getInt("GAM_id"),
+                                    obj.getString("GAM_title"),
+                                    obj.getInt("GAM_gameTypeID"),
+                                    obj.getInt("GAM_numPlayers"),
+                                    obj.getInt("GAM_maxPlayers"),
+                                    obj.getString("GAM_dateCreated"),
+                                    obj.getString("GAM_startTime"),
+                                    obj.getString("GAM_endTime"),
+                                    obj.getInt("GAM_captainID")
+                                    );
+            
+            games.add(gameObj);
+        }
+        return games;
+    }
+    
+    public static boolean createGame(User user, Game game) throws Exception
+    {
+        HashMap<String, String> queries = new HashMap<>();
+        queries.put("gameTitle", game.getTitle());
+        queries.put("gameTypeID", Integer.toString(game.getGameType()));
+        queries.put("numPlayers", Integer.toString(game.getNumPlayers()));
+        queries.put("maxPlayers", Integer.toString(game.getMaxPlayers()));
+        queries.put("dateCreated", game.getDateCreated());
+        queries.put("startTime", game.getStartTime());
+        queries.put("endTime", game.getEndTime());
+        queries.put("captainID", Integer.toString(game.getCaptainId()));
+        queries.put("zipcode", Integer.toString(game.getZipcode()));
+        queries.put("altitude", Double.toString(game.getAltitude()));
+        queries.put("longitude", Double.toString(game.getLongitude()));
+        queries.put("latitude", Double.toString(game.getLatitude()));
+        queries.put("state", game.getState());
+        queries.put("city", game.getCity());
+        
+        String url = WebAPI.queryBuilder(queries, user.getUsername(), user.getSessionId());
+        Log.d("URL", url);
+        String json = WebAPI.getJson("games/newGame", url);
+        if (json.compareTo("Success") == 0)
+            return true;
+        else
+            return false;
+        
+    }
+    
+    public String toString()
+    {
+        return String.format("%d, %s, %d, %d, %d, %s, %s, %s, %d", id, title, gameType, numPlayers, maxPlayers, dateCreated, startTime, endTime, captainId);
+    }
+    
+    public String getTitle() {
+        return title;
+    }
+    
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+    
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
+    
+    public int getGameType() {
+        return gameType;
+    }
+    
+    public void setGameType(int gameType) {
+        this.gameType = gameType;
+    }
+    
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+    
     public void setMaxPlayers(int maxPlayers) {
         this.maxPlayers = maxPlayers;
     }
-
-    public void setNumCurrentPlayers(int numCurrentPlayers) {
-        this.numCurrentPlayers = numCurrentPlayers;
+    
+    public String getDateCreated() {
+        return dateCreated;
     }
-
+    
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+    
+    public String getStartTime() {
+        return startTime;
+    }
+    
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    
+    public int getCaptainId() {
+        return captainId;
     }
-
-    public void setGameType(String gameType) {
-        this.gameType = gameType;
-    }
-
+    
     public void setCaptainId(int captainId) {
         this.captainId = captainId;
     }
-
-    private int gameId;
-    private String eventTitle;
-    private String location;
-    private int maxPlayers;
-    private int numCurrentPlayers;
-    private String startTime;
-    private String endTime;
-    private String gameType;
-    private int captainId;
-
-    /**
-     * Function to create a game. This funciton takes in the parameters passed, builds a URl,
-     * and posts the information to datebase.
-     *
-     * TODO Add Location Support
-     * @param userName
-     *  userName of the user who created the game. "The Captain"
-     * @param sessionID
-     *  sessionID of the logged in user.
-     * @param eventTitle
-     *  title of the event
-     * @param maxPlayers
-     *  max players allowed in the game.
-     * @param startTime
-     *  start time of the game.
-     * @param endTime
-     *  end time of the game.
-     * @param gameType
-     *  game type to be played.
-     * @param captainID
-     *  User ID of the person who created the game.
-     * @throws Exception
-     */
-    public void createGame(String userName, String sessionID, String eventTitle, int maxPlayers, String startTime, String endTime, String gameType, int captainID) throws Exception
-    {
-        //Update variables
-        this.eventTitle = eventTitle;
-        this.maxPlayers = maxPlayers;
-        this.startTime = startTime;
+    
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
-        this.gameType = gameType;
-        this.captainId = captainId;
-        this.location = "DUMMY DATA";
-
-        // Store the values and key in a hashmap
-        HashMap<String, String> create = new HashMap<>();
-        create.put("title", eventTitle);
-        create.put("maxPlayers", Integer.toString(maxPlayers));
-        create.put("startTime", startTime);
-        create.put("endTime", endTime);
-        create.put("gameType", gameType);
-        create.put("captainId", Integer.toString(captainID));
-
-        // Build the URl.
-        String url = WebAPI.queryBuilder(create, userName, sessionID);
-        Log.d("URL", url);
-        String json = WebAPI.getJson("games/newGame", url);
-        Log.d("Create Game Info", json); // Should return success.
     }
-
-    public void getGameInfo()
-    {
-        // TODO: MAKE API CALL AND SET THE VARIABLES
-        //DUMMY DATA FOR NOW
-        this.gameId = 1;
-        this.eventTitle = "Jack's Test Data";
-        this.maxPlayers = 10;
-        this.startTime = "2016-03-05 18:45:00";
-        this.endTime = "2016-03-05 22:45:00";
-        this.gameType = "Basketball";
-        this.captainId = 1;
-        this.location = "Ames";
-    }
-
-    public void getAllGames(String username, String sessionID) throws Exception {
-
-    }
-
-    public String getEventTitle()
-    {
-        return this.eventTitle;
-    }
-
-    public int getMaxPlayers()
-    {
-        return this.maxPlayers;
-    }
-
-    public String getStartTime()
-    {
-        return this.startTime;
-    }
-
-    public String getEndTime()
-    {
+    
+    public String getEndTime() {
         return this.endTime;
     }
-
-    public String getGameType()
-    {
-        return this.gameType;
+    
+    public int getZipcode() {
+        return zipcode;
     }
-
-    public int getCaptainId()
-    {
-        return this.captainId;
+    
+    public void setZipcode(int zipcode) {
+        this.zipcode = zipcode;
     }
-
-    public String getLocation()
-    {
-        return this.location;
+    
+    public double getAltitude() {
+        return altitude;
     }
-
-    public int getNumCurrentPlayers()
-    {
-        return this.numCurrentPlayers;
+    
+    public void setAltitude(double altitude) {
+        this.altitude = altitude;
     }
-
-    public int getGameId()
-    {
-        return this.gameId;
+    
+    public double getLongitude() {
+        return longitude;
     }
-
+    
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+    
+    public Double getLatitude()
+    {
+        return this.latitude;
+    }
+    
+    public void setLatitude(double latitude)
+    {
+        this.latitude = latitude;
+    }
+    
+    public String getState() {
+        return state;
+    }
+    
+    public void setState(String state) {
+        this.state = state;
+    }
+    
+    public String getCity() {
+        return city;
+    }
+    
+    public void setCity(String city) {
+        this.city = city;
+    }
 }

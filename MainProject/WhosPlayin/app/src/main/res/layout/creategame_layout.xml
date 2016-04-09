@@ -1,0 +1,103 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="group12.whosplayin.CreateGame_Fragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:weightSum="1"
+        android:focusable="false">
+
+        <EditText
+            android:hint="Create an Event Title..."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/eventTitle_text"
+            android:layout_gravity="center_horizontal" />
+
+        <AutoCompleteTextView
+            android:hint="Select a Location..."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/location_text"
+            android:layout_gravity="center_horizontal" />
+
+        <Spinner
+            android:hint="Select a Game Type..."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/gameType_select"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.14" />
+
+        <EditText
+            android:hint="Specifiy the maximum players..."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/maxPlayers_text"
+            android:layout_gravity="center_horizontal" />
+
+        <EditText
+            android:hint="Pick a Date..."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/date_text"
+            android:layout_gravity="center_horizontal"
+            android:focusableInTouchMode="false" />
+
+        <EditText
+            android:hint="Pick a Start Time..."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:ems="10"
+            android:id="@+id/startTime_text"
+            android:layout_gravity="center_horizontal"
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
+
+        <EditText
+            android:hint="Pick an End Time..."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:ems="10"
+            android:id="@+id/endTime_text"
+            android:layout_gravity="center_horizontal"
+            android:focusableInTouchMode="false" />
+
+        <EditText
+            android:hint="Write a Description..."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/description_text"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.41" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:id="@+id/submit_button"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/cancel_button"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+</FrameLayout>
