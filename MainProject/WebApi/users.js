@@ -42,24 +42,30 @@ var validateUser = function(sessionId, username, sqlStmt, done)
 
 var getInfo = function(request, response)
 {
-  var id = request.body.id;
   var sessionId = request.body.sessionId;
   var username = request.body.username;
+  var user = request.body.user;
 
-  validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,rating,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
+  if (user && username && sessionId)
   {
-    response.send(data); //Send user info in JSON
-  });
+    validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,rating,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
+    {
+      response.send(data);
+    });
+  }
+  else {
+    response.send("Invalid");
+  }
 }
 
 var authenticate = function(request, response)
 {
-  console.log(request);
   var password = request.body.password;
   var username = request.body.username;
   var hash = crypto.createHash('sha256');
+
   hash.update(password);
-  console.log(password);
+
   if (!password || !username || password.length < 1 || username.length < 1)
   {
     response.send('Invalid data');
@@ -147,11 +153,45 @@ var getId = function(request, response)
   var sessionId = request.body.sessionId;
   var username = request.body.username;
   var user = request.body.user;
-  console.log("Test");
-  validateUser(sessionId, username, 'SELECT id FROM User WHERE username=\'' + user + '\'', function (done)
+
+  if (user && username && sessionId)
   {
-    response.send(done);
-  });
+    var query = 'SELECT USR_id FROM db309grp12.User WHERE USR_username=\'' + user + '\';';
+    console.log(query);
+    validateUser(sessionId, username, query, function (done)
+    {
+      response.send(done);
+    });
+  }
+  else
+  {
+    response.send("Invalid");
+  }
+}
+
+var addFriend = function (request, response)
+{
+  var sessionId = request.body.sessionId;
+  var username = request.body.username;
+  var userId = request.body.userId;
+  var friendId = request.body.friendId;
+
+  if (user && username && sessionId && friendId)
+  {
+    validateUser(sessionId, username, 'CALL db309grp12.stp_AddUserFriend(' + userId + '\',\'' + friendId + '\');', function (done)
+    {
+      if (done == 'Error retrieving SQL data')
+      {
+        response.send("Invalid");
+      }
+      else {
+        response.send(done);
+    }
+    });
+  }
+  else {
+    response.send("Invalid");
+  }
 }
 
 module.exports = {
@@ -162,5 +202,6 @@ module.exports = {
   validateUser: validateUser,
   RNG: RNG,
   status: status,
-  getId: getId
+  getId: getId,
+  addFriend: addFriend
 }

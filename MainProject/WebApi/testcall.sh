@@ -1,5 +1,5 @@
 #!/bin/sh
-URL="http://10.30.11.195:5000/"
+URL="http://localhost:5000/"
 CMDSTR="curl -H \"Content-Type: application/json\" -X POST -d"
 if [ $1 == login ]; then
 	FULLURL=$URL"user/authenticate"

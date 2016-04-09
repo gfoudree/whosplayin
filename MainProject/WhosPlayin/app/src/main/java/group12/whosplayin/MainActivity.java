@@ -22,6 +22,12 @@ public class MainActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
 
+    private String sessionUserName = "twohy";
+    private String sessionId = "FAKE SESSION ID";
+    private int userID = 19;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +112,13 @@ public class MainActivity extends AppCompatActivity{
         }catch (Exception e){
             e.printStackTrace();
         }
+
+        //Pass the gragment data
+        Bundle outgoing = new Bundle();
+        outgoing.putString("USERNAME",sessionUserName);
+        outgoing.putString("SESSION_ID",sessionId);
+        outgoing.putInt("USER_ID", userID);
+        fragment.setArguments(outgoing);
 
         //Insert the selected Fragment by replacing the previous Fragment
         FragmentManager fragmentManager = getFragmentManager();
