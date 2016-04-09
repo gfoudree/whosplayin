@@ -78,14 +78,14 @@ public class FriendsProfile_Fragment extends Fragment{
         sendMessageButton = (Button)myActivity.findViewById(R.id.messageButton);
         addFriendButton = (Button)myActivity.findViewById(R.id.addFriendButton);
 
-        usernameText.setText(myUser.getName());
-        genderText.setText(myUser.getGender());
-        ageText.setText(String.valueOf(myUser.getAge()));
-        zipText.setText(myUser.getZipcode());
-        bioText.setText(myUser.getBio());
-        upVoteText.setText(String.valueOf(myUser.getUpVotes()));
-        downVoteText.setText(String.valueOf(myUser.getDownVotes()));
-        gamesPlayedText.setText(String.valueOf(myUser.getGamesPlayed()));
+        usernameText.setText(myUser.name);
+        genderText.setText(myUser.gender);
+        ageText.setText(String.valueOf(myUser.age));
+        zipText.setText(myUser.zipcode);
+        bioText.setText(myUser.bio);
+        upVoteText.setText(String.valueOf(myUser.upVotes));
+        downVoteText.setText(String.valueOf(myUser.downVotes));
+        gamesPlayedText.setText(String.valueOf(myUser.gamesPlayed));
 
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -185,11 +185,11 @@ public class MyProfile_Fragment extends Fragment{
     }
 
     private void setLabelData(){
-        usernameLabel.setText(myUser.getUsername());
-        usersNameView.setText(myUser.getName());
-        usersAgeView.setText(String.valueOf(myUser.getAge()));
-        usersBioView.setText(myUser.getBio());
-        usersGenderView.setText(myUser.getGender());
+        usernameLabel.setText(myUser.username);
+        usersNameView.setText(myUser.name);
+        usersAgeView.setText(String.valueOf(myUser.age));
+        usersBioView.setText(myUser.bio);
+        usersGenderView.setText(myUser.gender);
     }
 
 

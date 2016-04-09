@@ -30,7 +30,7 @@ class GamesAdaptor extends ArrayAdapter<Game> {
         TextView gameTitle = (TextView) friendsView.findViewById(R.id.gameTitle);
         ImageView gameProfilePic = (ImageView) friendsView.findViewById(R.id.gamePic);
 
-        gameTitle.setText(singleGame.getTitle());
+        gameTitle.setText(singleGame.getEventTitle());
         gameProfilePic.setImageResource(R.drawable.smiley); //needs to change for each achievement
 
         return friendsView;
