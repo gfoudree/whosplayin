@@ -40,7 +40,6 @@ import java.util.List;
 import android.support.v7.app.ActionBarActivity;
 
 import static android.Manifest.permission.READ_CONTACTS;
-
 /**
  * A login screen that offers login via email/password.
  */
