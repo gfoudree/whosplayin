@@ -23,14 +23,11 @@ public class MainActivity extends AppCompatActivity{
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
-<<<<<<< HEAD
     private String sessionUserName;
     private String sessionID;
     private int userID;
-    
-=======
 
->>>>>>> parent of 3f38c9a... Merge branch 'rick_user_profile_view'
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -122,7 +119,6 @@ public class MainActivity extends AppCompatActivity{
         catch (Exception e){
             e.printStackTrace();
         }
-<<<<<<< HEAD
         
         // WE NEED TO PASS THE FRAGMENTS DATA!!!!
         Bundle bundle = new Bundle();
@@ -132,10 +128,8 @@ public class MainActivity extends AppCompatActivity{
         
         fragment.setArguments(bundle);
         
-        
-=======
 
->>>>>>> parent of 3f38c9a... Merge branch 'rick_user_profile_view'
+
         //Insert the selected Fragment by replacing the previous Fragment
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent,fragment).commit();
