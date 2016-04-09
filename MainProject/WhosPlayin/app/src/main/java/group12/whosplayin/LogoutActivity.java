@@ -35,7 +35,8 @@ public class LogoutActivity extends Activity {
         yesButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
+
+                startActivity(new Intent(LogoutActivity.this, LoginActivity.class));
             }
         });
     }

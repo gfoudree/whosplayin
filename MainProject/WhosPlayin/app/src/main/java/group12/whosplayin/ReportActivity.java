@@ -1,5 +1,6 @@
 package group12.whosplayin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
@@ -19,6 +20,7 @@ public class ReportActivity extends Activity {
         final EditText playerEditText = (EditText) findViewById(R.id.report_player);
         final EditText reasonEditText = (EditText) findViewById(R.id.report_reason);
         final Button reportSubmitButton =  (Button) findViewById(R.id.report_submit_button);
+        final Button goBackButton = (Button) findViewById(R.id.report_go_back);
 
         reportSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,7 +30,17 @@ public class ReportActivity extends Activity {
                 reportReason = reasonEditText.getText().toString();
 
             }
+
         });
+
+        goBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ReportActivity.this, MainActivity.class));
+            }
+        });
+
+
     }
 
 }
