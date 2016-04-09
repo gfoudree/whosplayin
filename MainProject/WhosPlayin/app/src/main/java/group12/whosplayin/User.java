@@ -1,57 +1,48 @@
 package group12.whosplayin;
 
 
+import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+
+import static android.support.v4.app.ActivityCompat.startActivity;
+
+/**
+ * Created by twohyjr on 2/16/16.
+ */
 
 
 public class User {
-    private static User instance;
+
+    //[{"username":"tom","id":1,"name":"Tom Collin","age":20,"gender":"male","location":"Chicago","rating":null,"verified":null,"dateCreated":"2016-02-12T17:07:11.000Z",
+    // "lastLogin":null,"picture":null,"gamesPlayed":null,"gamesCreated":null}]
 
     private String sessionId = "";
-    private int id = 0;
-    private String username = "";
-    private String name = "";
-    private int age = 0;
-    private String gender = "";
-    private String location = "";
-    private int rating = 0;
-    private String verified = "";
-    private String dateCreated = "";
-    private String profilePicture = "";
-    private int gamesPlayed = 0;
+    private String email = "";
+    private String password = "";
+    private String phoneNumber = "";
+    public int id = 0;
+    public String username = "";
+    public String name = "";
+    public int age = 0;
+    public String gender = "";
+    public String location = "";
+    public int rating = 0;
+    public String verified = "";
+    public String dateCreated = "";
+    public String profilePicture = "";
+    public int gamesPlayed = 0;
     private int gamesCreated = 0;
-
-    public User(int id, String username, String name, int age, String gender, String location, int rating, String verified, String dateCreated, String profilePicture, int gamesPlayed, int gamesCreated)
-    {
-        this.id = id;
-        this.username = username;
-        this.setName(name);
-        this.setAge(age);
-        this.setGender(gender);
-        this.setLocation(location);
-        this.setRating(rating);
-        this.setVerified(verified);
-        this.setDateCreated(dateCreated);
-        this.setProfilePicture(profilePicture);
-        this.setGamesPlayed(gamesPlayed);
-        this.setGamesCreated(gamesCreated);
-    }
-
-    public User()
-    {
-
-    }
 
     public String getSessionId()
     {
-        return sessionId;
+	    return sessionId;
     }
 
     public String getUsername()
@@ -59,81 +50,31 @@ public class User {
         return username;
     }
 
-    public static synchronized User getInstance()
-    {
-        if (instance == null)
-            instance = new User();
-        return instance;
-    }
-
-    public static boolean createUser(String username, String password, String name, int age, String gender, String email, String phone) throws Exception
-    {
-        HashMap<String, String> queries = new HashMap<>();
-        queries.put("username", username);
-        queries.put("password", password);
-        queries.put("name", name);
-        queries.put("age", Integer.toString(age));
-        queries.put("gender", gender);
-        queries.put("email", email);
-        queries.put("phone", phone);
-
-        String url = WebAPI.queryBuilder(queries, null, null);
-        String json = WebAPI.getJson("user/create", url);
-
-        if (json.compareTo("Success") == 0)
-            return true;
-        else
-            return false;
-
-    }
-
-    public ArrayList<User> getFriends(int userId) throws Exception
-    {
-        HashMap<String, String> queries = new HashMap<>();
-        queries.put("id", Integer.toString(userId));
-        String url = WebAPI.queryBuilder(queries, this.username, this.sessionId);
-
-        String json = WebAPI.getJson("user/getFriendsList", url);
-
-        JSONArray root = new JSONArray(json);
-        JSONArray data = root.getJSONArray(0);
-        ArrayList<User> users = new ArrayList<User>();
-
-        for (int i = 0; i < data.length(); i++)
-        {
-            JSONObject obj = data.getJSONObject(i);
-
-        }
-
-        return null;
-
-    }
-
-    public void addFriend(int user, int friendIdToAdd) throws Exception
-    {
-        HashMap<String, String> queries = new HashMap<>();
-        queries.put("userId", Integer.toString(user));
-        queries.put("friendId", Integer.toString(friendIdToAdd));
-        String url = WebAPI.queryBuilder(queries, this.username, this.sessionId);
-        String json = WebAPI.getJson("user/addFriend", url);
-    }
-
-    public int getUserId() throws Exception
+    public int getUserId()
     {
         HashMap<String, String> queries = new HashMap<>();
         queries.put("user", this.username);
         String url = WebAPI.queryBuilder(queries, this.username, this.sessionId);
-        String json = WebAPI.getJson("user/getId", url);
-
-        if (!json.isEmpty()) {
-            JSONArray ja = new JSONArray(json);
-            JSONObject obj = ja.getJSONObject(0);
-            int userId = obj.getInt("USR_id");
-            return userId;
+        String json = "";
+        try {
+            json = WebAPI.getJson("user/getId", url);
         }
-        else
+        catch (Exception e)
         {
-            throw new Exception("Error getting userID from WEBAPI");
+            Log.d("ERROR", "Error talking to the webapi" + e.getMessage());
+            return -1;
+        }
+        try {
+                JSONArray ja = new JSONArray(json);
+                JSONObject obj = ja.getJSONObject(0);
+                int userId = obj.getInt("USR_id");
+                this.id = userId;
+                return userId;
+        }
+        catch (JSONException e)
+        {
+                Log.d("ERROR", "JSON ERROR");
+                return -1;
         }
     }
 
@@ -154,10 +95,11 @@ public class User {
         }
         catch (Exception e)
         {
-            return false;
+            Log.d("ERROR", "Error talking to the webapi" + e.getMessage());
         }
 
-        if (json.compareTo("Invalid") != 0 && !json.isEmpty()) //Is it valid?
+        Log.d("Info", json);
+        if (json.compareTo("Invalid") != 0) //Is it valid?
         {
             try
             {
@@ -166,7 +108,7 @@ public class User {
                 if (sessId != null && !sessId.isEmpty()) {
                     this.sessionId = sessId;
                     this.username = username;
-                    this.id = getUserId();
+                    getUserId();
                     return true;
                 }
                 else
@@ -192,106 +134,96 @@ public class User {
         String url = WebAPI.queryBuilder(queries, username, sessionId); //Replace sessionID with the id after being authenticated
         String json = WebAPI.getJson("user/info", url);
 
-        if (json.compareTo("Success") == 0) {
-            JSONObject obj = new JSONObject(json);
-            this.id = obj.getInt("id");
-            this.setAge(obj.getInt("age"));
-            this.setGender(obj.getString("gender"));
-            this.setLocation(obj.getString("location"));
-            this.setRating(obj.getInt("rating"));
-            this.setVerified(obj.getString("verified"));
-            this.setDateCreated(obj.getString("dateCreated"));
-            this.setGamesPlayed(obj.getInt("gamesPlayed"));
-            this.setGamesCreated(obj.getInt("gamesCreated"));
+        JSONObject obj = new JSONObject(json);
+        this.id = obj.getInt("id");
+        this.age = obj.getInt("age");
+        this.gender = obj.getString("gender");
+        this.location = obj.getString("location");
+        this.rating = obj.getInt("rating");
+        this.verified = obj.getString("verified");
+        this.dateCreated = obj.getString("dateCreated");
+        this.gamesPlayed = obj.getInt("gamesPlayed");
+        this.gamesCreated = obj.getInt("gamesCreated");
+    }
+
+    public boolean registerUser(String username, String email, String name, String gender, String password, String location, String phoneNumber, String age) throws Exception {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.gender = gender;
+        this.password = password;
+        this.location = location;
+        this.phoneNumber = phoneNumber;
+        this.age = Integer.parseInt(age);
+
+        //This replaces all the spaces in the strings with %20 because JSON does not
+        //react well to spaces
+        name = name.replaceAll("\\s","%20");
+        username = username.replaceAll("\\s","%20");
+        location = location.replaceAll("\\s","%20");
+        password = password.replaceAll("\\s","%20");
+        gender = gender.replaceAll("\\s","%20");
+        phoneNumber = phoneNumber.replaceAll("\\s","%20");
+
+
+
+        //Do for all strings with spaces in them
+
+        HashMap<String,String> regHashMap = new HashMap<>();
+        regHashMap.put("username", username);
+        regHashMap.put("email",email);
+        regHashMap.put("name", name);
+        regHashMap.put("gender", gender);
+        regHashMap.put("phoneNumber",phoneNumber);
+        regHashMap.put("password", password);
+        regHashMap.put("location", location);
+        regHashMap.put("age",age);
+
+        String url = WebAPI.queryBuilder(regHashMap, null,null);
+        String json = "";
+
+
+        try {
+            json = WebAPI.getJson("user/create",url);
+        }catch (Exception e){
+            Log.d("ERROR", "Error talking to the webapi" + e.getMessage());
         }
-        else
-            throw new Exception("Error getting user info from WebAPI");
+
+        Log.d("Info", json);
+
+        if (json.compareTo("Invalid") != 0)
+        {
+
+        }
+//        if (json.compareTo("Invalid") != 0)
+//        {
+//            try
+//            {
+//                JSONObject obj = new JSONObject(json);
+//                String sessId = obj.getString("sessionId");
+//                if (sessId != null && !sessId.isEmpty()) {
+//                    this.sessionId = sessId;
+//                    this.username = username;
+//                    getUserId();
+//                    return true;
+//                }
+//                else
+//                    return false;
+//            }
+//            catch (Exception e)
+//            {
+//                return false;
+//            }
+//        }
+
+
+        return false;
     }
 
     @Override
     public String toString()
     {
-        return String.format("%d, %s, %s, %d, %s, %s, %d, %s, %s, %s, %d, %d", id, username, getName(), getAge(), getGender(), getLocation(), getRating(), getVerified(), getDateCreated(), getProfilePicture(), getGamesPlayed(), getGamesCreated());
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    private int getAge() {
-        return age;
-    }
-
-    private void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public String getVerified() {
-        return verified;
-    }
-
-    public void setVerified(String verified) {
-        this.verified = verified;
-    }
-
-    public String getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(String dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public int getGamesPlayed() {
-        return gamesPlayed;
-    }
-
-    public void setGamesPlayed(int gamesPlayed) {
-        this.gamesPlayed = gamesPlayed;
-    }
-
-    public int getGamesCreated() {
-        return gamesCreated;
-    }
-
-    public void setGamesCreated(int gamesCreated) {
-        this.gamesCreated = gamesCreated;
+        return String.format("%d, %s, %s, %d, %s, %s, %d, %s, %s, %s, %d, %d", id, username, name, age, gender, location, rating, verified, dateCreated, profilePicture, gamesPlayed, gamesCreated);
     }
 
 }

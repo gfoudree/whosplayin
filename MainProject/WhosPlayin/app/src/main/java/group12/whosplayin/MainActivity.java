@@ -12,26 +12,23 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.app.Fragment;
-
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity{
 
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
-    private String sessionUserName;
-    private String sessionID;
-    private int userID;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        Intent intent = getIntent();
-
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -60,8 +57,7 @@ public class MainActivity extends AppCompatActivity{
         mDrawer.setDrawerListener(drawerToggle);
     }
 
-    private ActionBarDrawerToggle setupDrawerToggle()
-    {
+    private ActionBarDrawerToggle setupDrawerToggle() {
         return new ActionBarDrawerToggle(this,mDrawer,toolbar,R.string.drawer_open,R.string.drawer_close);
     }
 
@@ -110,23 +106,11 @@ public class MainActivity extends AppCompatActivity{
         }
 
         //Error Checking to see if user entered the wrong input
-        try
-        {
+        try {
             fragment = (android.app.Fragment) fragmentClass.newInstance();
-        }
-
-        catch (Exception e){
+        }catch (Exception e){
             e.printStackTrace();
         }
-
-        // WE NEED TO PASS THE FRAGMENTS DATA!!!!
-        Bundle bundle = new Bundle();
-        bundle.putString("USERNAME", sessionUserName);
-        bundle.putInt("USER_ID", userID);
-        bundle.putString("SESSION_ID", sessionID);
-
-        fragment.setArguments(bundle);
-
 
         //Insert the selected Fragment by replacing the previous Fragment
         FragmentManager fragmentManager = getFragmentManager();
@@ -143,8 +127,29 @@ public class MainActivity extends AppCompatActivity{
 
 
     @Override
-    //This method opens or closes the drawer when the action bar home/up action happens
+    //This method opens or closes the drawer when the action bar home/up action happens.
+    //This method also opens the options menu by pressing upper right, and then navigates to
+    //desired page
     public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch(item.getItemId()) {
+            case R.id.misc_menu_logout:
+                Intent logoutIntent = new Intent(MainActivity.this, LogoutActivity.class);
+                startActivity(logoutIntent);
+                return true;
+            case R.id.misc_menu_contact:
+                Intent contactIntent = new Intent(MainActivity.this, ContactActivity.class);
+                startActivity(contactIntent);
+                return true;
+            case R.id.misc_menu_settings:
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            case R.id.misc_menu_report:
+                Intent reportIntent = new Intent(MainActivity.this, ReportActivity.class);
+                startActivity(reportIntent);
+                return true;
+        }
         if (drawerToggle.onOptionsItemSelected(item)){
             return true;
         }
@@ -163,4 +168,14 @@ public class MainActivity extends AppCompatActivity{
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
     }
+
+    //Creates an options menu after user logs into app. Because the app uses Fragments
+    //for navigation, this method only needs to implemented once.
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+
 }
