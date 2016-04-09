@@ -30,7 +30,7 @@ class FriendsAdaptor extends ArrayAdapter<User> {
         TextView friendName = (TextView) friendsView.findViewById(R.id.friendRow_friendsNameLabel);
         ImageView friendProfilePic = (ImageView) friendsView.findViewById(R.id.friendRow_profilePicImage);
 
-        friendName.setText(singleUser.name);
+        friendName.setText(singleUser.getName());
         friendProfilePic.setImageResource(R.drawable.smiley); //needs to change for each achievement
 
         return friendsView;

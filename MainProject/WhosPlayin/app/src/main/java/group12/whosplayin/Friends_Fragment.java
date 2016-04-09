@@ -56,7 +56,13 @@ public class Friends_Fragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 User user = (User) friendsListView.getItemAtPosition(position);
-                goToFriendsProfile(user.id);
+
+                try {
+                    goToFriendsProfile(user.getUserId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         });
     }
