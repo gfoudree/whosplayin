@@ -1,6 +1,7 @@
 var db = require('./db');
 var users = require('./users');
 
+//TODO: make this work with REDIS to store current games instead of using mysql
 var getGames = function(request, response)
 {
   var sessionId = request.body.sessionId;
@@ -8,6 +9,7 @@ var getGames = function(request, response)
 
   var query = "CALL db309grp12.stp_GetCurrentGames();";
 
+<<<<<<< HEAD
   if (sessionId && username)
   {
     console.log("Gettin current games");
@@ -23,6 +25,17 @@ var getGames = function(request, response)
   else {
     response.send("Invalid");
   }
+=======
+  users.validateUser(sessionId, username, query, function(reply)
+  {
+    if (reply == 'Error retrieving SQL data')
+      response.send('Invalid');
+    else {
+      //Maybe set a redis key with TTL that expires that contains the list of current games We need to get gameID somehow
+      response.send(reply);
+    }
+  });
+>>>>>>> parent of 3f38c9a... Merge branch 'rick_user_profile_view'
 }
 
 var newGame = function(request, response)
@@ -44,21 +57,26 @@ var newGame = function(request, response)
   var sessionId = request.body.sessionId;
   var username = request.body.username;
 
+<<<<<<< HEAD
   if (gameTitle && gameTypeID && numPlayers && maxPlayers && dateCreated && startTime && endTime && captainID && zipcode && altitude && latitude && longitude && state && city && sessionId && username)
   {
   var query = "CALL db309grp12.stp_CreateGame (\'" + gameTitle + "\',\'" + gameTypeID+ "\',\'" +  numPlayers+ "\',\'" +  maxPlayers+ "\',\'" +  dateCreated + "\',\'" +  startTime+ "\',\'" +  endTime+ "\',\'" +  captainID+ "\',\'" +  zipcode + "\',\'" +  altitude + "\',\'" +  latitude+ "\',\'" +  longitude + "\',\'" + state + "\',\'" + city + "\');";
+=======
+    var query = "CALL db309grp12.stp_CreateGame (\'" + gameTitle + "\',\'" + gameTypeID+ "\',\'" +  numPlayers+ "\',\'" +  maxPlayers+ "\',\'" +  dateCreated + "\',\'" +  startTime+ "\',\'" +  endTime+ "\',\'" +  captainID+ "\',\'" +  zipcode + "\',\'" +  altitude + "\',\'" +  latitude+ "\',\'" +  longitude + "\',\'" + state + "\',\'" + city + "\');";
+
+    console.log(query);
+
+>>>>>>> parent of 3f38c9a... Merge branch 'rick_user_profile_view'
     users.validateUser(sessionId, username, query, function(reply) //Validate user before we do anything
     {
       if (reply == 'Error retrieving SQL data')
         response.send('Invalid');
       else {
+        //Maybe set a redis key with TTL that expires that contains the list of current games We need to get gameID somehow
         response.send('Success');
       }
     });
-  }
-  else {
-    response.send('Invalid');
-  }
+
 }
 
 var addPlayer = function(request, response)
@@ -68,17 +86,34 @@ var addPlayer = function(request, response)
   var sessionId = request.body.sessionId;
   var username = request.body.username;
 
+<<<<<<< HEAD
   if (!gameId || gameId < 1 || !userId || userId < 1 || !sessionId || sessionId.length === 0 || !username || username.length === 0)
+=======
+  if (!gameId || gameId < 1 || !playerId || playerId < 1 || !sessionId || sessionId.length === 0 || !username || username.length === 0)
+>>>>>>> parent of 3f38c9a... Merge branch 'rick_user_profile_view'
   {
     response.send('Invalid');
   }
   else {
+<<<<<<< HEAD
     var query = "CALL db309grp12.stp_AddUserToGame(\'" + userId + "\',\'" + gameId + "\');";
     users.validateUser(sessionId, username, query, function(result)
+=======
+    users.validateUser(sessionId, username, '', function(result)
+>>>>>>> parent of 3f38c9a... Merge branch 'rick_user_profile_view'
     {
-      if (result == 'Error retrieving SQL data')
+      if (result === 'Valid')
       {
-        response.send('Invalid');
+        db.listAddRedis('game:' + gameId, playerId, function(reply) //Adding player to game:gameId key in redis.
+        {
+          if (reply == 0)
+          {
+            response.send('Success');
+          }
+          else {
+            response.send('Failure');
+          }
+        });
       }
       else {
         response.send('Success');
@@ -93,18 +128,19 @@ var getPlayers = function(request, response)
   var sessionId = request.body.sessionId;
   var username = request.body.username;
 
-  var query = "CALL db309grp12.stp_GetPlayersInGame";
-
   if (!gameId || gameId < 1 || !sessionId || !username || username.length === 0)
   {
     response.send('Invalid');
   }
   else {
-    users.validateUser(sessionId, username, query, function(result)
+    users.validateUser(sessionId, username, '', function(result)
     {
-      if (result == 'Error retrieving SQL data')
+      if (result === 'Valid')
       {
-        response.send('Invalid');
+        db.listGetRedis('game:' + gameId, function(reply) //Get players in redis key
+        {
+          response.send(reply);
+        });
       }
       else {
         response.send(result);

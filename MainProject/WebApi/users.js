@@ -43,30 +43,24 @@ var validateUser = function(sessionId, username, sqlStmt, done)
 
 var getInfo = function(request, response)
 {
+  var id = request.body.id;
   var sessionId = request.body.sessionId;
   var username = request.body.username;
-  var user = request.body.user;
 
-  if (user && username && sessionId)
+  validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,rating,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
   {
-    validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,rating,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
-    {
-      response.send(data);
-    });
-  }
-  else {
-    response.send("Invalid");
-  }
+    response.send(data); //Send user info in JSON
+  });
 }
 
 var authenticate = function(request, response)
 {
+  console.log(request);
   var password = request.body.password;
   var username = request.body.username;
   var hash = crypto.createHash('sha256');
-
   hash.update(password);
-
+  console.log(password);
   if (!password || !username || password.length < 1 || username.length < 1)
   {
     response.send('Invalid data');
@@ -164,6 +158,7 @@ var getId = function(request, response)
   var sessionId = request.body.sessionId;
   var username = request.body.username;
   var user = request.body.user;
+<<<<<<< HEAD
 
   if (user && username && sessionId)
   {
@@ -187,21 +182,13 @@ var addFriend = function (request, response)
   var friendId = request.body.friendId;
 
   if (user && username && sessionId && friendId)
+=======
+  console.log("Test");
+  validateUser(sessionId, username, 'SELECT id FROM User WHERE username=\'' + user + '\'', function (done)
+>>>>>>> parent of 3f38c9a... Merge branch 'rick_user_profile_view'
   {
-    validateUser(sessionId, username, 'CALL db309grp12.stp_AddUserFriend(' + userId + '\',\'' + friendId + '\');', function (done)
-    {
-      if (done == 'Error retrieving SQL data')
-      {
-        response.send("Invalid");
-      }
-      else {
-        response.send(done);
-    }
-    });
-  }
-  else {
-    response.send("Invalid");
-  }
+    response.send(done);
+  });
 }
 
 module.exports = {
@@ -212,6 +199,5 @@ module.exports = {
   validateUser: validateUser,
   RNG: RNG,
   status: status,
-  getId: getId,
-  addFriend: addFriend
+  getId: getId
 }
