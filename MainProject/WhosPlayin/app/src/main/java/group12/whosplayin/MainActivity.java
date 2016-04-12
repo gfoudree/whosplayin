@@ -165,17 +165,17 @@ public class MainActivity extends AppCompatActivity{
         super.onOptionsItemSelected(item);
         switch(item.getItemId()) {
             case R.id.misc_menu_logout:
-//                Intent logoutIntent = new Intent(MainActivity.this, LogoutActivity.class);
-//                startActivity(logoutIntent);
-//                return true;
+                Intent logoutIntent = new Intent(MainActivity.this, LogoutActivity.class);
+                startActivity(logoutIntent);
+                return true;
             case R.id.misc_menu_contact:
                 Intent contactIntent = new Intent(MainActivity.this, ContactActivity.class);
                 startActivity(contactIntent);
                 return true;
-//            case R.id.misc_menu_settings:
-//                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-//                startActivity(settingsIntent);
-//                return true;
+            case R.id.misc_menu_settings:
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
             case R.id.misc_menu_report:
                 Intent reportIntent = new Intent(MainActivity.this, ReportActivity.class);
                 startActivity(reportIntent);

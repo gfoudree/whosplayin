@@ -61,7 +61,13 @@
             android:label="@string/title_activity_contact" />
         <activity
             android:name=".ReportActivity"
-            android:label="@string/title_activity_report"></activity>
+            android:label="@string/title_activity_report" />
+        <activity
+            android:name=".LogoutActivity"
+            android:label="@string/title_activity_logout" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>
