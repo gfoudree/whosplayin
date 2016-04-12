@@ -100,8 +100,8 @@ public class ViewGame_Fragment extends Fragment
         currentGame = new Game();
 
         userArrayList = new ArrayList<User>();
-//        GetUsersInGameTask usersTask = new GetUsersInGameTask(gameID);
-//        usersTask.execute((Void) null);
+        GetUsersInGameTask usersTask = new GetUsersInGameTask(gameID);
+        usersTask.execute((Void) null);
 
 
         // Game control button click listener. This button will appear join game if the user is not
@@ -114,8 +114,17 @@ public class ViewGame_Fragment extends Fragment
                 Log.d("VIEW GAME", "click");
                 Boolean success = false;
 
-                AddPlayerToGameTask addPlayerToGameTask = new AddPlayerToGameTask();
-                addPlayerToGameTask.execute((Void) null);
+                if(mGameControl.getText().equals("Join Game") )
+                {
+                    AddPlayerToGameTask addPlayerToGameTask = new AddPlayerToGameTask();
+                    addPlayerToGameTask.execute((Void) null);
+                }
+
+                else if(mGameControl.getText().equals("Leave Game"))
+                {
+                    RemovePlayerFromGameTask removePlayerFromGameTask = new RemovePlayerFromGameTask();
+                    removePlayerFromGameTask.execute((Void) null);
+                }
             }
         });
 
@@ -261,6 +270,48 @@ public class ViewGame_Fragment extends Fragment
             else
             {
                 mGameControl.setError("Could not add you to the game. Try again later");
+            }
+        }
+    }
+
+    /**
+     * Task for adding players to the game... This event is launched on join button click.
+     */
+    public class RemovePlayerFromGameTask extends AsyncTask<Void, Void, Boolean>
+    {
+        RemovePlayerFromGameTask()
+        {
+            // Empty Default Constructor
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+            Boolean success = false;
+            try
+            {
+                Game game = new Game();
+                success = game.removeUserFromGame(User.getInstance(), gameID, 19);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+            return success;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success)
+        {
+            if(success)
+            {
+                mGameControl.setText("Join Game");
+            }
+
+            else
+            {
+                mGameControl.setError("Could not remove you from game. Try again later");
             }
         }
     }
