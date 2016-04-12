@@ -441,8 +441,10 @@ public class CreateGame_Fragment extends Fragment
         protected Boolean doInBackground(Void... params)
         {
             Boolean success = false;
+
             Game game = new Game(0, gameTitle, gameTypeID, numPlayers, maxPlayers, dateCreated, startTime,
                     endTime, captainID, latitude, longitude, location);
+
             Log.d("Game", game.toString());
             game.setZipcode(zipCode);
             game.setAltitude(altitude);

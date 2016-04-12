@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="group12.whosplayin.ReportActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Report a Player"
+        android:textSize="30sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/report_player"
+        android:hint="Name of player to be reported"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="100dp"/>
+
+    <EditText
+        android:id="@+id/report_reason"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:inputType="textCapSentences|textMultiLine"
+        android:maxLines="4"
+        android:maxLength="600"
+        android:scrollHorizontally="false"
+        android:hint="What is the nature of your concern?"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"/>
+
+    <Button
+        android:id="@+id/report_submit_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Submit"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="400dp"/>
+
+    <Button
+        android:id="@+id/report_go_back"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Go Back"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="475dp"/>
+
+</RelativeLayout>

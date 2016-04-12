@@ -36,9 +36,9 @@ app.post('/user/getFriendsList', users.getFriendsList);
 app.post('/user/create', users.create);
 app.post('/user/status', users.status);
 app.post('/user/getId', users.getId);
-app.post('/user/addFriend', users.addFriend);
 
 /* ---------------------- GAMES --------------------------- */
+app.post('/games/info', games.getGames);
 app.post('/games/newGame', games.newGame);
 app.post('/games/addPlayerToGame', games.addPlayer);
 app.post('/games/getPlayers', games.getPlayers);
