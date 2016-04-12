@@ -328,7 +328,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             User user = User.getInstance();
             try {
-                return user.authenticate(mEmail, mPassword);
+                  return user.authenticate(mEmail, mPassword);
             }
             catch (Exception e)
             {

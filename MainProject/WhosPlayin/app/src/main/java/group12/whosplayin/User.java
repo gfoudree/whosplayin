@@ -1,12 +1,7 @@
 package group12.whosplayin;
 
-
-import android.util.Log;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -47,6 +42,13 @@ public class User {
     public User()
     {
 
+    }
+
+    public void logout() throws Exception
+    {
+        String resp = WebAPI.getJson("user/logout", WebAPI.queryBuilder(new HashMap<String, String>(), getUsername(), getSessionId()));
+        this.sessionId = "";
+        this.username = "";
     }
 
     public String getSessionId()

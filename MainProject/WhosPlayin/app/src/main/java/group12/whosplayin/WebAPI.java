@@ -20,7 +20,7 @@ import java.util.Map;
  * Created by gfoudree on 2/23/16.
  */
 public class WebAPI {
-    static final String baseUrl = "http://10.26.53.174:5000/";
+    static final String baseUrl = "http://10.30.11.195:5000/";
 
     public static String getJson(String path, String query) throws Exception
     {
@@ -50,7 +50,7 @@ public class WebAPI {
     /*
     Username = username
     sessionId = previously authenticated sessionID which is necessary for API calls
-    queries is a hashmap of key=value things to be passed as paramters
+    queries is a hashmap of key=value things to be passed as parameters
      */
     public static String queryBuilder(final HashMap<String, String> queries, String username, String sessionId)
     {

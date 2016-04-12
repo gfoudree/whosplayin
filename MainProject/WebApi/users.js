@@ -20,7 +20,7 @@ var validateUser = function(sessionId, username, sqlStmt, done)
   {
       db.getValueRedis('user:' + username, function(reply) //Get session ID from redis
       {
-        if (reply == sessionId && reply != null) //Check if the passed sessionId == stored sessionId
+        if (reply != null && reply.length > 0 && reply == sessionId) //Check if the passed sessionId == stored sessionId
         {
           if (sqlStmt && sqlStmt.length > 0)
           {
@@ -204,8 +204,30 @@ var addFriend = function (request, response)
   }
 }
 
+var logout = function (request, response)
+{
+  var sessionId = request.body.sessionId;
+  var username = request.body.username;
+  console.log("logging out");
+  if (sessionId && username)
+  {
+    db.setValueRedis("user:" + username, "");
+    //For debugging...
+    db.getValueRedis("user:" + username, function (value)
+    {
+      console.log("user:" + username + "=" + value);
+    });
+
+    response.send("Success");
+  }
+  else {
+    response.send("Invalid");
+  }
+}
+
 module.exports = {
   create: create,
+  logout: logout,
   getFriendsList: getFriendsList,
   authenticate: authenticate,
   getInfo: getInfo,
