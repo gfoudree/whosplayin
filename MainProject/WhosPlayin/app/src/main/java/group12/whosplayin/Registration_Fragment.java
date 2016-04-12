@@ -101,13 +101,11 @@ public class Registration_Fragment extends Fragment{
             this.location = location;
             this.age = age;
         }
-
-
-
         @Override
         protected Boolean doInBackground(Void... params) {
             User user = new User();
-            try{user.registerUser(username, email, name, gender, password, location, phoneNumber,age);
+            try{
+                user.createUser(username, password, name, Integer.parseInt(age), gender, email, phoneNumber);
                 return true;
             }catch (Exception e){
                 e.printStackTrace();

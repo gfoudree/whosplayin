@@ -40,11 +40,7 @@ app.post('/user/getId', users.getId);
 /* ---------------------- GAMES --------------------------- */
 app.post('/games/info', games.getGames);
 app.post('/games/newGame', games.newGame);
-<<<<<<< HEAD
 app.post('/games/addPlayerToGame', games.addPlayer);
-=======
-app.post('/games/addplayer', games.addPlayer);
->>>>>>> parent of 3f38c9a... Merge branch 'rick_user_profile_view'
 app.post('/games/getPlayers', games.getPlayers);
 app.post('/games/getCurrentGames', games.getGames);
 app.post('/games/removeUserFromGame', games.removeUserFromGame);

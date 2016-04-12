@@ -62,7 +62,7 @@ public class RegistrationActivity extends Activity {
                 registerLocation = editTextLocation.getText().toString();
                 registerAge = editTextAge.getText().toString();
 
-                regTask = new RegistrationTask(registerName, registerEmail, registerUserName, registerGender,
+                regTask = new RegistrationTask(registerUserName, registerPassword, registerName, registerGender,
                         registerPassword, registerPhone, registerLocation,registerAge);
                 regTask.execute((Void) null);
 
@@ -102,7 +102,7 @@ public class RegistrationActivity extends Activity {
         protected Boolean doInBackground(Void... params) {
             User user = new User();
             try{
-                return user.registerUser(rUsername,rEmail, rName,rGender, rPassword, rLocation, rPhoneNumber, rAge);
+                return user.createUser(rUsername,rPassword, rName,Integer.parseInt(rAge), rGender, rEmail, rPhoneNumber);
             }catch (Exception e){
                 e.printStackTrace();
                 return false;

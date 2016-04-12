@@ -23,10 +23,11 @@ public class Game {
     private double altitude;
     private double longitude;
     private double latitude;
+    private String gameLocation;
     private String state;
     private String city;
     
-    public Game(int id, String title, int gameType, int numPlayers, int maxPlayers, String dateCreated, String startTime, String endTime, int captainId)
+    public Game(int id, String title, int gameType, int numPlayers, int maxPlayers, String dateCreated, String startTime, String endTime, int captainId, String gameLocation)
     {
         this.setId(id);
         this.setTitle(title);
@@ -37,6 +38,7 @@ public class Game {
         this.setStartTime(startTime);
         this.setEndTime(endTime);
         this.setCaptainId(captainId);
+        this.setGameLocation(gameLocation);
     }
     
     public Game() {
@@ -107,7 +109,8 @@ public class Game {
                                     obj.getString("GAM_dateCreated"),
                                     obj.getString("GAM_startTime"),
                                     obj.getString("GAM_endTime"),
-                                    obj.getInt("GAM_captainID")
+                                    obj.getInt("GAM_captainID"),
+                                    obj.getString("GAM_locationName")
                                     );
             
             games.add(gameObj);
@@ -268,5 +271,13 @@ public class Game {
     
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getGameLocation() {
+        return gameLocation;
+    }
+
+    public void setGameLocation(String gameLocation) {
+        this.gameLocation = gameLocation;
     }
 }
