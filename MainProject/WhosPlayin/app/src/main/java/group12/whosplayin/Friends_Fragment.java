@@ -51,10 +51,7 @@ public class Friends_Fragment extends Fragment{
 
         User[] friends = null;
         try{
-            ArrayList<User> tempFriends = myUser.getFriends(19);
-            if(tempFriends.size() > 0){
-                friends = (User[])tempFriends.toArray();
-            }
+           friends = myUser.getUserFriends();
 
         }catch (Exception ex){
             ex.printStackTrace();

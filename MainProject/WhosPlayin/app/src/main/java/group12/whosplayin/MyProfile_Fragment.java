@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,6 @@ public class MyProfile_Fragment extends Fragment{
         private TextView usersGenderView;
         private TextView usersBioView;
 
-
         private User myUser;
 
 
@@ -44,8 +44,18 @@ public class MyProfile_Fragment extends Fragment{
             sessionId = incoming.getString("SESSION_ID");
             sessionUserID = incoming.getInt("USER_ID");
 
+            Log.d("Passed","Username: " + sessionUserName);
+            Log.d("Passed","UserID: " + sessionUserID);
+            Log.d("Passed","SessionID: " + sessionId);
+
+
+
+
             myUser = new User();
-            myUser.getUserInfo(sessionUserID);
+            myUser.getUserInfo(19);
+            Log.d("Info", "UserName: " + myUser.getSessionId());
+
+
 
             return inflater.inflate(R.layout.myprofile_layout, container, false);
         }

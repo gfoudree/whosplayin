@@ -296,10 +296,7 @@ public class User {
     public void setGamesCreated(int gamesCreated) {
         this.gamesCreated = gamesCreated;
     }
-
-
-
-
+    
     public String getBio(){
         return bio;
     }
@@ -329,5 +326,32 @@ public class User {
         Game[] games = {game1,game2};
         return games;
     }
+
+    public User[] getUserFriends(){
+        User tempUser1 = new User();
+        tempUser1.name = "Rick";
+        tempUser1.username = "twohyjr";
+        tempUser1.id = 18;
+        User tempUser2 = new User();
+        tempUser2.name = "Mike";
+        tempUser2.username = "mikejr";
+        tempUser2.id = 20;
+
+        User[] friends = {tempUser1,tempUser2};
+        return friends;
+    }
+
+    public Achievement[] getUserAchievements(){
+        Achievement ach1 = new Achievement();
+        ach1.setTitle("AWESOME");
+        ach1.setDescription("TOTALLY AWESOME");
+
+        Achievement ach2 = new Achievement();
+        ach2.setTitle("Even More BA");
+        ach2.setDescription("TOTALLY BA");
+
+        Achievement[] achievements = {ach1,ach2};
+        return achievements;
+    }
    }
-}
+
