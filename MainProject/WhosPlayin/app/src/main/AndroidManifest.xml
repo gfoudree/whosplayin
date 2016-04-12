@@ -27,7 +27,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
         
         <activity android:name=".FriendProfileActivity" android:label="@string/title_activity_friend_profile"
         android:theme="@style/AppTheme.NoActionBar" />
@@ -37,17 +36,7 @@
         <activity android:name="group12.whosplayin.MapsActivity" android:label="@string/title_activity_maps">
             
         </activity>
-        
-=======
-        <activity
-            android:name=".FriendProfileActivity"
-            android:label="@string/title_activity_friend_profile"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
->>>>>>> parent of 3f38c9a... Merge branch 'rick_user_profile_view'
+
     </application>
     
 </manifest>

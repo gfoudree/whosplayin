@@ -20,7 +20,7 @@ var validateUser = function(sessionId, username, sqlStmt, done)
   {
       db.getValueRedis('user:' + username, function(reply) //Get session ID from redis
       {
-        if (reply == sessionId && reply != null) //Check if the passed sessionId == stored sessionId
+        if (reply != null && reply.length > 0 && reply == sessionId) //Check if the passed sessionId == stored sessionId
         {
           if (sqlStmt && sqlStmt.length > 0)
           {
@@ -43,24 +43,30 @@ var validateUser = function(sessionId, username, sqlStmt, done)
 
 var getInfo = function(request, response)
 {
-  var id = request.body.id;
   var sessionId = request.body.sessionId;
   var username = request.body.username;
+  var user = request.body.user;
 
-  validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,rating,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
+  if (user && username && sessionId)
   {
-    response.send(data); //Send user info in JSON
-  });
+    validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,rating,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
+    {
+      response.send(data);
+    });
+  }
+  else {
+    response.send("Invalid");
+  }
 }
 
 var authenticate = function(request, response)
 {
-  console.log(request);
   var password = request.body.password;
   var username = request.body.username;
   var hash = crypto.createHash('sha256');
+
   hash.update(password);
-  console.log(password);
+
   if (!password || !username || password.length < 1 || username.length < 1)
   {
     response.send('Invalid data');
@@ -158,7 +164,6 @@ var getId = function(request, response)
   var sessionId = request.body.sessionId;
   var username = request.body.username;
   var user = request.body.user;
-<<<<<<< HEAD
 
   if (user && username && sessionId)
   {
@@ -182,22 +187,53 @@ var addFriend = function (request, response)
   var friendId = request.body.friendId;
 
   if (user && username && sessionId && friendId)
-=======
-  console.log("Test");
-  validateUser(sessionId, username, 'SELECT id FROM User WHERE username=\'' + user + '\'', function (done)
->>>>>>> parent of 3f38c9a... Merge branch 'rick_user_profile_view'
   {
-    response.send(done);
-  });
+    validateUser(sessionId, username, 'CALL db309grp12.stp_AddUserFriend(' + userId + '\',\'' + friendId + '\');', function (done)
+    {
+      if (done == 'Error retrieving SQL data')
+      {
+        response.send("Invalid");
+      }
+      else {
+        response.send(done);
+    }
+    });
+  }
+  else {
+    response.send("Invalid");
+  }
+}
+
+var logout = function (request, response)
+{
+  var sessionId = request.body.sessionId;
+  var username = request.body.username;
+  console.log("logging out");
+  if (sessionId && username)
+  {
+    db.setValueRedis("user:" + username, "");
+    //For debugging...
+    db.getValueRedis("user:" + username, function (value)
+    {
+      console.log("user:" + username + "=" + value);
+    });
+
+    response.send("Success");
+  }
+  else {
+    response.send("Invalid");
+  }
 }
 
 module.exports = {
   create: create,
+  logout: logout,
   getFriendsList: getFriendsList,
   authenticate: authenticate,
   getInfo: getInfo,
   validateUser: validateUser,
   RNG: RNG,
   status: status,
-  getId: getId
+  getId: getId,
+  addFriend: addFriend
 }

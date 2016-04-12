@@ -50,7 +50,7 @@ public class WebAPI {
     /*
     Username = username
     sessionId = previously authenticated sessionID which is necessary for API calls
-    queries is a hashmap of key=value things to be passed as paramters
+    queries is a hashmap of key=value things to be passed as parameters
      */
     public static String queryBuilder(final HashMap<String, String> queries, String username, String sessionId)
     {
@@ -65,7 +65,6 @@ public class WebAPI {
                 json.put("username", username);
                 json.put("sessionId", sessionId);
             }
-
         }
         catch (JSONException je)
         {

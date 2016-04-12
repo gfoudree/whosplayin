@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.app.Fragment;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity{
     
@@ -42,6 +44,17 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+                try {
+                    User currUser = User.getInstance();
+                    ArrayList<User> users = currUser.getFriends(20);
+                    for (User u : users) {
+                        Log.d("TEST", u.toString());
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d("TEST", e.getMessage());
+                }
             }
         });
         

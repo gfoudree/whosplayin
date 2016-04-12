@@ -37,13 +37,10 @@
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="title_activity_report">ReportActivity</string>
 
-<<<<<<< HEAD
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
 
-=======
->>>>>>> parent of 3f38c9a... Merge branch 'rick_user_profile_view'
 
     <!--Strings for the Misc. Menu-->
 
