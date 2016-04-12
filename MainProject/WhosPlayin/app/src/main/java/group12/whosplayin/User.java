@@ -89,7 +89,6 @@ public class User {
             return true;
         else
             return false;
-
     }
 
     public ArrayList<User> getFriends(int userId) throws Exception {
@@ -106,11 +105,11 @@ public class User {
         for (int i = 0; i < data.length(); i++)
         {
             JSONObject obj = data.getJSONObject(i);
-
+            int usrId = obj.getInt("Friend");
+            User u = User.getUserInfo(User.getInstance().getUsername(), User.getInstance().getSessionId(), usrId);
+            users.add(u);
         }
-
-        return null;
-
+        return users;
     }
 
     public void addFriend(int user, int friendIdToAdd) throws Exception
@@ -185,28 +184,29 @@ public class User {
             return false;
     }
 
-    public void getUserInfo() throws Exception
+    public static User getUserInfo(String username, String sessionId, int id) throws Exception
     {
         if (sessionId.isEmpty() || username.isEmpty())
             throw new Exception("No username or session ID!");
 
         HashMap<String, String> queries = new HashMap<String, String>();
-        queries.put("id", "1");
+        queries.put("id", Integer.toString(id));
 
         String url = WebAPI.queryBuilder(queries, username, sessionId); //Replace sessionID with the id after being authenticated
         String json = WebAPI.getJson("user/info", url);
 
         if (json.compareTo("Success") == 0) {
             JSONObject obj = new JSONObject(json);
-            this.id = obj.getInt("id");
-            this.setAge(obj.getInt("age"));
-            this.setGender(obj.getString("gender"));
-            this.setLocation(obj.getString("location"));
-            this.setRating(obj.getInt("rating"));
-            this.setVerified(obj.getString("verified"));
-            this.setDateCreated(obj.getString("dateCreated"));
-            this.setGamesPlayed(obj.getInt("gamesPlayed"));
-            this.setGamesCreated(obj.getInt("gamesCreated"));
+            User u = new User();
+            u.setAge(obj.getInt("age"));
+            u.setGender(obj.getString("gender"));
+            u.setLocation(obj.getString("location"));
+            u.setRating(obj.getInt("rating"));
+            u.setVerified(obj.getString("verified"));
+            u.setDateCreated(obj.getString("dateCreated"));
+            u.setGamesPlayed(obj.getInt("gamesPlayed"));
+            u.setGamesCreated(obj.getInt("gamesCreated"));
+            return u;
         }
         else
             throw new Exception("Error getting user info from WebAPI");
@@ -330,3 +330,4 @@ public class User {
         return games;
     }
    }
+}
