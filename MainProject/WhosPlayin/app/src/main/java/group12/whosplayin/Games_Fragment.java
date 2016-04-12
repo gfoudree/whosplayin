@@ -1,9 +1,11 @@
 package group12.whosplayin;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +13,16 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import java.util.ArrayList;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * Created by kjdwyer on 2/29/16.
  */
-public class Friends_Fragment extends Fragment{
+public class Games_Fragment extends Fragment{
 
     private String sessionUserName;
     private String sessionId;
@@ -34,14 +39,14 @@ public class Friends_Fragment extends Fragment{
 
         myUser = new User();
         myUser.getUserInfo(sessionUserID);
-        return inflater.inflate(R.layout.friends_layout, container, false);
+        return inflater.inflate(R.layout.games_layout, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        Button goBackButton = (Button)getActivity().findViewById(R.id.addFriendButton);
+        Button goBackButton = (Button)getActivity().findViewById(R.id.games_goBackButton);
         goBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,53 +54,22 @@ public class Friends_Fragment extends Fragment{
             }
         });
 
-        User[] friends = null;
-        try{
-            ArrayList<User> tempFriends = myUser.getFriends(19);
-            if(tempFriends.size() > 0){
-                friends = (User[])tempFriends.toArray();
-            }
+        Game[] games = myUser.getUserGames();
+        ListAdapter gamesAdaptor = new GamesAdaptor(getActivity(),games);
+        final ListView gamesListView = (ListView)this.getActivity().findViewById(R.id.gamesListView);
+        gamesListView.setAdapter(gamesAdaptor);
 
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
-
-
-        ///myUser.getFriends(sessionUserID).toArray(friends);
-
-        ListAdapter friendsAdapter = new FriendsAdaptor(getActivity(),friends);
-        final ListView friendsListView = (ListView)this.getActivity().findViewById(R.id.friendsListView);
-        friendsListView.setAdapter(friendsAdapter);
-
-        friendsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gamesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                User user = (User) friendsListView.getItemAtPosition(position);
-                goToFriendsProfile(user.id);
+                Game game = (Game) gamesListView.getItemAtPosition(position);
+                goToGame(game);
             }
         });
     }
 
-    private void goToFriendsProfile(int userId){
-        Class fragmentClass = FriendsProfile_Fragment.class;
-        Fragment fragment = null;
-
-        try{
-            fragment = (Fragment) fragmentClass.newInstance();
-        }catch(java.lang.InstantiationException ex){
-            ex.printStackTrace();
-        }catch (IllegalAccessException ex){
-            ex.printStackTrace();
-        }
-
-        //Outgoing bundle
-        Bundle outgoing = new Bundle();
-        outgoing.putInt("USER_ID", userId);
-        fragment.setArguments(outgoing);
-//
-        //Navigating to the fragment
-        FragmentManager manager = this.getFragmentManager();
-        manager.beginTransaction().replace(R.id.flContent,fragment).commit();
+    public void goToGame(Game game){
+        //TODO
     }
 
     public void goBackToProfile(){
@@ -112,7 +86,7 @@ public class Friends_Fragment extends Fragment{
 
         //Outgoing bundle
         Bundle outgoing = new Bundle();
-        outgoing.putString("USERNAME",sessionUserName);
+        outgoing.putString("USERNAME", sessionUserName);
         outgoing.putString("SESSION_ID",sessionId);
         outgoing.putInt("USER_ID", sessionUserID);
         fragment.setArguments(outgoing);
