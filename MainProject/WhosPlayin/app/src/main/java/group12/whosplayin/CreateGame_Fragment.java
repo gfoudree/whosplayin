@@ -73,6 +73,7 @@ public class CreateGame_Fragment extends Fragment
     private int zipCode;
     private String city;
     private String state;
+    private String location;
 
     private UserCreateGameTask mCreateGameTask = null;
 
@@ -261,7 +262,7 @@ public class CreateGame_Fragment extends Fragment
 
         // Get the values when the submnit button is pressed.
         String eventTitle = mEventTitle.getText().toString();
-        String location = mLocation.getText().toString();
+        location = mLocation.getText().toString();
         String gameType = mGameType.getSelectedItem().toString();
         int maxPlayers = Integer.parseInt(mMaxPlayers.getText().toString());
         String date = mDate.getText().toString();
@@ -373,7 +374,7 @@ public class CreateGame_Fragment extends Fragment
 
             mCreateGameTask = new UserCreateGameTask(eventTitle, gameTypeID, 1, maxPlayers, "2016-05-05 00:00:00",
                     finalStart, finalEnd, sessionUserID, zipCode, altitude, latitude, longitude,
-                    state, city, sessionID, sessionUserName);
+                    state, city, location);
             mCreateGameTask.execute((Void) null);
         }
 
@@ -411,13 +412,12 @@ public class CreateGame_Fragment extends Fragment
         private double longitude;
         private String state;
         private String city;
-        private String sessionID;
-        private String username;
+        private String location;
 
         UserCreateGameTask(String gameTitle, int gameTypeID, int numPlayers, int maxPlayers,
                            String dateCreated, String startTime, String endTime, int captainID,
                            int zipCode, double altitude, double latitude, double longitude,
-                           String state, String city, String sessionID, String username)
+                           String state, String city, String location)
         {
             this.gameTitle = gameTitle;
             this.gameTypeID = gameTypeID;
@@ -433,8 +433,7 @@ public class CreateGame_Fragment extends Fragment
             this.longitude = longitude;
             this.state =  state;
             this.city = city;
-            this.sessionID = sessionID;
-            this.username = username;
+            this.location = location;
         }
 
 
@@ -442,12 +441,11 @@ public class CreateGame_Fragment extends Fragment
         protected Boolean doInBackground(Void... params)
         {
             Boolean success = false;
-            Game game = new Game(0, gameTitle, gameTypeID, numPlayers, maxPlayers, dateCreated, startTime, endTime, captainID);
+            Game game = new Game(0, gameTitle, gameTypeID, numPlayers, maxPlayers, dateCreated, startTime,
+                    endTime, captainID, latitude, longitude, location);
             Log.d("Game", game.toString());
             game.setZipcode(zipCode);
             game.setAltitude(altitude);
-            game.setLatitude(latitude);
-            game.setLongitude(longitude);
             game.setState(state);
             game.setCity(city);
 

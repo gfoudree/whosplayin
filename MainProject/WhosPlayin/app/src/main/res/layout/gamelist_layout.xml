@@ -9,22 +9,25 @@
         android:id="@+id/eventTitle"
         android:textSize="30sp"
         android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/location"/>
+        android:id="@+id/location"
+        android:textColor="@color/colorAccent"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/gameTime"/>
+        android:id="@+id/gameTime"
+        android:textColor="@color/colorAccent"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/numPlayers"/>
-
+        android:id="@+id/numPlayers"
+        android:textColor="@color/colorAccent"/>
 
 </LinearLayout>

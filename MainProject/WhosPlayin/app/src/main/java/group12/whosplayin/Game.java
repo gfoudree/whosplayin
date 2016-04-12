@@ -26,7 +26,8 @@ public class Game {
     private String state;
     private String city;
 
-    public Game(int id, String title, int gameType, int numPlayers, int maxPlayers, String dateCreated, String startTime, String endTime, int captainId)
+    public Game(int id, String title, int gameType, int numPlayers, int maxPlayers, String dateCreated, String startTime, String endTime, int captainId, double latitude, double longitude, String gameLocation)
+
     {
         this.setId(id);
         this.setTitle(title);
@@ -107,9 +108,12 @@ public class Game {
                     obj.getString("GAM_dateCreated"),
                     obj.getString("GAM_startTime"),
                     obj.getString("GAM_endTime"),
-                    obj.getInt("GAM_captainID")
-            );
-
+                    obj.getInt("GAM_captainID"),
+                    obj.getDouble("GAM_latitude"),
+                    obj.getDouble("GAM_longitude"),
+                    obj.getString("GAM_locationName")
+                    );
+            
             games.add(gameObj);
         }
         return games;

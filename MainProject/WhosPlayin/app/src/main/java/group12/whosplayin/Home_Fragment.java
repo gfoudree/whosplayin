@@ -30,25 +30,13 @@ public class Home_Fragment extends Fragment
 {
     private Button mCreateGame;
     private Button mMapView;
-    private String sessionUserName;
-    private String sessionID;
-    private int sessionUserID;
     private ListView gamesList;
     ArrayList<Game> gameArray;
     View currentView;
-
-    private String allGamesString;
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        // Receive the incoming information.
-        Bundle incoming = this.getArguments();
-        sessionUserName = incoming.getString("USERNAME");
-        sessionID = incoming.getString("SESSION_ID");
-        sessionUserID = incoming.getInt("USER_ID");
-        Log.d("HOME INCOMING BUNDLE", sessionUserName + ", " + sessionUserID + ", " + sessionID);
-
         currentView = inflater.inflate(R.layout.home_layout, container, false);
 
         gameArray = new ArrayList<Game>();
@@ -79,14 +67,6 @@ public class Home_Fragment extends Fragment
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
-
-
-                // Create the outgoing bundle
-                Bundle outgoing = new Bundle();
-                outgoing.putString("USERNAME", sessionUserName);
-                outgoing.putInt("USER_ID", sessionUserID);
-                outgoing.putString("SESSION_ID", sessionID);
-                fragment.setArguments(outgoing);
 
                 // DO THE NAVIGATION
                 FragmentManager manager = getFragmentManager();
@@ -170,7 +150,7 @@ public class Home_Fragment extends Fragment
             Log.d("Title Text", titleText.toString());
             timeText.setText(game.getStartTime() + " - " + game.getEndTime());
             playersText.setText(game.getNumPlayers() + "/" + game.getMaxPlayers());
-            locationText.setText(game.getCity() + game.getState());
+            locationText.setText(game.getGameLocation());
 
             return view;
         }
@@ -199,7 +179,7 @@ public class Home_Fragment extends Fragment
                 String title = currentGame.getTitle();
                 String startTime = currentGame.getStartTime();
                 String endTime = currentGame.getEndTime();
-                String location = "FAKE LOCATION";
+                String location = currentGame.getGameLocation();
 
                 Class fragmentClass = ViewGame_Fragment.class;
                 Fragment fragment = null;
@@ -219,16 +199,14 @@ public class Home_Fragment extends Fragment
                     e.printStackTrace();
                 }
 
+
+                // Outgoing Bundle. Need to send Game_ID, title, start time, end time, and location.
                 Bundle outgoing = new Bundle();
                 outgoing.putInt("GAME_ID", gameId);
-                outgoing.putString("USERNAME", sessionUserName);
-                outgoing.putString("SESSION_ID", sessionID);
-                outgoing.putInt("USER_ID", sessionUserID);
                 outgoing.putString("TITLE", title);
                 outgoing.putString("START_TIME", startTime);
                 outgoing.putString("END_TIME", endTime);
                 outgoing.putString("LOCATION", location);
-                Log.d("LV CLICK OUTGOING", gameId + ", " + sessionUserName + ", " + sessionID);
                 fragment.setArguments(outgoing);
                 FragmentManager manager = getFragmentManager();
                 manager.beginTransaction().replace(R.id.flContent, fragment).commit();
