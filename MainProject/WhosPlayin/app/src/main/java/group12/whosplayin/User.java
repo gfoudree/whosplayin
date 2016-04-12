@@ -10,7 +10,7 @@ public class User {
     private static User instance;
 
     private String sessionId = "";
-    private int id = 0;
+    public int id = 0;
     private String username = "";
     private String name = "";
     private int age = 0;
@@ -22,6 +22,11 @@ public class User {
     private String profilePicture = "";
     private int gamesPlayed = 0;
     private int gamesCreated = 0;
+    private String bio = "";
+    private String zipcode = "";
+    private int upVotes = 0;
+    private int downVotes = 0;
+
 
     public User(int id, String username, String name, int age, String gender, String location, int rating, String verified, String dateCreated, String profilePicture, int gamesPlayed, int gamesCreated)
     {
@@ -88,8 +93,7 @@ public class User {
             return false;
     }
 
-    public ArrayList<User> getFriends(int userId) throws Exception
-    {
+    public ArrayList<User> getFriends(int userId) throws Exception {
         HashMap<String, String> queries = new HashMap<>();
         queries.put("id", Integer.toString(userId));
         String url = WebAPI.queryBuilder(queries, this.username, this.sessionId);
@@ -211,8 +215,7 @@ public class User {
     }
 
     @Override
-    public String toString()
-    {
+    public String toString(){
         return String.format("%d, %s, %s, %d, %s, %s, %d, %s, %s, %s, %d, %d", id, username, getName(), getAge(), getGender(), getLocation(), getRating(), getVerified(), getDateCreated(), getProfilePicture(), getGamesPlayed(), getGamesCreated());
     }
 
@@ -224,7 +227,7 @@ public class User {
         this.name = name;
     }
 
-    private int getAge() {
+    public int getAge() {
         return age;
     }
 
@@ -295,5 +298,62 @@ public class User {
     public void setGamesCreated(int gamesCreated) {
         this.gamesCreated = gamesCreated;
     }
+    
+    public String getBio(){
+        return bio;
+    }
 
-}
+    public String getZipcode(){return zipcode;}
+
+    public int getUpVotes(){return upVotes;}
+
+    public int getDownVotes(){return downVotes;}
+
+    public void getUserInfo(int userId){
+        User tempUser = new User();
+        tempUser.name = "Rick";
+        tempUser.username = "twohyjr";
+        tempUser.id = userId;
+    }
+
+    public Game[] getUserGames(){
+        Game game1 = new Game();
+        game1.setTitle("Game 1");
+        game1.setId(0);
+
+        Game game2 = new Game();
+        game2.setTitle("Game 1");
+        game2.setId(0);
+
+        Game[] games = {game1,game2};
+        return games;
+    }
+
+    public User[] getUserFriends(){
+        User tempUser1 = new User();
+        tempUser1.name = "Rick";
+        tempUser1.username = "twohyjr";
+        tempUser1.id = 18;
+        User tempUser2 = new User();
+        tempUser2.name = "Mike";
+        tempUser2.username = "mikejr";
+        tempUser2.id = 20;
+
+        User[] friends = {tempUser1,tempUser2};
+        return friends;
+    }
+
+    public Achievement[] getUserAchievements(){
+        Achievement ach1 = new Achievement();
+        ach1.setTitle("AWESOME");
+        ach1.setDescription("TOTALLY AWESOME");
+
+        Achievement ach2 = new Achievement();
+        ach2.setTitle("Even More BA");
+        ach2.setDescription("TOTALLY BA");
+
+        Achievement[] achievements = {ach1,ach2};
+        return achievements;
+    }
+   }
+
