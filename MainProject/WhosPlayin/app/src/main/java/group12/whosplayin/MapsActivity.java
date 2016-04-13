@@ -123,11 +123,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             outgoing.putString("LOCATION", gameToView.getGameLocation());
 
 
-                            fragment.setArguments(outgoing);
-
-
-                            FragmentManager fragmentManager = getFragmentManager();
-                            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                            Intent intent = new Intent(MapsActivity.this, MainActivity.class);
+                            intent.putExtra("message", "view game");
+                            intent.putExtra("bundle", outgoing);
+                            startActivity(intent);
 
                             return true;
                         }
