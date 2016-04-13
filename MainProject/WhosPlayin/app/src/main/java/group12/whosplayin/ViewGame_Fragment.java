@@ -64,13 +64,15 @@ public class ViewGame_Fragment extends Fragment
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+
         // Get the incoming arguments. We need game id, title, start time/end time and location.
         Bundle incoming = this.getArguments();
         gameID = incoming.getInt("GAME_ID");

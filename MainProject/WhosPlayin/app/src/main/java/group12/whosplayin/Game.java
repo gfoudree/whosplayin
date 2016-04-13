@@ -40,6 +40,8 @@ public class Game {
         this.setEndTime(endTime);
         this.setCaptainId(captainId);
         this.setGameLocation(gameLocation);
+        this.setLatitude(latitude);
+        this.setLongitude(longitude);
     }
     
     public Game() {

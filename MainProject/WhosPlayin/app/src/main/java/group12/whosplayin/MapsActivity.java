@@ -1,5 +1,9 @@
 package group12.whosplayin;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -43,12 +47,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                return true;
-            }
-        });
+
         GetAllGamesTask getAllGamesTask = new GetAllGamesTask();
         getAllGamesTask.execute((Void) null);
     }
@@ -58,6 +57,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * maps.
      */
     public class GetAllGamesTask extends AsyncTask<Void, Void, Boolean> {
+
+        private Game currentGame;
         GetAllGamesTask() {
 
         }
@@ -78,9 +79,59 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         protected void onPostExecute(final Boolean success) {
             if (success) {
                 for (int i = 0; i < gameArray.size(); i++) {
-                    Game currentGame = gameArray.get(i);
-                    LatLng latLng = new LatLng(currentGame.getLatitude(), currentGame.getLongitude());
+                    currentGame = gameArray.get(i);
+                    Double lat = currentGame.getLatitude();
+                    Double lng = currentGame.getLongitude();
+                    Log.d("Lat Long", Double.toString(lat) + ", " + Double.toString(lng));
+                    mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(lat, lng))
+                                    .title(Integer.toString(currentGame.getId()))
+                    );
 
+                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                        @Override
+                        public boolean onMarkerClick(Marker marker) {
+
+                            Log.d("MARKER ID", marker.getTitle());
+                            Game gameToView = null;
+
+                            for(int i = 0; i < gameArray.size(); i++)
+                            {
+                                if(gameArray.get(i).getId() == Integer.parseInt(marker.getTitle()))
+                                {
+                                    gameToView = gameArray.get(i);
+                                }
+                            }
+
+
+                            Class fragmentClass = ViewGame_Fragment.class;
+                            Fragment fragment = null;
+                            try {
+                                 fragment = (android.app.Fragment) fragmentClass.newInstance();
+
+                            } catch (InstantiationException e) {
+                                e.printStackTrace();
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            }
+
+                            Bundle outgoing = new Bundle();
+                            outgoing.putInt("GAME_ID", gameToView.getId());
+                            outgoing.putString("TITLE", gameToView.getTitle());
+                            outgoing.putString("START_TIME", gameToView.getStartTime());
+                            outgoing.putString("END_TIME", gameToView.getEndTime());
+                            outgoing.putString("LOCATION", gameToView.getGameLocation());
+
+
+                            fragment.setArguments(outgoing);
+
+
+                            FragmentManager fragmentManager = getFragmentManager();
+                            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+                            return true;
+                        }
+                    });
                 }
             } else {
                 Log.e("ERROR", "ERROR");
