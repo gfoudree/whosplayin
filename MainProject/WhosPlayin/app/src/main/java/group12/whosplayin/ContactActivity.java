@@ -37,12 +37,12 @@ public class ContactActivity extends Activity {
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"whosplayin12@gmail.com"});
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Whosplayin Concern");
                 emailIntent.putExtra(Intent.EXTRA_TEXT, contactConcern);
-                
+
                 try{
                     startActivity(Intent.createChooser(emailIntent, "Send mail..."));
                 }catch (Exception e){
                     Toast.makeText(ContactActivity.this, "There are no email clients installed", Toast.LENGTH_SHORT).show();
-                    
+
                 }
 
             }

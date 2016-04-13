@@ -18,7 +18,7 @@ public class LogoutActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_logout);
+        setContentView(R.layout.activity_logout2);
 
         Button yesButton = (Button) findViewById(R.id.logout_yes_button);
         Button noButton = (Button) findViewById(R.id.logout_no_button);

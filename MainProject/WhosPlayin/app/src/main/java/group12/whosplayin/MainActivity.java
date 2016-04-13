@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.app.Fragment;
@@ -75,7 +76,8 @@ public class MainActivity extends AppCompatActivity{
         
         mDrawer.setDrawerListener(drawerToggle);
     }
-    
+
+
     private ActionBarDrawerToggle setupDrawerToggle()
     {
         return new ActionBarDrawerToggle(this,mDrawer,toolbar,R.string.drawer_open,R.string.drawer_close);
@@ -162,6 +164,25 @@ public class MainActivity extends AppCompatActivity{
     @Override
     //This method opens or closes the drawer when the action bar home/up action happens
     public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch(item.getItemId()) {
+            case R.id.misc_menu_logout:
+                Intent logoutIntent = new Intent(MainActivity.this, LogoutActivity.class);
+                startActivity(logoutIntent);
+                return true;
+            case R.id.misc_menu_contact:
+                Intent contactIntent = new Intent(MainActivity.this, ContactActivity.class);
+                startActivity(contactIntent);
+                return true;
+            case R.id.misc_menu_settings:
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            case R.id.misc_menu_report:
+                Intent reportIntent = new Intent(MainActivity.this, ReportActivity.class);
+                startActivity(reportIntent);
+                return true;
+        }
         if (drawerToggle.onOptionsItemSelected(item)){
             return true;
         }
@@ -202,5 +223,13 @@ public class MainActivity extends AppCompatActivity{
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    //Creates an options menu after user logs into app. Because the app uses Fragments
+    //for navigation, this method only needs to implemented once.
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 }
