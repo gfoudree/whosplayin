@@ -17,18 +17,26 @@ public class User {
     private String gender = "";
     private String location = "";
     private int rating = 0;
-    private String verified = "";
+    private int verified = 0;
     private String dateCreated = "";
     private String profilePicture = "";
     private int gamesPlayed = 0;
     private int gamesCreated = 0;
     private String bio = "";
-    private String zipcode = "";
     private int upVotes = 0;
     private int downVotes = 0;
+    private String email = "";
+    private int timesMvp = 0;
+    private double locationLatitude = 0;
+    private double locationLongetude = 0;
+    private double locationAltitude = 0;
+    private int zipcode = 0;
+    private String phone = "";
+    private String city = "";
+    private String state = "";
 
 
-    public User(int id, String username, String name, int age, String gender, String location, int rating, String verified, String dateCreated, String profilePicture, int gamesPlayed, int gamesCreated)
+    public User(int id, String username, String name, int age, String gender, String location, int rating, int verified, String dateCreated, String profilePicture, int gamesPlayed, int gamesCreated)
     {
         this.id = id;
         this.username = username;
@@ -197,17 +205,30 @@ public class User {
         String url = WebAPI.queryBuilder(queries, username, sessionId); //Replace sessionID with the id after being authenticated
         String json = WebAPI.getJson("user/info", url);
 
-        if (json.compareTo("Success") == 0) {
-            JSONObject obj = new JSONObject(json);
+        if (json.compareTo("Invalid") != 0) {
+            JSONArray root = new JSONArray(json);
+            JSONArray data = root.getJSONArray(0);
+            JSONObject obj = data.getJSONObject(0);
             User u = new User();
-            u.setAge(obj.getInt("age"));
-            u.setGender(obj.getString("gender"));
-            u.setLocation(obj.getString("location"));
-            u.setRating(obj.getInt("rating"));
-            u.setVerified(obj.getString("verified"));
-            u.setDateCreated(obj.getString("dateCreated"));
-            u.setGamesPlayed(obj.getInt("gamesPlayed"));
-            u.setGamesCreated(obj.getInt("gamesCreated"));
+            u.setAge(obj.getInt("USR_age"));
+            u.setGender(obj.getString("USR_gender"));
+            u.setEmail(obj.getString("USR_email"));
+            u.setPhone(obj.getString("USR_phone"));
+            u.setTimesMvp(obj.getInt("USR_timesMVP"));
+            u.setLocationLatitude(obj.getDouble("ULOC_latitude"));
+            u.setLocationLongetude(obj.getDouble("ULOC_longitude"));
+            u.setLocationAltitude(obj.getDouble("ULOC_altitude"));
+            u.setDownVotes(obj.getInt("USR_downVotes"));
+            u.setUpVotes(obj.getInt("USR_upVotes"));
+            u.setZipcode(obj.getInt("ULOC_zipcode"));
+            u.setVerified(obj.getInt("USR_verified"));
+            u.setGamesPlayed(obj.getInt("USR_gamesPlayed"));
+            u.setGamesCreated(obj.getInt("USR_gamesCreated"));
+            u.setUsername(obj.getString("USR_username"));
+            u.setName(obj.getString("USR_name"));
+            u.setAge(obj.getInt("USR_age"));
+            u.setState(obj.getString("ULOC_state"));
+            u.setCity(obj.getString("ULOC_city"));
             return u;
         }
         else
@@ -259,11 +280,11 @@ public class User {
         this.rating = rating;
     }
 
-    public String getVerified() {
+    public int getVerified() {
         return verified;
     }
 
-    public void setVerified(String verified) {
+    public void setVerified(int verified) {
         this.verified = verified;
     }
 
@@ -303,11 +324,14 @@ public class User {
         return bio;
     }
 
-    public String getZipcode(){return zipcode;}
-
     public int getUpVotes(){return upVotes;}
 
     public int getDownVotes(){return downVotes;}
+
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
 
     public void getUserInfo(int userId){
         User tempUser = new User();
@@ -355,5 +379,85 @@ public class User {
         Achievement[] achievements = {ach1,ach2};
         return achievements;
     }
-   }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getTimesMvp() {
+        return timesMvp;
+    }
+
+    public void setTimesMvp(int timesMvp) {
+        this.timesMvp = timesMvp;
+    }
+
+    public double getLocationLatitude() {
+        return locationLatitude;
+    }
+
+    public void setLocationLatitude(double locationLatitude) {
+        this.locationLatitude = locationLatitude;
+    }
+
+    public double getLocationLongetude() {
+        return locationLongetude;
+    }
+
+    public void setLocationLongetude(double locationLongetude) {
+        this.locationLongetude = locationLongetude;
+    }
+
+    public double getLocationAltitude() {
+        return locationAltitude;
+    }
+
+    public void setLocationAltitude(double locationAltitude) {
+        this.locationAltitude = locationAltitude;
+    }
+
+    public void setZipcode(int zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public int getZipcode()
+    {
+        return zipcode;
+    }
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setUpVotes(int upVotes) {
+        this.upVotes = upVotes;
+    }
+
+    public void setDownVotes(int downVotes) {
+        this.downVotes = downVotes;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+}
 

@@ -1,9 +1,14 @@
 package group12.whosplayin;
 
+import android.Manifest;
 import android.app.FragmentManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -13,7 +18,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.app.Fragment;
@@ -29,18 +33,17 @@ public class MainActivity extends AppCompatActivity{
     private String sessionUserName;
     private String sessionID;
     private int userID;
-
+    private boolean serviceStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Intent intent = getIntent();
-
-        String message = intent.getStringExtra("message");
+        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1323);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +51,18 @@ public class MainActivity extends AppCompatActivity{
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
 
+                if (!serviceStarted) {
+                    Context c = getBaseContext();
+                    Intent gpsIntent = new Intent(c, GpsService.class);
+
+                    c.startService(gpsIntent);
+                    serviceStarted = true;
+                }
+                else
+                {
+                    GpsPosition pos = GpsPosition.getInstance();
+                    Log.d("GPS", Double.toString(pos.getCurrentLatitude()));
+                }
             }
         });
         
@@ -66,8 +81,7 @@ public class MainActivity extends AppCompatActivity{
         
         mDrawer.setDrawerListener(drawerToggle);
     }
-
-
+    
     private ActionBarDrawerToggle setupDrawerToggle()
     {
         return new ActionBarDrawerToggle(this,mDrawer,toolbar,R.string.drawer_open,R.string.drawer_close);
@@ -134,6 +148,8 @@ public class MainActivity extends AppCompatActivity{
         bundle.putString("SESSION_ID", sessionID);
         
         fragment.setArguments(bundle);
+        
+
 
         //Insert the selected Fragment by replacing the previous Fragment
         FragmentManager fragmentManager = getFragmentManager();
@@ -146,29 +162,12 @@ public class MainActivity extends AppCompatActivity{
         mDrawer.closeDrawers();
         
     }
-
+    
+    
+    
     @Override
     //This method opens or closes the drawer when the action bar home/up action happens
     public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-        switch(item.getItemId()) {
-            case R.id.misc_menu_logout:
-                Intent logoutIntent = new Intent(MainActivity.this, LogoutActivity.class);
-                startActivity(logoutIntent);
-                return true;
-            case R.id.misc_menu_contact:
-                Intent contactIntent = new Intent(MainActivity.this, ContactActivity.class);
-                startActivity(contactIntent);
-                return true;
-            case R.id.misc_menu_settings:
-                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(settingsIntent);
-                return true;
-            case R.id.misc_menu_report:
-                Intent reportIntent = new Intent(MainActivity.this, ReportActivity.class);
-                startActivity(reportIntent);
-                return true;
-        }
         if (drawerToggle.onOptionsItemSelected(item)){
             return true;
         }
@@ -179,44 +178,12 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
         drawerToggle.syncState();
-
-        if(getIntent().getExtras() == null)
-        {
-            // do nothing
-        }
-
-        else if(getIntent().getStringExtra("message").equals("view game"))
-        {
-            Bundle outgoing = getIntent().getBundleExtra("bundle");
-            Class fragmentClass = ViewGame_Fragment.class;
-            android.app.Fragment fragment = null;
-            try {
-                fragment = (android.app.Fragment) fragmentClass.newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            fragment.setArguments(outgoing);
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent,fragment).commit();
-        }
     }
     
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    //Creates an options menu after user logs into app. Because the app uses Fragments
-    //for navigation, this method only needs to implemented once.
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 }

@@ -45,11 +45,11 @@ var getInfo = function(request, response)
 {
   var sessionId = request.body.sessionId;
   var username = request.body.username;
-  var user = request.body.user;
+  var id = request.body.id;
 
-  if (user && username && sessionId)
+  if (id && username && sessionId)
   {
-    validateUser(sessionId, username, 'SELECT username,id,name,age,gender,location,rating,verified,dateCreated,lastLogin,picture,gamesPlayed,gamesCreated FROM users WHERE ID=\'' + id + '\'', function(data)
+    validateUser(sessionId, username, 'CALL db309grp12.stp_GetUserInfo(' + id + ');', function(data)
     {
       response.send(data);
     });
@@ -100,9 +100,6 @@ var getFriendsList = function(request, response)
   else {
     validateUser(sessionId, username, 'CALL db309grp12.stp_GetFriendsList(' + id + ');', function(data) //Call stored proceedure to get friends list
     {
-      if (data == 'Error retrieving SQL data')
-        response.send('Invalid');
-      else
         response.send(data);
     });
   }
