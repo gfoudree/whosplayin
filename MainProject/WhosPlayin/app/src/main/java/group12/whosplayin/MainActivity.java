@@ -47,17 +47,7 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
-                try {
-                    User currUser = User.getInstance();
-                    ArrayList<User> users = currUser.getFriends(20);
-                    for (User u : users) {
-                        Log.d("TEST", u.toString());
-                    }
-                }
-                catch (Exception e)
-                {
-                    Log.d("TEST", e.getMessage());
-                }
+
             }
         });
         
@@ -144,8 +134,6 @@ public class MainActivity extends AppCompatActivity{
         bundle.putString("SESSION_ID", sessionID);
         
         fragment.setArguments(bundle);
-        
-
 
         //Insert the selected Fragment by replacing the previous Fragment
         FragmentManager fragmentManager = getFragmentManager();
@@ -158,9 +146,7 @@ public class MainActivity extends AppCompatActivity{
         mDrawer.closeDrawers();
         
     }
-    
-    
-    
+
     @Override
     //This method opens or closes the drawer when the action bar home/up action happens
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -194,6 +180,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
+        drawerToggle.syncState();
 
         if(getIntent().getExtras() == null)
         {
