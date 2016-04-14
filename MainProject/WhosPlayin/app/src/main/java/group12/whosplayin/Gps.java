@@ -40,7 +40,7 @@ public class Gps implements LocationListener {
             GpsPosition pos = GpsPosition.getInstance();
 
             pos.setLatitude((double) Math.round(location.getLatitude() * 1000000) / 1000000);
-            pos.setLongetude((double) Math.round(location.getLongitude() * 1000000) / 1000000);
+            pos.setLongitude((double) Math.round(location.getLongitude() * 1000000) / 1000000);
             Log.d("GPS Position", "Changed");
         }
         catch (SecurityException se)

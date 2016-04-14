@@ -48,6 +48,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        //Center map
+        GpsPosition gpsPosition = GpsPosition.getInstance();
+
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                GpsPosition gpsPosition = GpsPosition.getInstance();
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gpsPosition.getCurrentLatitude(), gpsPosition.getCurrentLongitude()), 13));
+                return true;
+            }
+        });
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gpsPosition.getCurrentLatitude(), gpsPosition.getCurrentLongitude()), 13));
         GetAllGamesTask getAllGamesTask = new GetAllGamesTask();
         getAllGamesTask.execute((Void) null);
     }

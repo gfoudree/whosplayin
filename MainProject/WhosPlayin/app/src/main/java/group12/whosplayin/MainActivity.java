@@ -38,12 +38,13 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Intent intent = getIntent();
-        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1323);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
+        //Start GPS Service
+        startService(new Intent(this, GpsService.class));
+
+        Intent intent = getIntent();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

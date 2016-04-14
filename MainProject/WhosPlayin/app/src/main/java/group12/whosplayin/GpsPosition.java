@@ -9,9 +9,9 @@ public class GpsPosition {
     private static GpsPosition gpsPosition;
 
     private ArrayList<Double> pastLatitudes;
-    private ArrayList<Double> pastLongetudes;
+    private ArrayList<Double> pastLongitudes;
     private double currentLatitude;
-    private double currentLongetude;
+    private double currentLongitude;
 
     public static synchronized GpsPosition getInstance()
     {
@@ -23,29 +23,29 @@ public class GpsPosition {
     GpsPosition()
     {
         pastLatitudes = new ArrayList<>();
-        pastLongetudes = new ArrayList<>();
+        pastLongitudes = new ArrayList<>();
     }
 
     public ArrayList<Double> getPastLatitudes() {
         return pastLatitudes;
     }
 
-    public ArrayList<Double> getPastLongetudes() {
-        return pastLongetudes;
+    public ArrayList<Double> getPastLongitudes() {
+        return pastLongitudes;
     }
 
     public double getCurrentLatitude() {
         return currentLatitude;
     }
 
-    public double getCurrentLongetude() {
-        return currentLongetude;
+    public double getCurrentLongitude() {
+        return currentLongitude;
     }
 
-    public void setLongetude(double longe)
+    public void setLongitude(double longe)
     {
-        currentLongetude = longe;
-        pastLongetudes.add(longe);
+        currentLongitude = longe;
+        pastLongitudes.add(longe);
     }
 
     public void setLatitude(double lat)
