@@ -22,4 +22,14 @@ public class ExampleUnitTest {
             System.out.println(u.toString());
         }
     }
+
+    @Test
+    public void getUsersInGame() throws Exception{
+        User user = User.getInstance();
+        user.authenticate("grant", "password");
+        for (User u : Game.getPlayersInGame(user, 1))
+        {
+            System.out.println(u.toString());
+        }
+    }
 }

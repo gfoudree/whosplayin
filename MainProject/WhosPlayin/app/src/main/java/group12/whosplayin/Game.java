@@ -48,16 +48,25 @@ public class Game {
         
     }
     
-    public static boolean getPlayersInGame(User user, int gameId) throws Exception {
+    public static ArrayList<User> getPlayersInGame(User user, int gameId) throws Exception {
         HashMap<String, String> queries = new HashMap<>();
         queries.put("gameId", Integer.toString(gameId));
-        
+
+        ArrayList<User> players = new ArrayList<>();
+
         String url = WebAPI.queryBuilder(queries, user.getUsername(), user.getSessionId());
-        Log.d("URL", url);
         String json = WebAPI.getJson("games/getPlayers", url);
-        
-        Log.d("JSON", json);
-        return true;
+
+        JSONArray root = new JSONArray(json);
+        JSONArray data = root.getJSONArray(0);
+
+        for (int i = 0; i < data.length(); i++) {
+            JSONObject obj = data.getJSONObject(i);
+            int playerInt = obj.getInt("PLY_id");
+            players.add(User.getUserInfo(user.getUsername(), user.getSessionId(), playerInt));
+        }
+
+        return players;
     }
     
     public static boolean removeUserFromGame(User user, int userId, int gameId) throws Exception

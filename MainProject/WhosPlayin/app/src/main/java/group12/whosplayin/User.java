@@ -209,6 +209,7 @@ public class User {
             JSONArray root = new JSONArray(json);
             JSONArray data = root.getJSONArray(0);
             JSONObject obj = data.getJSONObject(0);
+
             User u = new User();
             u.setAge(obj.getInt("USR_age"));
             u.setGender(obj.getString("USR_gender"));

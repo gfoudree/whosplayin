@@ -93,13 +93,12 @@ var getPlayers = function(request, response)
   var sessionId = request.body.sessionId;
   var username = request.body.username;
 
-  var query = "CALL db309grp12.stp_GetPlayersInGame";
-
   if (!gameId || gameId < 1 || !sessionId || !username || username.length === 0)
   {
     response.send('Invalid');
   }
   else {
+    var query = "CALL db309grp12.stp_GetUsersInGame(" + gameId + ")";
     users.validateUser(sessionId, username, query, function(result)
     {
       if (result == 'Error retrieving SQL data')
