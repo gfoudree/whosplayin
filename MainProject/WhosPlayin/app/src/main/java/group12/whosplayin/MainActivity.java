@@ -1,9 +1,14 @@
 package group12.whosplayin;
 
+import android.Manifest;
 import android.app.FragmentManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -28,13 +33,14 @@ public class MainActivity extends AppCompatActivity{
     private String sessionUserName;
     private String sessionID;
     private int userID;
-
+    private boolean serviceStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Intent intent = getIntent();
-        
+        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1323);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
@@ -44,16 +50,18 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
-                try {
-                    User currUser = User.getInstance();
-                    ArrayList<User> users = currUser.getFriends(20);
-                    for (User u : users) {
-                        Log.d("TEST", u.toString());
-                    }
+
+                if (!serviceStarted) {
+                    Context c = getBaseContext();
+                    Intent gpsIntent = new Intent(c, GpsService.class);
+
+                    c.startService(gpsIntent);
+                    serviceStarted = true;
                 }
-                catch (Exception e)
+                else
                 {
-                    Log.d("TEST", e.getMessage());
+                    GpsPosition pos = GpsPosition.getInstance();
+                    Log.d("GPS", Double.toString(pos.getCurrentLatitude()));
                 }
             }
         });
