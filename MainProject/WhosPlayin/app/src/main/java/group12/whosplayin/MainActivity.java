@@ -179,6 +179,29 @@ public class MainActivity extends AppCompatActivity{
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
+
+        if(getIntent().getExtras() == null)
+        {
+            // do nothing
+        }
+
+        else if(getIntent().getStringExtra("message").equals("view game"))
+        {
+            Bundle outgoing = getIntent().getBundleExtra("bundle");
+            Class fragmentClass = ViewGame_Fragment.class;
+            android.app.Fragment fragment = null;
+            try {
+                fragment = (android.app.Fragment) fragmentClass.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            fragment.setArguments(outgoing);
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent,fragment).commit();
+        }
     }
     
     @Override
