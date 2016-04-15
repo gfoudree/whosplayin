@@ -111,8 +111,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-
-
         Button mRegisterActivityButton = (Button) findViewById(R.id.register2_button);
         mRegisterActivityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -221,7 +219,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return true;
-        //return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
@@ -369,4 +366,3 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 }
-

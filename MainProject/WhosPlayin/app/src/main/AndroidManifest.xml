@@ -7,6 +7,7 @@
     <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBLrqV6_nnu4MsKyOJ8b5GhwFAe-iBVLJc" />
     
     <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -15,6 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="23" />
     <application android:allowBackup="true" android:icon="@mipmap/ic_launcher" android:label="@string/app_name"
@@ -35,11 +37,37 @@
         
         <activity android:name=".MainActivity" android:label="@string/title_activity_main" android:theme="@style/AppTheme.NoActionBar"></activity>
         
-        <activity android:name="group12.whosplayin.MapsActivity" android:label="@string/title_activity_maps">
-            
-        </activity>
+        <activity android:name="group12.whosplayin.MapsActivity" android:label="@string/title_activity_maps"></activity>
 
         <service android:name=".GpsService" />
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="group12.whosplayin" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="group12.whosplayin.MyGCMListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="group12.whosplayin.MyIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="group12.whosplayin.RegistrationIntentService"
+            android:exported="false">
+        </service>
     </application>
     
 </manifest>

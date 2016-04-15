@@ -2,16 +2,21 @@ package group12.whosplayin;
 
 import android.Manifest;
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,6 +26,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.app.Fragment;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.ArrayList;
 
@@ -34,6 +42,31 @@ public class MainActivity extends AppCompatActivity{
     private String sessionID;
     private int userID;
     private boolean serviceStarted = false;
+    private boolean isReceiverRegistered;
+    private static final String TAG = "MainActivity";
+    private BroadcastReceiver broadcastReceiver;
+
+    private void registerReceiver(){
+        if(!isReceiverRegistered) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
+                    new IntentFilter("registrationComplete"));
+            isReceiverRegistered = true;
+        }
+    }
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                Log.d("Error", "Play services");
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,26 +77,27 @@ public class MainActivity extends AppCompatActivity{
         //Start GPS Service
         startService(new Intent(this, GpsService.class));
 
-        Intent intent = getIntent();
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            }
+        };
+
+        registerReceiver();
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
-
-                if (!serviceStarted) {
-                    Context c = getBaseContext();
-                    Intent gpsIntent = new Intent(c, GpsService.class);
-
-                    c.startService(gpsIntent);
-                    serviceStarted = true;
-                }
-                else
-                {
-                    GpsPosition pos = GpsPosition.getInstance();
-                    Log.d("GPS", Double.toString(pos.getCurrentLatitude()));
-                }
             }
         });
         
@@ -147,24 +181,17 @@ public class MainActivity extends AppCompatActivity{
         bundle.putString("USERNAME", sessionUserName);
         bundle.putInt("USER_ID", userID);
         bundle.putString("SESSION_ID", sessionID);
-        
         fragment.setArguments(bundle);
-        
-
 
         //Insert the selected Fragment by replacing the previous Fragment
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent,fragment).commit();
-        
-        
+
         //Highlights the item that has been selected and closes the drawer
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());
         mDrawer.closeDrawers();
-        
     }
-    
-    
     
     @Override
     //This method opens or closes the drawer when the action bar home/up action happens
@@ -172,7 +199,6 @@ public class MainActivity extends AppCompatActivity{
         if (drawerToggle.onOptionsItemSelected(item)){
             return true;
         }
-        
         return super.onOptionsItemSelected(item);
     }
     
